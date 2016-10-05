@@ -7,7 +7,7 @@ Try it now:
 
 ## Running your own copy of tealsclassroom
 
-You can fork your own copy of tealsclassroom in three easy steps:
+You can fork your own copy of tealsclassroom in a few easy steps:
 
 Begin by forking this project in github
 
@@ -25,6 +25,22 @@ You will need to note the following:
 
 Create an account (if you don't already have one) with [appengine](https://appengine.google.com)
 and create an app
+
+Download the Google App SDK for Python and run throught the [setup](https://cloud.google.com/sdk/docs/) steps
+
+### Build
+
+Install Node ([http://nodejs.org](http://nodejs.org)). Then run the following: 
+
+```
+npm install
+``` 
+
+Install python ([https://www.python.org/downloads/](https://www.python.org/downloads/)). Then run the following: 
+
+```
+pip2.7 install -t lib -r requirements.txt
+```
 
 ### Configuration
 
