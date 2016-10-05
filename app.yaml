@@ -1,4 +1,4 @@
-application: darringtonteals
+application: tealsclassroom
 version: 1
 runtime: python27
 api_version: 1
@@ -26,6 +26,6 @@ libraries:
   version: latest
 
 env_variables:
-  PUSHER_APP_ID: '239760'
-  PUSHER_APP_KEY: '74e204003e3870300809'
-  PUSHER_APP_SECRET: '7b0e59e128dcbddea5f8'
+  PUSHER_APP_ID: 'XXXXX'
+  PUSHER_APP_KEY: 'XXXXXXXXXXXXXXXXXXXX'
+  PUSHER_APP_SECRET: 'XXXXXXXXXXXXXXXXXXXX'
