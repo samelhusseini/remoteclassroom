@@ -1,4 +1,4 @@
 node_modules
 lib
 *.pyc
-config_file.json
+/config_file.json

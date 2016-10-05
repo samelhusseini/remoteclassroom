@@ -4,7 +4,7 @@
     "students": {
         "student1":
         { 
-            "studentId": "student1", 
+            "studentId": "student1",
             "first_name": "Student",
             "last_name": "1",
             "skypeMeeting": "https://meet.lync.com/teals/username/XXXXXXXX",
