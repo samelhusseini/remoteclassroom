@@ -9,6 +9,8 @@ Try it now:
 
 You can fork your own copy of tealsclassroom in three easy steps:
 
+Begin by forking this project in github
+
 ### Pusher
 
 Create an account with [pusher.com](https://pusher.com/)
