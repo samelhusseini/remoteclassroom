@@ -45,12 +45,12 @@ pip2.7 install -t lib -r requirements.txt
 ### Configuration
 
 There are two configuration files you'll need to touch: 
-* app.yaml
-* config_file.json
+* **app.yaml**
+* **config_file.json**
 
 Edit app.yaml and be sure to update: 
-* application, with your Google Appengine application id
-* PUSHER_APP_ID, PUSHER_APP_KEY, and PUSHER_APP_SECRET with your pusher application details
+* ```application```, with your Google Appengine application id
+* ```PUSHER_APP_ID```, ```PUSHER_APP_KEY```, and ```PUSHER_APP_SECRET``` with your pusher application details
 
 Edit config_file.json: 
 * student information and skype meetings
