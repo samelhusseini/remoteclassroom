@@ -9,7 +9,7 @@ Try it now:
 
 You can fork your own copy of tealsclassroom in a few easy steps:
 
-Begin by forking this project in github
+Begin by checking out this repo into a local folder
 
 ### Pusher
 
