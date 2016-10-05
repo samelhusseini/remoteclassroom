@@ -22,7 +22,7 @@
         "student3": { 
             "studentId": "student3", 
             "first_name": "Student",
-            "last_name": "2",
+            "last_name": "3",
             "skypeMeeting": "https://meet.lync.com/teals/username/XXXXXXXX",
             "directSkype": "conf:sip:username@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:XXXXXXXX%3Frequired-media=audio",
             "enabled": "true"
@@ -30,7 +30,7 @@
         "student4": { 
             "studentId": "student4", 
             "first_name": "Student",
-            "last_name": "2",
+            "last_name": "4",
             "skypeMeeting": "https://meet.lync.com/teals/username/XXXXXXXX",
             "directSkype": "conf:sip:username@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:XXXXXXXX%3Frequired-media=audio",
             "enabled": "true"
@@ -38,7 +38,7 @@
         "student5": { 
             "studentId": "student5", 
             "first_name": "Student",
-            "last_name": "2",
+            "last_name": "5",
             "skypeMeeting": "https://meet.lync.com/teals/username/XXXXXXXX",
             "directSkype": "conf:sip:username@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:XXXXXXXX%3Frequired-media=audio",
             "enabled": "true"
@@ -46,7 +46,7 @@
         "student6": { 
             "studentId": "student6", 
             "first_name": "Student",
-            "last_name": "2",
+            "last_name": "6",
             "skypeMeeting": "https://meet.lync.com/teals/username/XXXXXXXX",
             "directSkype": "conf:sip:username@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:XXXXXXXX%3Frequired-media=audio",
             "enabled": "true"
