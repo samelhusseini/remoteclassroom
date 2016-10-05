@@ -17,8 +17,9 @@ def show_admin():
 
 @app.route("/newpoll")
 def show_admin_new_poll():
-    config = json.dumps(app.config.get('config'))
-    return render_template('admin/new_poll.html', config=config)
+    config = app.config.get('config')
+    jsonconfig = json.dumps(app.config.get('config'))
+    return render_template('admin/new_poll.html', appconfig=config, config=jsonconfig)
 
 @app.route("/allpolls")
 def show_admin_all_polls():
