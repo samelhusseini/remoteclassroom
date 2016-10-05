@@ -40,7 +40,8 @@ def show_slide():
 
 @app.route("/quiz")
 def show_quiz():
-    return redirect("https://b.socrative.com/login/student/")
+    quizLink = app.config.get('quiz')['redirectLink']
+    return redirect(quizLink)
 
 @app.route("/changeclassroom")
 def show_admin_change_classlink():
@@ -104,15 +105,18 @@ def trigger_changeslide():
 @app.route("/")
 def show_index():
     host = app.config.get('host')
-    return render_template('index.html', host=host)
+    config = app.config.get('config')
+    jsonconfig = json.dumps(app.config.get('config'))
+    return render_template('index.html', appconfig=config, config=jsonconfig, host=host)
 
 @app.route("/starter")
 def show_starter():
     students = getStudents()
     quiz = app.config.get('quiz')
     quiz['instructions'] = ''.join(quiz['instructions'])
-    config = json.dumps(app.config.get('config'))
-    return render_template('starter.html', config=config, students=students, quiz=quiz)
+    config = app.config.get('config')
+    jsonconfig = json.dumps(app.config.get('config'))
+    return render_template('starter.html', appconfig=config, config=jsonconfig, students=students, quiz=quiz)
 
 @app.route("/starter", methods=['POST'])
 def get_starter_info():

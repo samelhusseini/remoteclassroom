@@ -1,76 +1,40 @@
 {
     "debug":false,
-    "host": "http://darrington.us",
+    "host": "http://example.com",
     "students": {
         "student1":
         { 
             "studentId": "student1", 
-            "first_name": "Ian",
-            "last_name": "Ayers",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/R56MUD99",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:R56MUD99%3Frequired-media=audio",
+            "first_name": "Student",
+            "last_name": "1",
+            "skypeMeeting": "https://meet.lync.com/teals/username/XXXXXXXX",
+            "directSkype": "conf:sip:username@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:XXXXXXXX%3Frequired-media=audio",
             "enabled": "true"
         },
         "student2": { 
             "studentId": "student2", 
-            "first_name": "Taylor",
-            "last_name": "Brown",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/BBL4M5A6",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:BBL4M5A6%3Frequired-media=audio",
-            "enabled": "true"
-        },
-        "student3": { 
-            "studentId": "student3", 
-            "first_name": "Colby",
-            "last_name": "Hudson",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/7O37BW2Y",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:7O37BW2Y%3Frequired-media=audio",
-            "enabled": "true"
-        },
-        "student6": { 
-            "studentId": "student6", 
-            "first_name": "Tim",
-            "last_name": "Johnson",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/E9ZIZQFS",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:E9ZIZQFS%3Frequired-media=audio",
-            "enabled": "true"
-        },
-        "student4": { 
-            "studentId": "student4", 
-            "first_name": "Max",
-            "last_name": "Pickard",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/EK2R0GPY",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:EK2R0GPY%3Frequired-media=audio",
-            "enabled": "true"
-        },
-        "student5": { 
-            "studentId": "student5",
-            "first_name": "Senator",
-            "last_name": "Santos",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/D07Q8EY2",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:D07Q8EY2%3Frequired-media=audio",
-            "enabled": "true"
-        },
-        "student7": {
-            "studentId": "student7", 
-            "first_name": "Emily",
-            "last_name": "Young",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/NYEAS691",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:NYEAS691%3Frequired-media=audio",
+            "first_name": "Student",
+            "last_name": "2",
+            "skypeMeeting": "https://meet.lync.com/teals/username/XXXXXXXX",
+            "directSkype": "conf:sip:username@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:XXXXXXXX%3Frequired-media=audio",
             "enabled": "true"
         }
     },
     "quiz": {
         "instructions": [
         "<p>To begin the quiz, go to: <br />",
-            "<h3><a href=\"http://darrington.us/quiz\" target=\"_blank\">http://darrington.us/quiz</a> </h3><br /> and",
+            "<h3><a href=\"http://example.com/quiz\" target=\"_blank\">http://example.com/quiz</a> </h3><br /> and",
             "type in the following code (or copy and paste)<br />",
-            "<h3>YXUDDWC3H</h3>",
+            "<h3>XXXXXXXXX</h3>",
         "</p>"
         ], 
-        "link": "http://darrington.us/quiz"
+        "link": "http://example.com/quiz", 
+        "quizLink": "https://b.socrative.com/login/student/"
     },
     "config": {
+        "appname": "TEALS virtual classroom",
+        "school_name": "TEALS",
+        "course_name": "Intro to CS",
         "notifications": {
             "poll": {
                 "icon": "/images/sam_avatar.png"

@@ -3,7 +3,7 @@
 <div class="ui vertical center aligned segment">
     <div class="ui container">
         <h2 class="ui center aligned icon header">
-            <i class="circular users teal icon"></i> Welcome to the TEALS virtual classroom (Admin Portal)
+            <i class="circular users teal icon"></i> Welcome to the {{appconfig.appname}} (Admin Portal)
         </h2>
         {% for student in studentsjson %} {{student.name}} {% endfor %}
         <div style="margin-bottom:40px;"></div>

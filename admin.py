@@ -28,8 +28,9 @@ def show_admin_all_polls():
         if entry.type == "poll":
             entry.yes = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "yes").count()
             entry.no = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "no").count()
-    config = json.dumps(app.config.get('config'))
-    return render_template('admin/all_polls.html', config=config, entries=entries)
+    config = app.config.get('config')
+    jsonconfig = json.dumps(app.config.get('config'))
+    return render_template('admin/all_polls.html', appconfig=config, config=jsonconfig, entries=entries)
 
 @app.route("/dashboard")
 def dashboard():
@@ -42,8 +43,9 @@ def dashboard():
         if entry.type == "poll":
             entry.yes = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "yes").count()
             entry.no = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "no").count()
-    config = json.dumps(app.config.get('config'))
-    return render_template('admin/dashboard.html', config=config, entries=entries, students=students)
+    config = app.config.get('config')
+    jsonconfig = json.dumps(app.config.get('config'))
+    return render_template('admin/dashboard.html', appconfig=config, config=jsonconfig, entries=entries, students=students)
 
 
 #region Pusher
