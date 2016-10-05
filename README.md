@@ -56,6 +56,18 @@ Edit config_file.json:
 * student information and skype meetings
 * application configuration, like app name, school name and course name
 
+### Embed
+
+To embed the getting started page, in a CMS like Canvas, place the following HTML on the front page, and change the src to point to your hosted app engine website: 
+
+```HTML
+
+<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://tealsclassroom.appspot.com/" width="300" height="500">
+  Your browser does not support iframes.</iframe>
+
+``` 
+
+
 ## License
 
 MIT
