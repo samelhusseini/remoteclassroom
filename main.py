@@ -8,17 +8,21 @@ import json
 import logging
 
 from common import app, p, getStudents
-from model import Log, LogType
+from model import Log, LogType, Link
 import admin
 
 @app.route("/class")
 def show_class():
     link = Link.get_by_id('class_link')
+    if link == None:
+        return redirect("/")
     return redirect(link.link)
 
 @app.route("/classroom")
 def show_classroom():
     link = Link.get_by_id('class_link')
+    if link == None:
+        return redirect("/")
     return redirect(link.link + "?sl=")
 
 @app.route("/oldclass")
@@ -46,12 +50,16 @@ def show_quiz():
 @app.route("/changeclassroom")
 def show_admin_change_classlink():
     link = Link.get_by_id('class_link')
-    return render_template('admin/classroom_link.html', classlink=link)
+    config = app.config.get('config')
+    jsonconfig = json.dumps(app.config.get('config'))
+    return render_template('admin/classroom_link.html', appconfig=config, config=jsonconfig, classlink=link)
 
 @app.route("/changeslide")
 def show_admin_change_slidelink():
     link = Link.get_by_id('slide_link')
-    return render_template('admin/slide_link.html', slidelink=link)
+    config = app.config.get('config')
+    jsonconfig = json.dumps(app.config.get('config'))
+    return render_template('admin/slide_link.html',  appconfig=config, config=jsonconfig, slidelink=link)
 
 @app.route("/help", methods=['POST'])
 def trigger_help():
@@ -85,7 +93,6 @@ def go_to_student(studentId):
 @app.route("/changeclassroom", methods=['POST'])
 def trigger_changeclassroom():
     classlink =  cgi.escape(request.form['classlink'])
-
     link = Link.get_or_insert('class_link', link=classlink)
     link.link = classlink
     link.put()
