@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Darrington TEALS</title>
+    <meta name="author" content="TEALS Virtual Community">
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta name="robots" content="NOINDEX,NOFOLLOW">
+    <meta name="description" property="og:description" content="TEALS Virtual Classroom">
+    <meta name="keywords" content="teals, virtual, classroom, online, remote, teaching">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="google" content="notranslate" />
+
+    <link href="css/semantic.min.css" rel="stylesheet" media="screen">
+    <link href="css/owl.carousel.min.css" rel="stylesheet" media="screen">
+    <link href="css/owl.theme.green.min.css" rel="stylesheet" media="screen">
+    <link href="css/main.css" rel="stylesheet" media="screen">
+
+    <body>
+        <!-- Page Contents -->
+        <div class="pusher">
+            <div class="ui vertical">
+                <div class="ui container">
+                    <h1 class="ui center aligned icon header">
+                        <i class="circular users teal icon"></i> Welcome to the TEALS virtual classroom
+                    </h1>
+                </div>
+                <div class="ui container">
+                    <div class="ui five doubling cards">
+                        <div class="card blue raffle-ticket-card" style="display:none;">
+                            <div class="content">
+                                <div class="description">
+                                    <div class="ui teal statistic">
+                                        <div class="value">
+                                            <i class="ticket icon"></i>
+                                            <span class="total-raffle-tickets"></span>
+                                        </div>
+                                        <div class="label text-blue">
+                                            Total Tickets
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card blue raffle-ticket-card" style="display:none;">
+                            <div class="content">
+                                <div class="description">
+                                    <div class="ui teal statistic">
+                                        <div class="value">
+                                            <i class="ticket icon"></i>
+                                            <span class="weekly-raffle-tickets"></span>
+                                        </div>
+                                        <div class="label text-blue">
+                                            Tickets This Week
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card quiz-button">
+                            <div class="ui button large green buttoncard">
+                                <i class="list layout icon"></i>Begin Quiz
+                            </div>
+                        </div>
+                        <div class="card help-button">
+                            <div class="ui button large blue buttoncard">
+                                <i class="info circle icon"></i>I need Help
+                            </div>
+                        </div>
+
+                        <div class="card snap-button">
+                            <div class="ui button image" style="height:100%">
+                                <img src="/images/links/snap.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui container">
+                    <div style="margin-bottom:40px;"></div>
+                    <h3 class="ui top attached header blue center aligned segment">
+                        Select your name from the list to get started
+                    </h3>
+                    <div class="ui attached segment item">
+                        <div class="ui link cards owl-carousel owl-theme">
+                            {% for student in students %}
+                            <div id="{{student.studentId}}" skype="{{student.skypeMeeting}}" class="ui card">
+                                <div class="image">
+                                    <img src="/images/avatar/{{student.studentId}}.png">
+                                </div>
+                                <div class="content">
+                                    <span class="header">{{student.name}}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="ui bottom attached huge button get-started">Start Session <i class="right arrow icon"></i></div>
+                </div>
+            </div>
+
+            <!-- Modals -->
+            <div class="ui modal survey small">
+                <div class="header"><span class="notification-header"></span></div>
+                <div class="content">
+                    <span class="notification-body"></span>
+                </div>
+                <div class="actions">
+                    <div class="ui large form">
+                        <div class="ui stacked segment">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <textarea id="survey-response-body" name="body"></textarea>
+                                </div>
+                            </div>
+                            <div id="submit-response" class="ui fluid large teal submit button">Submit Response</div>
+                        </div>
+                        <div class="ui error message"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui modal linkmodal small">
+                <div class="header"><span class="link-header"></span></div>
+                <div class="content">
+                    <a class="link-url" target="_blank"></a>
+                </div>
+                <div class="actions">
+                    <div class="ui approve button green">Go to Link</div>
+                    <div class="ui cancel button">Dismiss</div>
+                </div>
+            </div>
+
+            <div class="ui modal quizmodal small">
+                <div class="header">Quiz</div>
+                <div class="content">
+                    {{quiz.instructions | safe}}
+                </div>
+                <div class="actions">
+                    <a class="ui approve button green" href="{{quiz.link}}" target="_blank">Go to Link</a>
+                    <div class="ui cancel button">Dismiss</div>
+                </div>
+            </div>
+
+
+            <div class="ui modal poll small basic">
+                <div class="header">
+                    <div class="ui one column stackable center aligned page grid">
+                        <div class="column twelve wide">
+                            <span class="notification-header"></span></div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="ui one column stackable center aligned page grid">
+                        <div class="column twelve wide">
+                            <span class="notification-body"></span>
+                        </div>
+                        <div class="column twelve wide">
+
+                            <button id="thumbsdown" class="ui icon button humongous negative">
+                                <i class="thumbs down icon"></i>
+                            </button>
+                            <button id="thumbsup" class="ui icon button humongous positive">
+                                <i class="thumbs up icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JAVASCRIPTS -->
+            <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+                crossorigin="anonymous"></script>
+            <script src="https://js.pusher.com/3.2/pusher.min.js"></script>
+            <script type="text/javascript" src="js/semantic.min.js"></script>
+            <script type="text/javascript" src="js/owl.carousel.min.js"></script>
+            <script type="text/javascript">
+                var config = {{config|safe}}
+            </script>
+            <script type="text/javascript" src="js/common.js"></script>
+            <script type="text/javascript" src="js/main.js"></script>
+
+    </body>
+
+</html>

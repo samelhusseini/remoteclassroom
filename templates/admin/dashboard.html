@@ -1,0 +1,126 @@
+{% extends "admin/admin.html" %} {% block body %}
+
+<div class="ui vertical center aligned segment">
+    <div class="ui container">
+        <h2 class="ui center aligned icon header">
+            <i class="circular users teal icon"></i> Welcome to the TEALS virtual classroom (Admin Portal)
+        </h2>
+        {% for student in studentsjson %} {{student.name}} {% endfor %}
+        <div style="margin-bottom:40px;"></div>
+        <div class="ui attached segment item">
+            <div class="ui link cards owl-carousel owl-theme">
+                {% for student in students %}
+                <div id="{{student.studentId}}" skype="{{student.skypeMeeting}}" skype-full="{{student.directSkype}}" class="ui card student">
+                    <div class="image">
+                        <img src="/images/avatar/{{student.studentId}}.png">
+                    </div>
+                    <div class="content">
+                        <span class="header"><i class="icon circle grey small" ></i>{{student.name}}
+                        </span>
+
+                        <h4 class="ui red header notifications-off"></h4>
+                        <div>
+                        </div>
+                        <div class="extra content">
+                            <span class="right floated">
+                            <i class="ticket outline ticket icon"></i>
+                            {{student.rewardcount}} tickets
+                        </span>
+                        </div>
+                    </div>
+                    <div class="ui attached button green ping-button">
+                        <i class="icon spinner "></i> Ping
+                    </div>
+                    <div class="ui attached button red reward-button">
+                        <i class="icon ticket "></i> Reward Ticket
+                    </div>
+                    <div class="ui bottom attached buttons">
+                        <div class="ui bottom attached button blue connect-button">
+                            <i class="icon skype "></i> Web
+                        </div>
+                        <div class="ui bottom attached button teal connect-direct-button">
+                            <i class="icon skype "></i> Direct
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="ui bottom attached buttons">
+            <div class="ui button huge refresh-button">Refresh Status<i class="right refresh icon"></i></div>
+            <button class="ui item huge blue button connect">Connect All <i class="right arrow icon"></i></button>
+        </div>
+        <div class="ui bottom attached blue progress hidden" data-percent="0" id="connect-progress">
+            <div class="bar"></div>
+            <div class="label"></div>
+        </div>
+    </div>
+</div>
+<div style="margin-bottom:20px;"></div>
+<div class="ui cards one column stackable grid center aligned">
+    {% for entry in entries %}
+    <div class="ui card ten wide column">
+        <div class="content">
+            {% if entry.type == 'poll' %}
+            <i class="right floated thumbs up icon humongous green"></i> {% endif %} {% if entry.type == 'alert' %}
+            <i class="right floated announcement icon humongous blue"></i> {% endif %} {% if entry.type == 'survey' %}
+            <i class="right floated browser icon humongous red"></i> {% endif %} {% if entry.type == 'link' %}
+            <i class="right floated linkify icon humongous yellow"></i> {% endif %} {% if entry.type == 'quiz' %}
+            <i class="right floated list layout icon humongous yellow"></i> {% endif %}
+
+            <a class="header">{{ entry.question }}</a>
+            <div class="meta">
+                Sent <span class="ago_date">{{ entry.date }}</span>
+            </div>
+            <div class="description">
+                <p>{{entry.html }}</p>
+            </div>
+            <div class="extra">
+                {% if entry.type == 'poll' %}
+                <div class="ui statistics">
+                    <div class="red statistic">
+                        <div class="value">
+                            {{entry.no}}
+                        </div>
+                        <div class="label">
+                            <i class="red thumbs down icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="green statistic">
+                        <div class="value">
+                            {{entry.yes}}
+                        </div>
+                        <div class="label">
+                            <i class="green thumbs up icon"></i>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="ui comments">
+                {% for answer in entry.answers %}
+                <div class="comment">
+                    <a class="avatar">
+                        <img src="/images/avatar/{{answer.studentId}}.png">
+                    </a>
+                    <div class="content">
+                        <a class="author">{{answer.studentId}}</a>
+                        <div class="metadata">
+                            Received <span class="ago_date">{{answer.date }}</span>
+                        </div>
+                        <div class="text">
+                            {% if entry.type != 'poll' %} {{answer.answer}} {% else %} voted {{answer.answer}} {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <em>Unbelievable.  No polls today</em> {% endfor %}
+</div>
+
+{% endblock %}

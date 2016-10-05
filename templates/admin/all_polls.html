@@ -1,0 +1,81 @@
+{% extends "admin/admin.html" %} {% block body %}
+
+<div class="ui cards one column stackable grid">
+    {% for entry in entries %}
+    <div class="ui card sixteen wide column">
+        <div class="content">
+            {% if entry.type == 'poll' %}
+            <i class="right floated thumbs up icon humongous green"></i>
+            {% endif %}
+            {% if entry.type == 'alert' %}
+            <i class="right floated announcement icon humongous blue"></i>
+            {% endif %}
+            {% if entry.type == 'survey' %}
+            <i class="right floated browser icon humongous red"></i>
+            {% endif %}
+            {% if entry.type == 'link' %}
+            <i class="right floated linkify icon humongous yellow"></i>
+            {% endif %}
+            {% if entry.type == 'quiz' %}
+            <i class="right floated list layout icon humongous yellow"></i>
+            {% endif %}
+
+            <a class="header">{{ entry.question }}</a>
+            <div class="meta">
+                Sent <span class="ago_date">{{ entry.date }}</span>
+            </div>
+            <div class="description">
+                <p>{{entry.html }}</p>
+            </div>
+            <div class="extra">
+                {% if entry.type == 'poll' %}
+                <div class="ui statistics">
+                    <div class="red statistic">
+                        <div class="value">
+                            {{entry.no}}
+                        </div>
+                        <div class="label">
+                            <i class="red thumbs down icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="green statistic">
+                        <div class="value">
+                            {{entry.yes}}
+                        </div>
+                        <div class="label">
+                            <i class="green thumbs up icon"></i>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="ui comments">
+                {% for answer in entry.answers %}
+                <div class="comment">
+                    <a class="avatar">
+                        <img src="/images/avatar/{{answer.studentId}}.png">
+                    </a>
+                    <div class="content">
+                        <a class="author">{{answer.studentId}}</a>
+                        <div class="metadata">
+                            Received <span class="ago_date">{{answer.date }}</span>
+                        </div>
+                        <div class="text">
+                        {% if entry.type != 'poll' %}
+                            {{answer.answer}}
+                        {% else %}
+                            voted {{answer.answer}}
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <em>Unbelievable.  No polls today</em> {% endfor %}
+</div>
+
+{% endblock %}

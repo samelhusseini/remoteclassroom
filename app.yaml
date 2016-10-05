@@ -1,0 +1,31 @@
+application: darringtonteals
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /css
+  static_dir: css
+
+- url: /js
+  static_dir: js
+
+- url: /images
+  static_dir: images
+
+- url: .*
+  script: main.app
+
+libraries:
+- name: ssl
+  version: latest
+
+env_variables:
+  PUSHER_APP_ID: '239760'
+  PUSHER_APP_KEY: '74e204003e3870300809'
+  PUSHER_APP_SECRET: '7b0e59e128dcbddea5f8'

@@ -1,0 +1,111 @@
+{% extends "admin/admin.html" %} {% block body %}
+<div class="ui vertical masthead center aligned segment">
+    <div class="ui link cards">
+        <div class="card pulse-poll">
+            <div class="content">
+                <div class="header">
+                    <i class="thumbs up icon"></i>
+                    Pulse Poll</div>
+                <div class="description">
+                    How are you doing?.
+                </div>
+            </div>
+            <div class="ui bottom attached button primary">
+                <i class="send icon"></i> Send
+            </div>
+        </div>
+
+        <div class="card announcement-reminder">
+            <div class="content">
+                <div class="header">
+                    <i class="announcement icon"></i>
+                    5 min Reminder</div>
+                <div class="description">
+                    5 more minute to go!
+                </div>
+            </div>
+            <div class="ui bottom attached button green">
+                <i class="send icon"></i> Send
+            </div>
+        </div>
+
+        <div class="card quiz-reminder">
+            <div class="content">
+                <div class="header">
+                    <i class="list layout icon"></i>
+                    Quiz</div>
+                <div class="description">
+                    Go to Quiz
+                </div>
+            </div>
+            <div class="ui bottom attached button green">
+                <i class="send icon"></i> Send
+            </div>
+        </div>
+    </div>
+    <h3>Custom Poll</h3>
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+            <h2 class="ui teal image header">
+                <div class="content">
+                    Please fill in the following to post a poll.
+                </div>
+            </h2>
+            <form class="ui large form" method="POST">
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="help icon"></i>
+                            <input type="text" name="header" placeholder="Poll Header">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <textarea name="body" placeholder="Poll Body"></textarea>
+                        </div>
+                    </div>
+                    <div class="inline fields">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="type" value="poll" checked="" tabindex="0" class="hidden">
+                                <label>Poll</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="type" value="survey" tabindex="0" class="hidden">
+                                <label>Question</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="type" value="link" tabindex="0" class="hidden">
+                                <label>Link</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="type" value="alert" tabindex="0" class="hidden">
+                                <label>Announcement</label>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="type" value="html" tabindex="0" class="hidden">
+                                <label>Html</label>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                    <div class="ui fluid large teal submit button submit-notification">Submit</div>
+                </div>
+
+                <div class="ui error message"></div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
