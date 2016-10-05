@@ -62,7 +62,8 @@ To embed the getting started page, in a CMS like Canvas, place the following HTM
 
 ```HTML
 
-<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://tealsclassroom.appspot.com/" width="300" height="500">
+<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    src="https://tealsclassroom.appspot.com/" width="300" height="500">
   Your browser does not support iframes.</iframe>
 
 ``` 
