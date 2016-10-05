@@ -1,6 +1,8 @@
 # tealsclassroom
 TEALS Virtual Classroom for remote teaching
 
+![](http://tealsclassroom.appspot.com/images/screenshots/starterscreenshot.png)
+
 Try it now:
 * [Starter Demo](http://tealsclassroom.appspot.com/starter)
 * [Admin Demo](http://tealsclassroom.appspot.com/admin)
