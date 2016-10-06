@@ -79,7 +79,7 @@ To embed the getting started page, in a CMS like Canvas, place the following HTM
 
 ## Browser support
 
-Chrome
+Chrome 28+
 
 ## License
 
