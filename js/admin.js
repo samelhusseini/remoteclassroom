@@ -241,15 +241,3 @@ $(document).ready(function () {
     });
     $('#connect-progress').hide();
 });
-
-(function (d, script) {
-    script = d.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.onload = function () {
-        // remote script has loaded
-        Smooch.init({ appToken: 'e415pm1hohu9rdeshw7y040y4' });
-    };
-    script.src = 'https://cdn.smooch.io/smooch.min.js';
-    d.getElementsByTagName('head')[0].appendChild(script);
-} (document));
