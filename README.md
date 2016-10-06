@@ -71,7 +71,7 @@ To embed the getting started page, in a CMS like Canvas, place the following HTM
 2. Hit the Let's get started button
 
 3. First visit: Click "Allow" to allow Chrome notifications for the site
-![](http://tealsclassroom.appspot.com/images/screenshots/chromenotifications.png)
+![](http://tealsclassroom.appspot.com/images/screenshots/chromenotifications.png| width=300)
 
 4. Select your name from the list, and hit 'Start Session' 
 
