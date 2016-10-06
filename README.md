@@ -70,6 +70,22 @@ To embed the getting started page, in a CMS like Canvas, place the following HTM
 
 ``` 
 
+## Student Instructions
+
+1. Login to the student CMS (where the main ```Let's get started``` page is embedded in an iframe).
+
+2. Hit the Let's get started button
+
+3. First visit: Click "Allow" to allow Chrome notifications for the site
+![](http://tealsclassroom.appspot.com/images/screenshots/chromenotifications.png)
+
+4. Select your name from the list, and hit 'Start Session' 
+
+5. Leave the virtual classroom tab open to receive notifications.
+
+## Browser support
+
+Chrome
 
 ## License
 
