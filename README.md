@@ -30,13 +30,7 @@ and create an app
 
 Download the Google App SDK for Python and run throught the [setup](https://cloud.google.com/sdk/docs/) steps
 
-### Build
-
-Install Node ([http://nodejs.org](http://nodejs.org)). Then run the following: 
-
-```
-npm install
-``` 
+### Dependencies
 
 Install python ([https://www.python.org/downloads/](https://www.python.org/downloads/)). Then run the following: 
 
