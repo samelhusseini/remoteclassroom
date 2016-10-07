@@ -42,7 +42,7 @@ def show_slide():
 
 @app.route("/quiz")
 def show_quiz():
-    quizLink = app.config.get('quiz')['redirectLink']
+    quizLink = app.config.get('features')['quiz']['quizLink']
     return redirect(quizLink)
 
 @app.route("/changeclassroom")
@@ -118,10 +118,8 @@ def show_index():
 @app.route("/starter")
 def show_starter():
     students = getStudents()
-    quiz = app.config.get('quiz')
-    quiz['instructions'] = ''.join(quiz['instructions'])
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('starter.html', jsconfig=jsonconfig, students=students, quiz=quiz)
+    return render_template('starter.html', jsconfig=jsonconfig, students=students)
 
 @app.route("/starter", methods=['POST'])
 def get_starter_info():

@@ -326,9 +326,6 @@ var runQuiz = function () {
     .modal('setting', 'transition', 'horizontal flip')
     .modal('setting', 'allowMultiple', true)
     .modal('setting', 'inverted', true)
-    .modal('setting', 'onApprove', function () {
-        window.open(data.link);
-    })
     //.modal('setting', 'closable', false)
     .modal('show')
     ;

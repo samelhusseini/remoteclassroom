@@ -61,18 +61,19 @@
             "image": "/images/defaults/myAvatar.png"
         }
     },
-    "quiz": {
-        "instructions": [
-        "<p>To begin the quiz, go to: <br />",
-            "<h3><a href=\"http://example.com/quiz\" target=\"_blank\">http://example.com/quiz</a> </h3><br /> and",
-            "type in the following code (or copy and paste)<br />",
-            "<h3>XXXXXXXXX</h3>",
-        "</p>"
-        ], 
-        "link": "http://example.com/quiz", 
-        "quizLink": "https://b.socrative.com/login/student/"
-    },
     "features": {
+        "quiz": {
+            "enable": true, 
+            "instructions": [
+            "<p>To begin the quiz, go to: <br />",
+                "<h3><a href=\"http://example.com/quiz\" target=\"_blank\">http://example.com/quiz</a> </h3><br /> and",
+                "type in the following code (or copy and paste)<br />",
+                "<h3>XXXXXXXXX</h3>",
+            "</p>"
+            ], 
+            "link": "http://example.com/quiz", 
+            "redirectLink": "https://b.socrative.com/login/student/"
+        },
         "pingStudents": {
             "enable": true
         },

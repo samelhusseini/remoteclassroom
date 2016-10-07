@@ -134,16 +134,18 @@
                 </div>
             </div>
 
+            {% if (config['features']['quiz']['enable'] == true) %}
             <div class="ui modal quizmodal small">
                 <div class="header">Quiz</div>
                 <div class="content">
-                    {{quiz.instructions | safe}}
+                    {{''.join(config['features']['quiz']['instructions']) | safe}}
                 </div>
                 <div class="actions">
-                    <a class="ui approve button green" href="{{quiz.link}}" target="_blank">Go to Link</a>
+                    <a class="ui approve button green" href="{{config['features']['quiz']['link']}}" target="_blank">Go to Link</a>
                     <div class="ui cancel button">Dismiss</div>
                 </div>
             </div>
+            {% endif %}
 
 
             <div class="ui modal poll small basic">
