@@ -23,6 +23,14 @@ You will need to note the following:
 * APP_KEY
 * APP_SECRET
 
+#### Enable client events
+
+For full feature functionality, enable client events in pusher. 
+
+In pusher, go to App Settings, and select ```Enable client events```
+
+<img src="http://tealsclassroom.appspot.com/images/screenshots/clientevents.png" width="300" />
+
 ### App Engine
 
 Create an account (if you don't already have one) with [appengine](https://appengine.google.com)
