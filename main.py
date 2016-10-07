@@ -42,7 +42,7 @@ def show_slide():
 
 @app.route("/quiz")
 def show_quiz():
-    quizLink = app.config.get('features')['quiz']['quizLink']
+    quizLink = app.config.get('features')['quiz']['redirectLink']
     return redirect(quizLink)
 
 @app.route("/changeclassroom")

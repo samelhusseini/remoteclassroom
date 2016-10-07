@@ -13,9 +13,9 @@ import json
 
 app = Flask(__name__)
 
-fName = './config.sample.json'
-if os.path.isfile(fName): 
-    fName = './config.json'
+fName = './config.json'
+if not os.path.exists(fName): 
+    fName = './config.sample.json'
 with open(fName) as f:
     config = json.load(f)
 app.config.update(config)
