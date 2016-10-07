@@ -1,4 +1,5 @@
 node_modules
 lib
 *.pyc
-/config_file.json
+/config.json
+/images/avatar

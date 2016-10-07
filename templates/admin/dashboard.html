@@ -12,7 +12,7 @@
                 {% for student in students %}
                 <div id="{{student.studentId}}" skype="{{student.skypeMeeting}}" skype-full="{{student.directSkype}}" class="ui card student">
                     <div class="image">
-                        <img src="/images/avatar/{{student.studentId}}.png">
+                        <img src="{{student.image}}">
                     </div>
                     <div class="content">
                         <span class="header"><i class="icon circle grey small" ></i>{{student.name}}

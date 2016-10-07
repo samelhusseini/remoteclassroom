@@ -13,7 +13,10 @@ import json
 
 app = Flask(__name__)
 
-with open('./config_file.json') as f:
+fName = './config.sample.json'
+if os.path.isfile(fName): 
+    fName = './config.json'
+with open(fName) as f:
     config = json.load(f)
 app.config.update(config)
 
