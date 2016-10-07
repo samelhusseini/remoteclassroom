@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import json
 import logging
 
-from common import app, p, getStudents
+from common import app, p, getStudents, getStudent, getStudentName
 from model import Poll, PollAnswer, Log, LogType
 
 @app.route("/admin")
@@ -17,21 +17,22 @@ def show_admin():
 
 @app.route("/newpoll")
 def show_admin_new_poll():
-    config = app.config.get('config')
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('admin/new_poll.html', appconfig=config, config=jsonconfig)
+    return render_template('admin/new_poll.html', jsconfig=jsonconfig)
 
 @app.route("/allpolls")
 def show_admin_all_polls():
     entries = Poll.get_all().fetch(10)
     for entry in entries:
         entry.answers = PollAnswer.query(PollAnswer.parent == entry.key)
+        for answer in entry.answers:
+            answer.student = getStudent(answer.studentId)
+            answer.studentName = getStudentName(answer.student)
         if entry.type == "poll":
             entry.yes = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "yes").count()
             entry.no = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "no").count()
-    config = app.config.get('config')
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('admin/all_polls.html', appconfig=config, config=jsonconfig, entries=entries)
+    return render_template('admin/all_polls.html', jsconfig=jsonconfig, entries=entries)
 
 @app.route("/dashboard")
 def dashboard():
@@ -41,12 +42,14 @@ def dashboard():
     entries = Poll.get_todays().fetch(5)
     for entry in entries:
         entry.answers = PollAnswer.query(PollAnswer.parent == entry.key)
+        for answer in entry.answers:
+            answer.student = getStudent(answer.studentId)
+            answer.studentName = getStudentName(answer.student)
         if entry.type == "poll":
             entry.yes = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "yes").count()
             entry.no = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "no").count()
-    config = app.config.get('config')
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('admin/dashboard.html', appconfig=config, config=jsonconfig, entries=entries, students=students)
+    return render_template('admin/dashboard.html', jsconfig=jsonconfig, entries=entries, students=students)
 
 
 #region Pusher
@@ -109,21 +112,23 @@ def trigger_notification():
 @app.route("/reward", methods=['POST'])
 def trigger_reward():
     studentId =  cgi.escape(request.form['studentId'])
+    student = getStudent(studentId)
 
     reward = Log(type=LogType.REWARD, student=studentId)
     reward.put()
 
-    p.trigger('private-status', 'client-reward', {'studentId': studentId})
+    p.trigger('private-status', 'client-reward', {'studentId': studentId, 'student': student})
     return "Reward received"
 
 @app.route("/ping", methods=['POST'])
 def trigger_ping():
     studentId =  cgi.escape(request.form['studentId'])
+    student = getStudent(studentId)
 
     pinged = Log(type=LogType.PINGED, student=studentId)
     pinged.put()
 
-    p.trigger('private-status', 'client-ping', {'studentId': studentId})
+    p.trigger('private-status', 'client-ping', {'studentId': studentId, 'student': student})
     return "Ping received"
 
 #endregion

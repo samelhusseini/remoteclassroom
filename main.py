@@ -1,5 +1,3 @@
-import pusher, pusher.gae
-
 import os
 import cgi
 from flask import Flask, render_template, redirect, request
@@ -7,7 +5,7 @@ from datetime import datetime, timedelta
 import json
 import logging
 
-from common import app, p, getStudents
+from common import app, p, getStudents, getStudent
 from model import Log, LogType, Link
 import admin
 
@@ -65,10 +63,11 @@ def show_admin_change_slidelink():
 def trigger_help():
     studentId =  cgi.escape(request.form['studentId'])
 
+    student = getStudent(studentId)
     help = Log(type=LogType.HELP_NEEDED, student=studentId)
     help.put()
 
-    p.trigger('private-status', 'help', {'studentId': studentId})
+    p.trigger('private-status', 'help', {'studentId': studentId, 'student': student})
     return "Help received"
 
 @app.route("/register", methods=['POST'])
@@ -86,9 +85,10 @@ def go_to_tim():
     return go_to_student('student6')
 
 def go_to_student(studentId):
-    student = app.config.get('students')[studentId]
-    logging.info(student)
-    return redirect(student['skypeMeeting'])
+    student = getStudent(studentId)
+    if student is not None:
+        return redirect(student['skypeMeeting'])
+    return redirect("/")
 
 @app.route("/changeclassroom", methods=['POST'])
 def trigger_changeclassroom():
@@ -112,18 +112,16 @@ def trigger_changeslide():
 @app.route("/")
 def show_index():
     host = app.config.get('host')
-    config = app.config.get('config')
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('index.html', appconfig=config, config=jsonconfig, host=host)
+    return render_template('index.html', jsconfig=jsonconfig, host=host)
 
 @app.route("/starter")
 def show_starter():
     students = getStudents()
     quiz = app.config.get('quiz')
     quiz['instructions'] = ''.join(quiz['instructions'])
-    config = app.config.get('config')
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('starter.html', appconfig=config, config=jsonconfig, students=students, quiz=quiz)
+    return render_template('starter.html', jsconfig=jsonconfig, students=students, quiz=quiz)
 
 @app.route("/starter", methods=['POST'])
 def get_starter_info():
@@ -137,14 +135,6 @@ def get_starter_info():
     info["weeklytickets"] = weeklyrewards.count()
     return json.dumps(info)
 
-@app.route("/pusher/auth", methods=['POST'])
-def pusher_authentication():
-
-    auth = p.authenticate(
-        channel=request.form['channel_name'],
-        socket_id=request.form['socket_id']
-    )
-    return json.dumps(auth)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=app.config.get('debug'))

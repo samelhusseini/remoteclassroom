@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{{appconfig.school_name}}</title>
+    <title>{{config['school_name']}}</title>
     <meta name="author" content="TEALS Virtual Community">
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
     <meta name="robots" content="NOINDEX,NOFOLLOW">
@@ -23,11 +23,12 @@
             <div class="ui vertical">
                 <div class="ui container">
                     <h1 class="ui center aligned icon header">
-                        <i class="circular users teal icon"></i> Welcome to the {{appconfig.appname}}
+                        <i class="circular users teal icon"></i> Welcome to the {{config['appname']}}
                     </h1>
                 </div>
                 <div class="ui container">
                     <div class="ui five doubling cards">
+                        {% if (config['features']['raffleTickets']['enable'] == true) %}
                         <div class="card blue raffle-ticket-card" style="display:none;">
                             <div class="content">
                                 <div class="description">
@@ -58,6 +59,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         <div class="card quiz-button">
                             <div class="ui button large green buttoncard">
                                 <i class="list layout icon"></i>Begin Quiz
@@ -85,9 +87,9 @@
                     <div class="ui attached segment item">
                         <div class="ui link cards owl-carousel owl-theme">
                             {% for student in students %}
-                            <div id="{{student.studentId}}" skype="{{student.skypeMeeting}}" class="ui card">
+                            <div id="{{student.studentId}}" index="{{student.index}}" skype="{{student.skypeMeeting}}" class="ui card">
                                 <div class="image">
-                                    <img src="{{student.img}}">
+                                    <img src="{{student.image}}">
                                 </div>
                                 <div class="content">
                                     <span class="header">{{student.name}}</span>
@@ -176,7 +178,7 @@
             <script type="text/javascript" src="js/semantic.min.js"></script>
             <script type="text/javascript" src="js/owl.carousel.min.js"></script>
             <script type="text/javascript">
-                var config = {{config|safe}}
+                var config = {{jsconfig|safe}}
             </script>
             <script type="text/javascript" src="js/common.js"></script>
             <script type="text/javascript" src="js/main.js"></script>

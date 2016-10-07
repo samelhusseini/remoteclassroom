@@ -2,7 +2,7 @@
 // Enable pusher logging - don't include this in production
 Pusher.logToConsole = true;
 
-var pusher = new Pusher(config.pusher_key, {
+var pusher = new Pusher(config.PUSHER_APP_KEY, {
     encrypted: true
 });
 
@@ -23,7 +23,6 @@ channel.bind('client-is_online', function (data) {
     }
     if (!data.notificationsOn) {
         $('#' + data.studentId + " .notifications-off").text("Notifications Disabled");
-        console.log(students[data.studentId] + " has not enabled notifications");
     }
 });
 
@@ -48,12 +47,14 @@ channel.bind('registered', function (data) {
 channel.bind('help', function (data) {
     console.log(data.studentId + " needs help..");
     var title = "Student needs help";
+    var student = data.student;
+
     if (Notification.permission !== "granted")
         Notification.requestPermission();
     else {
         var notification = new Notification(title, {
-            icon: config.notifications.help.icon,
-            body: students[data.studentId] + " needs help!",
+            icon: student.image,
+            body: getName(student) + " needs help!",
         });
 
         notification.onclick = function () {
@@ -119,8 +120,7 @@ var connect = function () {
         var studentId = $(this).attr('id');
         var selectedUrl = $(this).attr('skype');
         var directSelectedUrl = $(this).attr('skype-full');
-        
-        var studentName = students[studentId];
+        var totalStudentCount = config.totalStudents;
         var currIndex = index;
         setTimeout(function () {
             $('#connect-progress').show();
@@ -229,10 +229,6 @@ $(document).ready(function () {
         var utctime = moment.tz($(this).text(), "UTC");
         $(this).text(utctime.tz('America/Los_Angeles').startOf('min').fromNow());
     });
-    $('.author').each(function () {
-        var author = $(this).text();
-        $(this).text(students[author]);
-    })
     $('.ui.sidebar')
         .sidebar('show')
         ;

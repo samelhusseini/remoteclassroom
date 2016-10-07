@@ -54,10 +54,10 @@
                 {% for answer in entry.answers %}
                 <div class="comment">
                     <a class="avatar">
-                        <img src="/images/avatar/{{answer.studentId}}.png">
+                        <img src="{{answer.student.image if answer.student != None else '/images/defaults/myAvatar.png'}}">
                     </a>
                     <div class="content">
-                        <a class="author">{{answer.studentId}}</a>
+                        <a class="author">{{answer.studentName}}</a>
                         <div class="metadata">
                             Received <span class="ago_date">{{answer.date }}</span>
                         </div>

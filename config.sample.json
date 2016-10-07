@@ -1,6 +1,9 @@
 {
     "debug": false,
     "host": "http://tealsclassroom.appspot.com",
+    "appname": "TEALS virtual classroom",
+    "school_name": "TEALS",
+    "course_name": "Intro to CS",
     "students": {
         "student1":
         { 
@@ -69,11 +72,21 @@
         "link": "http://example.com/quiz", 
         "quizLink": "https://b.socrative.com/login/student/"
     },
+    "features": {
+        "pingStudents": {
+            "enable": true
+        },
+        "raffleTickets": {
+            "enable": true
+        }
+    },
+    "pusher": {
+        "PUSHER_APP_ID": "255936",
+        "PUSHER_APP_SECRET": "4cc12a8cbeb59427cfaa"
+    },
     "config": {
-        "appname": "TEALS virtual classroom",
-        "school_name": "TEALS",
-        "course_name": "Intro to CS",
-        "pusher_key": "736d92139f4cbbb04640",
+        "PUSHER_APP_KEY": "74e204003e3870300809",
+        "totalStudents": 5,
         "notifications": {
             "poll": {
                 "icon": "/images/teacher_avatar.png"

@@ -3,7 +3,7 @@
 <div class="ui vertical center aligned segment">
     <div class="ui container">
         <h2 class="ui center aligned icon header">
-            <i class="circular users teal icon"></i> Welcome to the {{appconfig.appname}} (Admin Portal)
+            <i class="circular users teal icon"></i> Welcome to the {{config['appname']}} (Admin Portal)
         </h2>
         {% for student in studentsjson %} {{student.name}} {% endfor %}
         <div style="margin-bottom:40px;"></div>
@@ -21,19 +21,28 @@
                         <h4 class="ui red header notifications-off"></h4>
                         <div>
                         </div>
+                        {% if (config['features']['raffleTickets']['enable'] == true) %}
                         <div class="extra content">
                             <span class="right floated">
                             <i class="ticket outline ticket icon"></i>
                             {{student.rewardcount}} tickets
-                        </span>
+                            </span>
                         </div>
+                        {% endif %}
                     </div>
+
+                    {% if (config['features']['pingStudents']['enable'] == true) %}
                     <div class="ui attached button green ping-button">
                         <i class="icon spinner "></i> Ping
                     </div>
+                    {% endif %}
+
+                    {% if (config['features']['raffleTickets']['enable'] == true) %}
                     <div class="ui attached button red reward-button">
                         <i class="icon ticket "></i> Reward Ticket
                     </div>
+                    {% endif %}
+
                     <div class="ui bottom attached buttons">
                         <div class="ui bottom attached button blue connect-button">
                             <i class="icon skype "></i> Web
@@ -103,10 +112,10 @@
                 {% for answer in entry.answers %}
                 <div class="comment">
                     <a class="avatar">
-                        <img src="/images/avatar/{{answer.studentId}}.png">
+                        <img src="{{answer.student.image if answer.student != None else '/images/defaults/myAvatar.png'}}">
                     </a>
                     <div class="content">
-                        <a class="author">{{answer.studentId}}</a>
+                        <a class="author">{{answer.studentName}}</a>
                         <div class="metadata">
                             Received <span class="ago_date">{{answer.date }}</span>
                         </div>

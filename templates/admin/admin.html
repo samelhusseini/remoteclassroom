@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{{appconfig.school_name}} Admin</title>
+    <title>{{config['school_name']}} Admin</title>
     <meta name="author" content="TEALS Virtual Community">
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
     <meta name="robots" content="NOINDEX,NOFOLLOW">
@@ -46,7 +46,7 @@
         <div class="ui fixed large inverted pointing menu">
             <div class="ui container">
                 <a href="/admin" class="header item">
-                    <img class="logo" src="images/teals_logo.png"> {{appconfig.school_name}}
+                    <img class="logo" src="images/teals_logo.png"> {{config['school_name']}}
                 </a>
                 <a href="/admin" class="item">Home</a>
                 <a href="/allpolls" class="item">All Polls</a>
@@ -225,7 +225,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.5/moment-timezone-with-data-2010-2020.min.js"></script>
         <script type="text/javascript">
-            var config = {{config|safe}}
+            var config = {{jsconfig|safe}}
         </script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/admin.js"></script>

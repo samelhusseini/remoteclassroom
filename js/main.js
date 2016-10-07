@@ -2,7 +2,7 @@
 // Enable pusher logging - don't include this in production
 Pusher.logToConsole = true;
 
-var pusher = new Pusher(config.pusher_key, {
+var pusher = new Pusher(config.PUSHER_APP_KEY, {
     encrypted: true
 });
 
@@ -237,7 +237,7 @@ statuschannel.bind('client-reward', function (data) {
         else {
             var notification = new Notification("Raffle ticket", {
                 icon: config.notifications.raffle.icon,
-                body: "Congrats " + studentsName[globalStudentId] + "! You've received a raffle ticket!",
+                body: "Congrats " + getName(data.student) + "! You've received a raffle ticket!",
             });
 
             notification.onclick = function () {
@@ -274,8 +274,10 @@ statuschannel.bind('client-ping', function (data) {
 $('.owl-carousel .ui.card').on('click', function () {
     var studentId = $(this).attr('id');
     var selectedUrl = $(this).attr('skype');
+    var selectedIndex = $(this).attr('index');
     localStorage.setItem('studentId', studentId);
     localStorage.setItem('selectedUrl', selectedUrl);
+    localStorage.setItem('selectedIndex', selectedIndex);
 
     console.log("clicked: " + studentId + " : " + selectedUrl);
     $('.owl-carousel .ui.card').removeClass('selected');
@@ -290,9 +292,11 @@ function getFieldValue(fieldId) {
 
 var getStarted = function () {
     var studentId = localStorage.getItem('studentId');
+    var selectedIndex = localStorage.getItem('selectedIndex');
     var selectedUrl = localStorage.getItem('selectedUrl');
     if (selectedUrl != "") {
         localStorage.setItem('globalStudentId', studentId);
+        localStorage.setItem('globalStudentIndex', selectedIndex);
         var suffix = "?sl=";
         $.post('/register', { studentId: studentId }).success(function (data) {
             console.log('Registration successful for ' + studentId);
@@ -302,7 +306,6 @@ var getStarted = function () {
 }
 
 var needHelp = function () {
-
     if (Notification.permission !== "granted")
         Notification.requestPermission();
     else {
@@ -362,6 +365,7 @@ $(document).ready(function () {
         }
     });
     var globalStudentId = localStorage.getItem('globalStudentId');
+    var globalStudentIndex = localStorage.getItem('globalStudentIndex');
 
     if (globalStudentId) {
         $.post('/starter', { studentId: globalStudentId }).success(function (data) {
@@ -373,9 +377,9 @@ $(document).ready(function () {
         });
 
     }
-    if (globalStudentId) {
+    if (globalStudentId && globalStudentIndex) {
         $('#' + globalStudentId).addClass('selected');
-        $(".owl-carousel").trigger("to.owl.carousel", [studentIndex[globalStudentId], 1, true])
+        $(".owl-carousel").trigger("to.owl.carousel", [globalStudentIndex, 1, true])
     }
     if (Notification.permission !== "granted")
         Notification.requestPermission();
