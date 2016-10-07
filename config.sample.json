@@ -86,7 +86,7 @@
         "PUSHER_APP_SECRET": "4cc12a8cbeb59427cfaa"
     },
     "config": {
-        "PUSHER_APP_KEY": "74e204003e3870300809",
+        "PUSHER_APP_KEY": "736d92139f4cbbb04640",
         "totalStudents": 5,
         "notifications": {
             "poll": {
