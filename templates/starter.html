@@ -60,16 +60,22 @@
                             </div>
                         </div>
                         {% endif %}
+                        
+                        {% if (config['features']['quiz']['enable'] == true) %}
                         <div class="card quiz-button">
                             <div class="ui button large green buttoncard">
                                 <i class="list layout icon"></i>Begin Quiz
                             </div>
                         </div>
+                        {% endif %}
+
+                        {% if (config['features']['help']['enable'] == true) %}
                         <div class="card help-button">
                             <div class="ui button large blue buttoncard">
                                 <i class="info circle icon"></i>I need Help
                             </div>
                         </div>
+                        {% endif %}
 
                         <div class="card snap-button">
                             <div class="ui button image" style="height:100%">

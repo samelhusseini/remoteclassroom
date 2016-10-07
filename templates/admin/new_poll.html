@@ -29,6 +29,7 @@
             </div>
         </div>
 
+        {% if (config['features']['quiz']['enable'] == true) %}
         <div class="card quiz-reminder">
             <div class="content">
                 <div class="header">
@@ -42,6 +43,7 @@
                 <i class="send icon"></i> Send
             </div>
         </div>
+        {% endif %}
     </div>
     <h3>Custom Poll</h3>
     <div class="ui middle aligned center aligned grid">
