@@ -38,6 +38,10 @@
     border: 5px solid #75ab00 !important;
 }
 
+.ui.item.link.selected, .ui.item.selected:hover{
+    border: 5px solid #75ab00 !important;
+}
+
 .owl-theme .owl-nav [class*=owl-]:hover {
     background-color: 	#2b5464;
 }

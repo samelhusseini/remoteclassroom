@@ -4,6 +4,7 @@
     "appname": "TEALS virtual classroom",
     "school_name": "TEALS",
     "course_name": "Intro to CS",
+    "studentView": "card",
     "students": {
         "student1":
         { 

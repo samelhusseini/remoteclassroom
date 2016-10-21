@@ -36,7 +36,7 @@ def getStudents():
     index = 0
     for k, v in studentlist.items():
         student = v
-        student['name'] = student['first_name'] + " " + student['last_name']
+        student['name'] = getStudentName(student)
         if student['enabled'] == 'true':
             student['index'] = index
             students.append(student)

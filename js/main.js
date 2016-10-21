@@ -271,7 +271,7 @@ statuschannel.bind('client-ping', function (data) {
     }
 })
 
-$('.owl-carousel .ui.card').on('click', function () {
+var studentClicked = function () {
     var studentId = $(this).attr('id');
     var selectedUrl = $(this).attr('skype');
     var selectedIndex = $(this).attr('index');
@@ -281,8 +281,13 @@ $('.owl-carousel .ui.card').on('click', function () {
 
     console.log("clicked: " + studentId + " : " + selectedUrl);
     $('.owl-carousel .ui.card').removeClass('selected');
+    $('.owl-list .ui.item').removeClass('selected');
     $(this).addClass('selected');
-})
+}
+
+$('.owl-carousel .ui.card').on('click', studentClicked);
+$('.owl-list .ui.item').on('click', studentClicked);
+
 
 //Get value from an input field
 function getFieldValue(fieldId) {
@@ -372,7 +377,6 @@ $(document).ready(function () {
             $('.weekly-raffle-tickets').text(starterInfo.weeklytickets);
             $('.raffle-ticket-card').show();
         });
-
     }
     if (globalStudentId && globalStudentIndex) {
         $('#' + globalStudentId).addClass('selected');
