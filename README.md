@@ -1,5 +1,5 @@
-# tealsclassroom
-TEALS Virtual Classroom for remote teaching
+# remoteclassroom
+Virtual Classroom for remote teaching
 
 ![](http://tealsclassroom.appspot.com/images/screenshots/starterscreenshot.png)
 
