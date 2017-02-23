@@ -23,18 +23,6 @@ def show_classroom():
         return redirect("/")
     return redirect(link.link + "?sl=")
 
-@app.route("/oldclass")
-def show_old_classroom():
-    return redirect('https://join.microsoft.com/meet/samelh/DG4RFMGZ')
-
-@app.route("/classproc")
-def show_class_proc():
-    return redirect('https://docs.google.com/presentation/d/1kLWV0vnWB-nt6trokBBhjLAUUyo8EEPULvizORI9_QM/edit?usp=sharing')
-
-@app.route("/classprocedures")
-def show_class_procedures():
-    return redirect('https://docs.google.com/presentation/d/1kLWV0vnWB-nt6trokBBhjLAUUyo8EEPULvizORI9_QM/edit?usp=sharing')
-
 @app.route("/slide")
 def show_slide():
     link = Link.get_by_id('slide_link')
@@ -48,16 +36,14 @@ def show_quiz():
 @app.route("/changeclassroom")
 def show_admin_change_classlink():
     link = Link.get_by_id('class_link')
-    config = app.config.get('config')
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('admin/classroom_link.html', appconfig=config, config=jsonconfig, classlink=link)
+    return render_template('admin/classroom_link.html', jsconfig=jsonconfig, classlink=link)
 
 @app.route("/changeslide")
 def show_admin_change_slidelink():
     link = Link.get_by_id('slide_link')
-    config = app.config.get('config')
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('admin/slide_link.html',  appconfig=config, config=jsonconfig, slidelink=link)
+    return render_template('admin/slide_link.html',  jsconfig=jsonconfig, slidelink=link)
 
 @app.route("/help", methods=['POST'])
 def trigger_help():
@@ -79,10 +65,6 @@ def trigger_register():
 
     p.trigger('private-status', 'registered', {'studentId': studentId})
     return "Registration received"
-
-@app.route("/tim")
-def go_to_tim():
-    return go_to_student('student6')
 
 def go_to_student(studentId):
     student = getStudent(studentId)
