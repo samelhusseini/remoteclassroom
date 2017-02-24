@@ -8,9 +8,12 @@ install:
 - pip install -r requirements.txt -t lib/
 script:
 - echo "No Script to run"
+# [START travis_deploy]
 deploy:
   provider: gae
   skip_cleanup: true
   keyfile: darringtonteals-8e58298eb992.json
   project: darringtonteals
+  default: true
   on: darrington
+# [END travis_deploy]
