@@ -15,5 +15,6 @@ deploy:
   keyfile: darringtonteals-8e58298eb992.json
   project: darringtonteals
   default: true
-  on: darrington
+  on:
+    all_branches: true
 # [END travis_deploy]
