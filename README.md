@@ -7,9 +7,9 @@ Try it now:
 * [Starter Demo](http://tealsclassroom.appspot.com/starter)
 * [Admin Demo](http://tealsclassroom.appspot.com/admin)
 
-## Running your own copy of tealsclassroom
+## Running your own copy of remoteclassroom
 
-You can fork your own copy of tealsclassroom in a few easy steps:
+You can fork your own copy of remoteclassroom in a few easy steps:
 
 Begin by checking out this repo into a local folder
 
