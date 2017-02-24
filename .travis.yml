@@ -1,0 +1,9 @@
+deploy:
+  provider: gae
+  keyfile: darringtonteals-8e58298eb992.json
+  project: darringtonteals
+  on: darrington
+before_install:
+- openssl aes-256-cbc -K $encrypted_7617702322ea_key -iv $encrypted_7617702322ea_iv
+  -in darringtonteals-8e58298eb992.json.enc -out darringtonteals-8e58298eb992.json
+  -d
