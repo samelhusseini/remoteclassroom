@@ -10,6 +10,7 @@ script:
 - echo "No Script to run"
 deploy:
   provider: gae
+  skip_cleanup: true
   keyfile: darringtonteals-8e58298eb992.json
   project: darringtonteals
   on: darrington
