@@ -1,0 +1,19 @@
+language: python
+before_install:
+- openssl aes-256-cbc -K $encrypted_7617702322ea_key -iv $encrypted_7617702322ea_iv
+  -in tealsclassroom-89708b35ef44.json.enc -out tealsclassroom-89708b35ef44.json -d
+install:
+# Install the Python dependencies
+- pip install -r requirements.txt -t lib/
+script:
+- echo "No Script to run"
+# [START travis_deploy]
+deploy:
+  provider: gae
+  skip_cleanup: true
+  keyfile: tealsclassroom-89708b35ef44.json
+  project: tealsclassroom
+  default: true
+  on:
+    all_branches: true
+# [END travis_deploy]

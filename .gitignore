@@ -1,5 +1,4 @@
-node_modules
-lib
+node_modules/
+lib/
 *.pyc
-/config.json
-/images/avatar
+tealsclassroom-89708b35ef44.json
