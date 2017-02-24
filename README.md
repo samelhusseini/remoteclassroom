@@ -1,6 +1,8 @@
 # remoteclassroom
 Virtual Classroom for remote teaching
 
+![](https://travis-ci.org/samelhusseini/remoteclassroom.svg?branch=master)
+
 ![](http://tealsclassroom.appspot.com/images/screenshots/starterscreenshot.png)
 
 Try it now:
