@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import json
 import logging
 
-from common import app, p, getStudents, getStudent, getStudentName
+from common import app, p, getStudents, getMeetings, getStudent, getStudentName
 from model import Poll, PollAnswer, Log, LogType
 
 @app.route("/admin")
@@ -37,6 +37,7 @@ def show_admin_all_polls():
 @app.route("/dashboard")
 def dashboard():
     students = getStudents()
+    meetings = getMeetings()
     for student in students:
         student['rewardcount'] = Log.get_by_type(student['studentId'], LogType.REWARD).count()
     entries = Poll.get_todays().fetch(5)
@@ -49,7 +50,7 @@ def dashboard():
             entry.yes = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "yes").count()
             entry.no = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "no").count()
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('admin/dashboard.html', jsconfig=jsonconfig, entries=entries, students=students)
+    return render_template('admin/dashboard.html', jsconfig=jsonconfig, entries=entries, students=students, meetings=meetings)
 
 
 #region Pusher

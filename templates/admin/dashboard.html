@@ -108,6 +108,63 @@
         </div>
     </div>
 </div>
+
+
+<div class="ui vertical center aligned segment">
+    <div class="ui container">
+        {% if (config['meetingView'] == 'list') %}
+        <div class="ui middle aligned divided animated list owl-list">
+            {% for meeting in meetings %}
+            <div id="{{meeting.studentId}}" index="{{meeting.index}}" skype="{{meeting.skypeMeeting}}" class="ui item link">
+                <div class="right floated content">
+
+                    <div class="ui bottom buttons">
+                        <div class="ui bottom button blue connect-button">
+                            <i class="icon skype "></i> Web
+                        </div>
+                        <div class="ui bottom button teal connect-direct-button">
+                            <i class="icon skype "></i> Direct
+                        </div>
+                    </div>
+
+                </div>
+                <img class="ui avatar image" src="{{meeting.image}}">
+                <div class="content">
+                    {{meeting.name}}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="ui attached segment item">
+            <div class="ui link cards owl-carousel owl-theme">
+                {% for meeting in meetings %}
+                <div id="{{meeting.studentId}}" skype="{{meeting.skypeMeeting}}" skype-full="{{meeting.directSkype}}" class="ui card student">
+                    <div class="image">
+                        <img src="{{meeting.image}}">
+                    </div>
+                    <div class="content">
+                        <span class="header">{{meeting.name}}
+                        </span>
+                    </div>
+
+                    <div class="ui bottom attached buttons">
+                        <div class="ui bottom attached button blue connect-button">
+                            <i class="icon skype "></i> Web
+                        </div>
+                        <div class="ui bottom attached button teal connect-direct-button">
+                            <i class="icon skype "></i> Direct
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
 <div style="margin-bottom:20px;"></div>
 <div class="ui cards one column stackable grid center aligned">
     {% for entry in entries %}

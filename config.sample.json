@@ -5,6 +5,7 @@
     "school_name": "TEALS",
     "course_name": "Intro to CS",
     "studentView": "card",
+    "meetingView": "card",
     "students": {
         "student1":
         { 

@@ -285,9 +285,8 @@ var studentClicked = function () {
     $(this).addClass('selected');
 }
 
-$('.owl-carousel .ui.card').on('click', studentClicked);
-$('.owl-list .ui.item').on('click', studentClicked);
-
+$('.owl-carousel.students .ui.card').on('click', studentClicked);
+$('.owl-list.students .ui.item').on('click', studentClicked);
 
 //Get value from an input field
 function getFieldValue(fieldId) {
@@ -380,7 +379,7 @@ $(document).ready(function () {
     }
     if (globalStudentId && globalStudentIndex) {
         $('#' + globalStudentId).addClass('selected');
-        $(".owl-carousel").trigger("to.owl.carousel", [globalStudentIndex, 1, true])
+        $(".owl-carousel.students").trigger("to.owl.carousel", [globalStudentIndex, 1, true])
     }
     if (Notification.permission !== "granted")
         Notification.requestPermission();

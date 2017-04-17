@@ -87,7 +87,7 @@
                         Select your name from the list to get started
                     </h3>
                     {% if (config['studentView'] == 'list') %}
-                    <div class="ui middle aligned divided animated list owl-list">
+                    <div class="ui middle aligned divided animated list owl-list students">
                         {% for student in students %}
                         <div id="{{student.studentId}}" index="{{student.index}}" skype="{{student.skypeMeeting}}" class="ui item link">
                             <!--<div class="right floated content">
@@ -102,7 +102,7 @@
                     </div>
                     {% else %}
                     <div class="ui attached segment item">
-                        <div class="ui link cards owl-carousel owl-theme">
+                        <div class="ui link cards owl-carousel owl-theme students">
                             {% for student in students %}
                             <div id="{{student.studentId}}" index="{{student.index}}" skype="{{student.skypeMeeting}}" class="ui card">
                                 <div class="image">
@@ -117,6 +117,45 @@
                     </div>
                     {% endif %}
                     <div class="ui bottom attached huge button get-started">Start Session <i class="right arrow icon"></i></div>
+                </div>
+            </div>
+
+                <div class="ui container">
+                    <div style="margin-bottom:40px;"></div>
+                    {% if (config['meetingView'] == 'list') %}
+                    <div class="ui middle aligned divided animated list owl-list meetings">
+                        {% for meeting in meetings %}
+                        <a href="{{meeting.skypeMeeting}}?sl=" target="_blank">
+                            <div id="{{meeting.studentId}}" index="{{meeting.index}}" skype="{{meeting.skypeMeeting}}" class="ui item link">
+                                <!--<div class="right floated content">
+                                    <div class="ui button">Add</div>
+                                </div>-->
+                                <img class="ui avatar image" src="{{meeting.image}}">
+                                <div class="content">
+                                    {{meeting.name}}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="ui item">
+                        <div class="ui link cards owl-carousel owl-theme meetings">
+                            {% for meeting in meetings %}
+                            <a href="{{meeting.skypeMeeting}}?sl=" target="_blank">
+                                <div id="{{meeting.meetingId}}" index="{{meeting.index}}" skype="{{meeting.skypeMeeting}}" class="ui card">
+                                    <div class="image">
+                                        <img src="{{meeting.image}}">
+                                    </div>
+                                    <div class="content">
+                                        <span class="header">{{meeting.name}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 
