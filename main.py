@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import json
 import logging
 
-from common import app, p, getStudents, getStudent
+from common import app, p, getStudents, getMeetings, getStudent
 from model import Log, LogType, Link
 import admin
 
@@ -100,8 +100,10 @@ def show_index():
 @app.route("/starter")
 def show_starter():
     students = getStudents()
+    meetings = getMeetings()
+
     jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('starter.html', jsconfig=jsonconfig, students=students)
+    return render_template('starter.html', jsconfig=jsonconfig, students=students, meetings=meetings)
 
 @app.route("/starter", methods=['POST'])
 def get_starter_info():

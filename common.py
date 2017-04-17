@@ -44,6 +44,19 @@ def getStudents():
     students = sorted(students, key=lambda student: student['last_name'])
     return students
 
+def getMeetings():
+    meetingslist = app.config.get('meetings')
+    meetings = []
+    index = 0
+    for k, v in meetingslist.items():
+        meeting = v
+        if meeting['enabled'] == 'true':
+            meeting['index'] = index
+            meetings.append(meeting)
+            index+=1
+    meetings = sorted(meetings, key=lambda student: student['name'])
+    return meetings
+
 def getStudent(studentId):
     students = app.config.get('students')
     if studentId in students:
