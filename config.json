@@ -1,6 +1,6 @@
 {
     "debug": false,
-    "host": "http://darrington.us",
+    "host": "http://darrington.remoteclass.school",
     "appname": "TEALS remote classroom",
     "school_name": "Darrington TEALS",
     "course_name": "Intro to CS",
@@ -10,143 +10,178 @@
         "student1":
         { 
             "studentId": "student1", 
-            "first_name": "Hannah",
-            "last_name": "Anderson",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/UD3USZW1",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:UD3USZW1%3Frequired-media=audio",
+            "first_name": "Jeremy",
+            "last_name": "Ballard",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/0IHSO7WA",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:0IHSO7WA%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student1.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student2": { 
             "studentId": "student2", 
-            "first_name": "Steven",
-            "last_name": "Colson",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/CI3FGGMG",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:CI3FGGMG%3Frequired-media=audio",
+            "first_name": "Desmond",
+            "last_name": "Bigby",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/H07VLPY0",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:H07VLPY0%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student2.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student3": { 
             "studentId": "student3", 
-            "first_name": "Jaedan",
-            "last_name": "Cook",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/4Z09YUDW",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:4Z09YUDW%3Frequired-media=audio",
+            "first_name": "Dylan",
+            "last_name": "Case",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/G6O0MLLV",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:G6O0MLLV%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student3.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student4": { 
             "studentId": "student4", 
-            "first_name": "Kataleena",
-            "last_name": "Forbus",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/63S3SQEU",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:63S3SQEU%3Frequired-media=audio",
+            "first_name": "Tristan",
+            "last_name": "Coggins",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/J1SCTLMP",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:J1SCTLMP%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student4.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student5": { 
             "studentId": "student5", 
-            "first_name": "Jorjah",
-            "last_name": "Johnson",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/XTVCBXC2",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:XTVCBXC2%3Frequired-media=audio",
+            "first_name": "Roger",
+            "last_name": "Conley",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/47OPX7E2",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:47OPX7E2%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student5.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student6": { 
             "studentId": "student6",
-            "first_name": "Riley",
-            "last_name": "Jones",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/OZSRL8B5",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:OZSRL8B5%3Frequired-media=audio",
+            "first_name": "Steven",
+            "last_name": "Darst",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/WRCK12XE",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:WRCK12XE%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student6.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student7": {
             "studentId": "student7", 
-            "first_name": "Thomas",
-            "last_name": "Miller",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/9AB51BQ6",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:9AB51BQ6%3Frequired-media=audio",
+            "first_name": "Eddie",
+            "last_name": "Del Cid Paz",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/GTABAXUI",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:GTABAXUI%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student7.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student8": {
             "studentId": "student8", 
-            "first_name": "Alexander",
-            "last_name": "Pickard",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/IJ8B6ZBV",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:IJ8B6ZBV%3Frequired-media=audio",
+            "first_name": "Johnathon",
+            "last_name": "Franke",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/AY38ZUBR",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:AY38ZUBR%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student8.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student9": {
             "studentId": "student9", 
-            "first_name": "Aden",
-            "last_name": "Requa",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/OM1VHWFW",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:OM1VHWFW%3Frequired-media=audio",
+            "first_name": "Isaiah",
+            "last_name": "Green",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/03O2B79E",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:03O2B79E%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student9.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student10": {
             "studentId": "student10", 
-            "first_name": "Brevin",
-            "last_name": "Ross",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/1VVROR6O",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:1VVROR6O%3Frequired-media=audio",
+            "first_name": "Josephine",
+            "last_name": "Hagglund",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/ZIQJTOU0",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:ZIQJTOU0%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student10.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student11": {
             "studentId": "student11", 
-            "first_name": "Ryan",
-            "last_name": "Thornock",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/6GQUW5YC ",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:6GQUW5YC%3Frequired-media=audio",
+            "first_name": "Jalen",
+            "last_name": "Maltos",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/W88LH456",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:W88LH456%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student11.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student12": {
             "studentId": "student12",
-            "first_name": "Michael",
-            "last_name": "West",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/MQF409CB",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:MQF409CB%3Frequired-media=audio",
+            "first_name": "Logan",
+            "last_name": "Mckenzie",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/4C51PZUE",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:4C51PZUE%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student12.png"
+            "image": "/images/defaults/myAvatar.png"
         },
         "student13": {
             "studentId": "student13", 
-            "first_name": "Evan",
-            "last_name": "Couch",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/427QESO1",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:427QESO1%3Frequired-media=audio",
+            "first_name": "Trent",
+            "last_name": "Mcmillion",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/MMMJYCH7",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:MMMJYCH7%3Frequired-media=audio",
             "enabled": "true", 
-            "image": "/images/avatar/student13.png"
+            "image": "/images/defaults/myAvatar.png"
+        },
+        "student14": {
+            "studentId": "student14", 
+            "first_name": "James",
+            "last_name": "Mead",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/HVN7NZY4",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:HVN7NZY4%3Frequired-media=audio",
+            "enabled": "true", 
+            "image": "/images/defaults/myAvatar.png"
+        },
+        "student15": {
+            "studentId": "student15", 
+            "first_name": "Joseph",
+            "last_name": "Monchak",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/L9D6TP2X",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:L9D6TP2X%3Frequired-media=audio",
+            "enabled": "true", 
+            "image": "/images/defaults/myAvatar.png"
+        },
+        "student16": {
+            "studentId": "student16", 
+            "first_name": "Jorgan",
+            "last_name": "Sedenius",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/916TP1I4",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:916TP1I4%3Frequired-media=audio",
+            "enabled": "true", 
+            "image": "/images/defaults/myAvatar.png"
         }
     },
     "meetings": {
         "meeting1": {
             "meetingId": "meeting1", 
             "name": "Meeting Room 1",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/G9X8MXFE",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:G9X8MXFE%3Frequired-media=audio",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/JQ4TE9EX",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:JQ4TE9EX%3Frequired-media=audio",
             "enabled": "true", 
             "image": "/images/defaults/meeting.png"
         },
         "meeting2": {
             "meetingId": "meeting2", 
             "name": "Meeting Room 2",
-            "skypeMeeting": "https://meet.lync.com/teals/samelhusseini/TCBDZ72U",
-            "directSkype": "conf:sip:samelhusseini@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:TCBDZ72U%3Frequired-media=audio",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/N7XARUK3",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:N7XARUK3%3Frequired-media=audio",
+            "enabled": "true", 
+            "image": "/images/defaults/meeting.png"
+        },
+        "meeting3": {
+            "meetingId": "meeting3", 
+            "name": "Meeting Room 3",
+            "skypeMeeting": "https://meet.lync.com/teals/adamleibhardt/0XF03Y2O",
+            "directSkype": "conf:sip:adamleibhardt@TEALS.onmicrosoft.com;gruu;opaque=app:conf:focus:id:0XF03Y2O%3Frequired-media=audio",
             "enabled": "true", 
             "image": "/images/defaults/meeting.png"
         }
     },
     "features": {
         "quiz": {
-            "enable": true,
+            "enable": false,
             "instructions": [
             "<p>To begin the quiz, go to: <br />",
                 "<h3><a href=\"http://darrington.us/quiz\" target=\"_blank\">http://darrington.us/quiz</a> </h3><br />",
@@ -171,8 +206,13 @@
         "PUSHER_APP_ID": "239760",
         "PUSHER_APP_SECRET": "7b0e59e128dcbddea5f8"
     },
+    "lti": {
+        "CONSUMER_KEY": "",
+        "SECRET": ""
+    },
     "config": {
         "PUSHER_APP_KEY": "74e204003e3870300809",
+        "iframeUrl": "https://snap.berkeley.edu/snapsource/snap.html",
         "totalStudents": 7,
         "notifications": {
             "poll": {

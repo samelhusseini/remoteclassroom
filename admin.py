@@ -7,11 +7,14 @@ from google.appengine.ext.ndb import msgprop
 from datetime import datetime, timedelta
 import json
 import logging
+import requests
+
+from canvas_read import CanvasReader
 
 from common import app, p, getStudents, getMeetings, getStudent, getStudentName
-from model import Poll, PollAnswer, Log, LogType
+from model import Poll, PollAnswer, Log
 
-@app.route("/admin")
+@app.route("/adminn")
 def show_admin():
     return redirect('/dashboard')
 
@@ -39,7 +42,7 @@ def dashboard():
     students = getStudents()
     meetings = getMeetings()
     for student in students:
-        student['rewardcount'] = Log.get_by_type(student['studentId'], LogType.REWARD).count()
+        student['rewardcount'] = Log.get_by_type(student['studentId'], 'reward').count()
     entries = Poll.get_todays().fetch(5)
     for entry in entries:
         entry.answers = PollAnswer.query(PollAnswer.parent == entry.key)
@@ -51,7 +54,6 @@ def dashboard():
             entry.no = PollAnswer.query(PollAnswer.parent == entry.key, PollAnswer.answer == "no").count()
     jsonconfig = json.dumps(app.config.get('config'))
     return render_template('admin/dashboard.html', jsconfig=jsonconfig, entries=entries, students=students, meetings=meetings)
-
 
 #region Pusher
 @app.route("/poll", methods=['POST'])
@@ -115,7 +117,7 @@ def trigger_reward():
     studentId =  cgi.escape(request.form['studentId'])
     student = getStudent(studentId)
 
-    reward = Log(type=LogType.REWARD, student=studentId)
+    reward = Log(type='reward', student=studentId)
     reward.put()
 
     p.trigger('private-status', 'client-reward', {'studentId': studentId, 'student': student})
@@ -126,7 +128,7 @@ def trigger_ping():
     studentId =  cgi.escape(request.form['studentId'])
     student = getStudent(studentId)
 
-    pinged = Log(type=LogType.PINGED, student=studentId)
+    pinged = Log(type='ping', student=studentId)
     pinged.put()
 
     p.trigger('private-status', 'client-ping', {'studentId': studentId, 'student': student})

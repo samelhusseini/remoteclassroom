@@ -1,14 +1,21 @@
 import os
 import cgi
+from google.appengine.ext import ndb
 from flask import Flask, render_template, redirect, request
 from datetime import datetime, timedelta
 import json
 import logging
 
-from common import app, p, getStudents, getMeetings, getStudent
-from model import Log, LogType, Link
-import admin
+from common import app, p, getStudents, getMeetings, getStudent, pusher_key_config
+from model import Log, Student
 
+from common import feedUpdated, configChanged
+import admin
+import lti
+
+from canvas_read import CanvasReader
+
+'''
 @app.route("/class")
 def show_class():
     link = Link.get_by_id('class_link')
@@ -45,27 +52,6 @@ def show_admin_change_slidelink():
     jsonconfig = json.dumps(app.config.get('config'))
     return render_template('admin/slide_link.html',  jsconfig=jsonconfig, slidelink=link)
 
-@app.route("/help", methods=['POST'])
-def trigger_help():
-    studentId =  cgi.escape(request.form['studentId'])
-
-    student = getStudent(studentId)
-    help = Log(type=LogType.HELP_NEEDED, student=studentId)
-    help.put()
-
-    p.trigger('private-status', 'help', {'studentId': studentId, 'student': student})
-    return "Help received"
-
-@app.route("/register", methods=['POST'])
-def trigger_register():
-    studentId =  cgi.escape(request.form['studentId'])
-
-    register = Log(type=LogType.REGISTERED, student=studentId)
-    register.put()
-
-    p.trigger('private-status', 'registered', {'studentId': studentId})
-    return "Registration received"
-
 def go_to_student(studentId):
     student = getStudent(studentId)
     if student is not None:
@@ -90,33 +76,65 @@ def trigger_changeslide():
     link.put()
 
     return redirect("/changeslide")
+'''
 
 @app.route("/")
 def show_index():
-    host = app.config.get('host')
-    jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('index.html', jsconfig=jsonconfig, host=host)
+    return render_template('www/index.html')
 
-@app.route("/starter")
+@app.route("/test")
+def show_test():
+    return render_template('test.html')
+
+@app.route("/test-starter")
 def show_starter():
-    students = getStudents()
-    meetings = getMeetings()
+    host = app.config.get('host')
+    logging.info(request.view_args.items())
+    jsonconfig = {
+        'PUSHER_APP_KEY': json.dumps(pusher_key_config['PUSHER_APP_KEY']).replace('"', ''),
+        'iframeUrl': 'http://snap.berkeley.edu/snapsource/snap.html'
+    }
+    iframeUrl = ndb.Key('Setting', '1207667iframeUrl').get()
+    if (iframeUrl):
+        jsonconfig['iframeUrl'] = json.dumps(iframeUrl.value).replace('"', '')
+    jsonsession = {
+        'full_name': 'test',
+        'course_id': '1207667',
+        'user_id': '8791939',
+        'role': 'Instructor'
+    }
+    student = ndb.Key('Student', jsonsession['course_id'] + jsonsession['user_id']).get()
+    if (student and student.primaryRemoteLink):
+        jsonsession['remote_link'] = json.dumps(student.primaryRemoteLink).replace('"', '')
+    return render_template('index.html', jsconfig=jsonconfig, jssession=jsonsession, host=host)
 
-    jsonconfig = json.dumps(app.config.get('config'))
-    return render_template('starter.html', jsconfig=jsonconfig, students=students, meetings=meetings)
 
+@app.route("/test-admin")
+def show_adminn():
+    host = app.config.get('host')
+    jsonconfig = {
+        'PUSHER_APP_KEY': json.dumps(pusher_key_config['PUSHER_APP_KEY']).replace('"', ''),
+        'iframeUrl': 'http://snap.berkeley.edu/snapsource/snap.html',
+        'classSkype': 'https://meet.lync.com/microsoft/samelh/37BHT9O9'
+    }
+    jsonsession = {
+        'full_name': 'test'
+    }
+    return render_template('admin.html', jsconfig=jsonconfig, jssession=jsonsession, host=host)
+
+'''
 @app.route("/starter", methods=['POST'])
 def get_starter_info():
     studentId =  cgi.escape(request.form['studentId'])
 
-    rewards = Log.get_by_type(studentId, LogType.REWARD)
-    weeklyrewards = Log.get_by_type_weekly(studentId, LogType.REWARD)
+    rewards = Log.get_by_type(studentId, 'reward')
+    weeklyrewards = Log.get_by_type_weekly(studentId, 'reward')
 
     info = {}
     info["totaltickets"] = rewards.count()
     info["weeklytickets"] = weeklyrewards.count()
     return json.dumps(info)
-
+'''
 
 if __name__ == "__main__":
     app.run(debug=app.config.get('debug'))

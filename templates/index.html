@@ -1,37 +1,51 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
-    <title>{{config['school_name']}}</title>
-    <meta name="author" content="TEALS Virtual Community">
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-    <meta name="robots" content="NOINDEX,NOFOLLOW">
-    <meta name="description" property="og:description" content="TEALS Virtual Classroom">
-    <meta name="keywords" content="teals, virtual, classroom, online, remote, teaching">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="google" content="notranslate" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <!--
+      Notice the use of %PUBLIC_URL% in the tag above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>Remote Classroom</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.css" rel="stylesheet" media="screen" />
+  <link href="./public/css/main.css" rel="stylesheet" media="screen" />
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.css" rel="stylesheet" media="screen">
-    <link href="css/main.css" rel="stylesheet" media="screen">
+  <script>
+    var config = {{jsconfig|safe }};
+    var session = {{jssession|safe }};
+  </script>
 
-    <body>
+  <style>
+    #remoteVideos video {
+      height: 150px;
+    }
 
-        <!-- Page Contents -->
-        <div class="pusher">
-            <div class="ui vertical masthead center aligned segment">
+    #localVideo {
+      height: 150px;
+    }
+  </style>
+  <script src="https://simplewebrtc.com/latest-v2.js"></script>
+</head>
 
-                <div class="ui container">
-                    <h2 class="ui center aligned icon header">
-                        <i class="circular users teal icon"></i> Welcome to {{config['school_name']}} {{config['course_name']}}
-                    </h2>
-                    <a href="{{host}}/starter" target="_blank" class="ui item humongous button to-starter" style="margin-top:45px;">Let's Get Started <i class="right arrow icon"></i></a>
-                </div>
-            </div>
+<body>
+  <video id="localVideo"></video>
+  <div id="remoteVideos"></div>
+  <div id="root"></div>
 
-            <!-- JAVASCRIPTS -->
-            <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-                crossorigin="anonymous"></script>
-    </body>
+  <!-- Dependencies -->
+  <script src="./public/react/react.min.js"></script>
+  <script src="./public/react/react-dom.min.js"></script>
+  <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+
+  <!-- Main -->
+  <script src="./dist/main_bundle.js"></script>
+</body>
 
 </html>

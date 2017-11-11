@@ -10,8 +10,11 @@ from datetime import datetime, timedelta
 from protorpc import messages
 import logging
 import json
+import settings
 
 app = Flask(__name__)
+app.secret_key = settings.secret_key
+app.config.from_object(settings.configClass)
 
 fName = './config.json'
 if not os.path.exists(fName): 
@@ -67,6 +70,18 @@ def getStudentName(student):
     if student is not None:
         return student['first_name'] + " " + student['last_name']
     return "Anonymous"
+
+def feedUpdated(courseId, new_message):
+    p.trigger('feed'+courseId, 'update', {'message': new_message})
+    
+def registerUpdated(courseId, user):
+    p.trigger('feed'+courseId, 'registered', {'user': user})
+
+def loadedUpdated(courseId, user):
+    p.trigger('feed'+courseId, 'loaded', {'user': user})
+
+def configChanged(courseId, name, value):
+    p.trigger('config'+courseId, 'changed', {name: value})
 
 @app.route("/pusher/auth", methods=['POST'])
 def pusher_authentication():

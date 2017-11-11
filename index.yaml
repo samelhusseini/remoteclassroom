@@ -12,6 +12,12 @@ indexes:
 
 - kind: Log
   properties:
+  - name: courseId
+  - name: date
+    direction: desc
+
+- kind: Log
+  properties:
   - name: student
   - name: date
     direction: desc
@@ -21,4 +27,20 @@ indexes:
   - name: student
   - name: type
   - name: date
+    direction: desc
+
+- kind: SourceCode
+  properties:
+  - name: studentKey
+  - name: projectName
+
+- kind: Student
+  properties:
+  - name: courseId
+  - name: fullName
+
+- kind: Student
+  properties:
+  - name: courseId
+  - name: fullName
     direction: desc
