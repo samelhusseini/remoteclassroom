@@ -41,7 +41,7 @@ export namespace Util {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-            },
+            } as any,
             body: JSON.stringify(data),
             credentials: 'include'
         })

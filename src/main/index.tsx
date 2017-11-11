@@ -74,7 +74,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         }, false);
 
         let webrtc = new SimpleWebRTC({
-            localVideoEl: ReactDOM.findDOMNode(this.refs.local),
+            localVideoEl: ReactDOM.findDOMNode((this as any).refs.local),
             remoteVideosEl: "",
             autoRequestMedia: true
             //url: 'https://your-production-signalserver.com/'
