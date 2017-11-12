@@ -74,9 +74,10 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         }, false);
 
         let webrtc = new SimpleWebRTC({
-            localVideoEl: ReactDOM.findDOMNode((this as any).refs.local),
+            localVideoEl: "",
             remoteVideosEl: "",
-            autoRequestMedia: true
+            autoRequestMedia: true,
+            media: { audio: true, video: false, screen: true }
             //url: 'https://your-production-signalserver.com/'
         });
 
@@ -84,6 +85,14 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         webrtc.on('readyToCall', function () {
             // you can name it anything
             webrtc.joinRoom(Util.getCourseId() + Util.getStudentId());
+
+            webrtc.shareScreen(function (err: any) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Sharing screen");
+                }
+            });
         });
     }
 
@@ -138,12 +147,6 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 <Menu.Menu position='right'>
                 </Menu.Menu>
             </Menu>
-            <video className="local"
-                id="localVideo"
-                ref="local" > </video>
-            <div className="remotes"
-                id="remoteVideos"
-                ref="remotes"> </div>
             <iframe id="content-iframe" src={snapUrl} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
         </div>;
     }

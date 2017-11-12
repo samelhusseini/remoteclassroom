@@ -59,7 +59,7 @@ export class Users extends React.Component<UsersProps, UsersState> {
     }
 
     handleImportUsersDialog(e: any) {
-        const token = "";
+        const token = "7~wS4LmKEJvb2dGKYVLL0cgdUMgAvAyeC6x3PcYNc8cNbAOC0fIthbXZBSjlSXUDWm";
         Util.POST('/importusers', {
             courseId: Util.getCourseId(),
             token: token

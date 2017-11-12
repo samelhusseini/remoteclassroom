@@ -42,7 +42,7 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
                 <Grid.Row>
                     <Grid.Column width={8}>
                         <h1>{user.fullName}</h1>
-                        <Screen />
+                        <Screen channel={this.props.channel} />
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>

@@ -8,6 +8,7 @@ import { Grid, Button, Container, Segment, Menu, Icon } from 'semantic-ui-react'
 import { StatusFeed } from "../components/Feed";
 import { Users } from "../components/Users";
 import { MainMenu } from "../components/MainMenu";
+import { Screen } from "../components/Screen";
 
 import * as SimpleWebRTC from 'simplewebrtc';
 
@@ -70,7 +71,6 @@ export class MainView extends React.Component<MainViewProps, MainViewState> {
         this.updateFeed();
         this.updateUsers();
 
-
         let webrtc = new SimpleWebRTC({
             localVideoEl: ReactDOM.findDOMNode((this as any).refs.local),
             remoteVideosEl: "",
@@ -129,13 +129,6 @@ export class MainView extends React.Component<MainViewProps, MainViewState> {
                         </Segment>
                     </Grid.Column>
                 </Grid>
-
-                <video className="local"
-                    id="localVideo"
-                    ref="local" > </video>
-                <div className="remotes"
-                    id="remoteVideos"
-                    ref="remotes"> </div>
             </Container>
         </div>;
     }
