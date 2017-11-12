@@ -136,7 +136,7 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                    <UserSelector messages={this.state.messages} users={this.state.users} onSelectedUser={this.setSelectedUser.bind(this)} />
+                    <UserSelector messages={this.state.messages} users={this.state.users} selectedUser={selectedUser} onSelectedUser={this.setSelectedUser.bind(this)} />
                     <div className="settings">
                         <Divider inverted />
                         <Menu vertical inverted fluid borderless className="user-selector">
