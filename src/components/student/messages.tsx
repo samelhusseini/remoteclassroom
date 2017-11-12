@@ -51,7 +51,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                                         <div>5:42PM</div>
                                     </Comment.Metadata>
                                     <Comment.Text>
-                                        <Card color='orange'>
+                                        <Card color='orange' fluid>
                                             <Card.Content><a href = 'http://www.google.com'> www.google.com</a></Card.Content>
                                         </Card>
                                     </Comment.Text>
@@ -73,7 +73,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                                         <div>5:42PM</div>
                                     </Comment.Metadata>
                                     <Comment.Text>
-                                        <Card color='blue'>
+                                        <Card color='blue' fluid>
                                             <Card.Content>The class will start in 5 minutes</Card.Content>
                                         </Card>
                                     </Comment.Text>

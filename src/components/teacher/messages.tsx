@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Grid, Comment, TextArea, Checkbox, Button, Icon, Modal, Form, Header, Image, Input } from 'semantic-ui-react';
+import { Grid, Comment, TextArea, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Card } from 'semantic-ui-react';
 
 import Util from '../../utils/util';
 
@@ -36,7 +36,35 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                                 <Comment.Metadata>
                                     <div>Today at 5:42PM</div>
                                 </Comment.Metadata>
+                                <Comment.Text>
+                                    <Card color='blue' fluid>
+                                        <Card.Content>The class will start in 5 minutes</Card.Content>
+                                    </Card>
+                                </Comment.Text>
+                            </Comment.Content>
+                        </Comment>
+                        <Comment>
+                            <Comment.Avatar src='https://digitalsummit.com/wp-content/uploads/2017/01/bobby-singh.jpg' />
+                            <Comment.Content>
+                                <Comment.Author as='a'>Matt</Comment.Author>
+                                <Comment.Metadata>
+                                    <div>Today at 5:42PM</div>
+                                </Comment.Metadata>
                                 <Comment.Text>How artistic!</Comment.Text>
+                            </Comment.Content>
+                        </Comment>
+                        <Comment>
+                            <Comment.Avatar src='https://digitalsummit.com/wp-content/uploads/2017/01/bobby-singh.jpg' />
+                            <Comment.Content>
+                                <Comment.Author as='a'>Matt</Comment.Author>
+                                <Comment.Metadata>
+                                    <div>Today at 5:42PM</div>
+                                </Comment.Metadata>
+                                <Comment.Text>
+                                    <Card color='orange' fluid>
+                                        <Card.Content><a href = 'http://www.google.com'> www.google.com</a></Card.Content>
+                                    </Card>
+                                </Comment.Text>
                             </Comment.Content>
                         </Comment>
                         <Comment>
