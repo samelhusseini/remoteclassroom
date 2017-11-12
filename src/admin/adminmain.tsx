@@ -129,7 +129,9 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
                     <div> Settings </div>
                 </div>
             </div>
-            <UserDetail messages={this.state.messages} user={selectedUser} channel={this.privateChannel} />
+            <div className="admin-body">
+                <UserDetail messages={this.state.messages} user={selectedUser} channel={this.privateChannel} />
+            </div>
         </div>;
     }
 }

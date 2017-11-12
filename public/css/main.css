@@ -116,11 +116,11 @@ body {
     left: 0;
     width: 300px;
     background-color: #0072bc;
+    overflow-y: auto;
 }
 .admin-scrollabale {
     padding: 1rem;
     position: relative;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -136,13 +136,19 @@ body {
     margin-right:0.75rem;
 }
 
-.admin-user-detail-panel {
+.admin-body {
     position: absolute;
+    top: 0;
+    bottom: 0;
     right: 0;
+    left: 300px;
+    overflow-y: auto;
+}
+
+.admin-user-detail-panel {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin-left: 300px;
     color: #333333;
     padding: 1.5rem;
 }
