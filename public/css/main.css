@@ -82,10 +82,6 @@
     font-size:40px;
 }
 
-.ui.tiny.modal {
-    width: 500px;
-}
-
 .ui.menu .item>img:not(.ui) {
     width:10em !important;
     padding-top:1em;

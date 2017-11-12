@@ -51,7 +51,7 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
                         <Button.Group size='small'>
                                 <Button>On</Button>
                                 <Button.Or />
-                                <Button Negative>Off</Button>
+                                <Button negative>Off</Button>
                             </Button.Group>
                         </h4>
                     </Grid.Column>
