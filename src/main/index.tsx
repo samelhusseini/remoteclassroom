@@ -195,7 +195,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                         <Button className="raise-hand" size='mini' color="yellow" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                     </Menu.Item>
                     <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
-                        <Icon name='sidebar'/>Open Messages
+                        <Icon name='sidebar'/>Messages
                         <Label size="small" className='white'>1</Label>
                     </Menu.Item>
                 </Menu>
