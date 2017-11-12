@@ -166,7 +166,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
             <div className={`main-sidebar ${sidebarOpen ? 'sidebar-visible' : ''}`}>
                 <Messages />
             </div>
-            <NotificationModal open={true} type="ping"/>
+            <NotificationModal open={false} type="ping"/>
         </div>;
     }
 }
