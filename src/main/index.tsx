@@ -10,9 +10,9 @@ import { Menu, Button, Icon } from "semantic-ui-react";
 
 import Util from '../utils/util';
 
-import { NotificationModal } from "../components/user/notificationmodal";
-import { Frame } from "../components/user/frame";
-import { Messages } from "../components/user/messages";
+import { NotificationModal } from "../components/student/notificationmodal";
+import { Frame } from "../components/student/frame";
+import { Messages } from "../components/student/messages";
 
 declare var Pusher: any;
 declare var config: RemoteConfig;
