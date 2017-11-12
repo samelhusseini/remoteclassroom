@@ -20,6 +20,13 @@ export interface NotificationModalState {
 
 export class NotificationModal extends React.Component<NotificationModalProps, NotificationModalState> {
 
+    constructor(props: NotificationModalProps) {
+        super(props);
+        this.state = {
+            modalOpen: false
+        }
+    }
+
     handleClose() {
         this.setState({ modalOpen: false });
     }
