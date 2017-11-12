@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Card, Input } from 'semantic-ui-react';
+import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Card, Input, Grid } from 'semantic-ui-react';
 
 import Util from '../../utils/util';
 
@@ -15,6 +15,7 @@ export interface NewPostModalProps {
 }
 
 export interface NewPostModalState {
+    tab: string;
 }
 
 export class NewPostModal extends React.Component<NewPostModalProps, NewPostModalState> {
@@ -22,83 +23,59 @@ export class NewPostModal extends React.Component<NewPostModalProps, NewPostModa
     constructor(props: NewPostModalProps) {
         super(props);
         this.state = {
+            tab: "message"
         }
     }
-
-    handleClose() {
-        this.setState({ modalOpen: false });
+    handleTabChanged(inputTab:string){
+        this.setState({tab:inputTab})
     }
 
+
     render() {
-
-        return <Modal trigger={this.props.trigger} size='fullscreen' closeIcon={true}>
-            <Header icon='add' content='New Blast' />
+        const { tab } = this.state;
+        return <Modal trigger={this.props.trigger} closeIcon={true}>
+            <Header icon='add' content='New Message to Entire Class' />
             <Modal.Content>
+                <Grid>
+                    <Grid.Row >
+                        <Grid.Column textAlign='center'>
+                            <Button.Group basic>
+                                <Button active={tab == "message"} onClick={()=>{this.handleTabChanged('message')}}>Message Entire Class</Button>
+                                <Button active={tab == "link"} onClick={()=>{this.handleTabChanged('link')}}>Send Link to Entire Class</Button>
+                                <Button active={tab == "poll"} onClick={()=>{this.handleTabChanged('poll')}}>Check Status of Entire Class</Button>
+                            </Button.Group>
+                        </Grid.Column>
+                    </Grid.Row>
+                    {tab == "message" ?
+                        <Grid.Row>
+                            <Grid.Column textAlign='right'>
+                                <Form>
+                                    <Form.TextArea autoHeight placeholder='Enter Message here' rows={1} />
+                                    <Form.Button primary>Send Message</Form.Button>
+                                </Form>
+                            </Grid.Column>
+                        </Grid.Row> : undefined}
+                    {tab == "link" ?
+                    <Grid.Row>
+                        <Grid.Column textAlign='right'>
+                            <Form>
+                                <Form.TextArea autoHeight placeholder='Enter link here, e.g. http://www.google.com' rows={1} />
+                                <Form.TextArea autoHeight placeholder='Enter link text here, e.g. Go here to search' rows={1} />
+                                <Form.Button primary>Send Link</Form.Button>
+                            </Form>
+                        </Grid.Column>
+                    </Grid.Row> : undefined}
+                    {tab == "poll" ?
+                    <Grid.Row>
+                        <Grid.Column textAlign='left'>
+                            <h4>This will send a message to all students asking them: "How are you doing so far?"</h4>
+                            <p>Results will be displayed in each students tab as they answer the question</p>
 
+                            <Button floated='right' primary>Send Survey</Button>
 
-                <Card.Group itemsPerRow='3'>
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                            <Card.Header>
-                                Steve Sanders
-        </Card.Header>
-                            <Card.Meta>
-                                Friends of Elliot
-        </Card.Meta>
-                            <Card.Description>
-                                Steve wants to add you to the group <strong>best friends</strong>
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <div className='ui two buttons'>
-                                <Button basic color='green'>Approve</Button>
-                                <Button basic color='red'>Decline</Button>
-                            </div>
-                        </Card.Content>
-                    </Card>
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/molly.png' />
-                            <Card.Header>
-                                Molly Thomas
-        </Card.Header>
-                            <Card.Meta>
-                                New User
-        </Card.Meta>
-                            <Card.Description>
-                                Molly wants to add you to the group <strong>musicians</strong>
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <div className='ui two buttons'>
-                                <Button basic color='green'>Approve</Button>
-                                <Button basic color='red'>Decline</Button>
-                            </div>
-                        </Card.Content>
-                    </Card>
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/jenny.jpg' />
-                            <Card.Header>
-                                Jenny Lawrence
-        </Card.Header>
-                            <Card.Meta>
-                                New User
-        </Card.Meta>
-                            <Card.Description>
-                                Jenny requested permission to view your contact details
-        </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <div className='ui two buttons'>
-                                <Button basic color='green'>Approve</Button>
-                                <Button basic color='red'>Decline</Button>
-                            </div>
-                        </Card.Content>
-                    </Card>
-
-                </Card.Group>
+                        </Grid.Column>
+                    </Grid.Row> : undefined}
+                </Grid>
             </Modal.Content>
         </Modal >
     }
