@@ -10,6 +10,8 @@ import { UserSelector } from "../components/userselector";
 import { UserDetail } from "../components/userdetail";
 import { MainMenu } from "../components/MainMenu";
 
+import { NewPostModal } from "../components/teacher/newpostmodal";
+
 import * as SimpleWebRTC from 'simplewebrtc';
 
 import Util from '../utils/util';
@@ -124,14 +126,23 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
         return <div className="pusher">
             <div className="admin-sidebar">
                 <div className="admin-scrollabale">
-                    <Header inverted as='h1'>Code Class</Header>
+                    <Grid>
+                        <Grid.Row>
+                            <Grid.Column width={12}>
+                                <Header inverted as='h2'>Code Class</Header>
+                            </Grid.Column>
+                            <Grid.Column width={4} textAlign="left">
+                                <NewPostModal trigger={<Button circular inverted color={'white' as any} icon='add' size='mini' />} />
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                     <UserSelector messages={this.state.messages} users={this.state.users} onSelectedUser={this.setSelectedUser.bind(this)} />
                     <div className="settings">
                         <Divider inverted />
                         <Menu vertical inverted fluid borderless className="user-selector">
-                        <Menu.Item >
-                            <Header inverted as='h4'> <Icon inverted name='settings' />Settings </Header>
-                        </Menu.Item>
+                            <Menu.Item >
+                                <Header inverted as='h4'> <Icon inverted name='settings' />Settings </Header>
+                            </Menu.Item>
                         </Menu>
                     </div>
                 </div>
