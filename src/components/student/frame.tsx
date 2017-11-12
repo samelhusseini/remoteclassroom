@@ -11,6 +11,7 @@ declare var config: RemoteConfig;
 declare var session: RemoteSession;
 
 export interface FrameProps {
+    url?: string;
 }
 
 export interface FrameState {
@@ -25,7 +26,8 @@ export class Frame extends React.Component<FrameProps, FrameState> {
     }
 
     render() {
-        //<iframe id="content-iframe" src={snapUrl} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
-        return <div />
+        const { url } = this.props;
+        return <iframe id="content-iframe" src={url} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
+        //return <div />
     }
 }

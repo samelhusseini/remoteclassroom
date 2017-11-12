@@ -116,7 +116,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
     }
 
     handleOpenSidebar(e: any) {
-        this.setState({sidebarOpen: !this.state.sidebarOpen})
+        this.setState({ sidebarOpen: !this.state.sidebarOpen })
     }
 
     render() {
@@ -138,31 +138,33 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
 
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         return <div className="pusher">
-            <Menu inverted className="fixed starter-menu" size='mini'>
-                <Menu.Menu position='left'>
+            <div className={`main-body ${sidebarOpen ? 'sidebar-visible' : ''}`}>
+                <Menu inverted className="starter-menu" size='mini'>
+                    <Menu.Menu position='left'>
+                        <Menu.Item>
+                            <img className="ui avatar image" src={user_image} />
+                            <span>{full_name}</span>
+                        </Menu.Item>
+                    </Menu.Menu>
+                    {remote_link ?
+                        <Menu.Item>
+                            <Button color="green" icon labelPosition='left' onClick={this.handleStartCall}><Icon name='call' /> Start Call</Button>
+                        </Menu.Item> : undefined}
                     <Menu.Item>
-                        <img className="ui avatar image" src={user_image} />
-                        <span>{full_name}</span>
+                        <Button color="blue" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                     </Menu.Item>
-                </Menu.Menu>
-                {remote_link ?
                     <Menu.Item>
-                        <Button color="green" icon labelPosition='left' onClick={this.handleStartCall}><Icon name='call' /> Start Call</Button>
-                    </Menu.Item> : undefined}
-                <Menu.Item>
-                    <Button color="blue" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
-                </Menu.Item>
-                <Menu.Item>
-                    <Button color="blue" icon labelPosition='left' onClick={this.handleOpenSidebar.bind(this)}><Icon name='hand pointer' />Open Sidebar</Button>
-                </Menu.Item>
-                <Menu.Menu position='right'>
-                </Menu.Menu>
-            </Menu>
-            <div className="main-body">
-                <Frame />
+                        <Button color="blue" icon labelPosition='left' onClick={this.handleOpenSidebar.bind(this)}><Icon name='hand pointer' />Open Sidebar</Button>
+                    </Menu.Item>
+                    <Menu.Menu position='right'>
+                    </Menu.Menu>
+                </Menu>
+                <div className="frame-body">
+                    <Frame url={snapUrl} />
+                </div>
             </div>
-            <div className="main-sidebar">
-                <Messages visible={sidebarOpen} />
+            <div className={`main-sidebar ${sidebarOpen ? 'sidebar-visible' : ''}`}>
+                <Messages />
             </div>
             <NotificationModal open={false} />
         </div>;
