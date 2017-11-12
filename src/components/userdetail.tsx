@@ -57,10 +57,13 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+
             <div className="user-selector">
             </div>
+
             <Grid padded>
                 <Grid.Row>
+                    <Grid.Column width={10}>
                     <Comment.Group>
                         <Comment>
                             <Comment.Avatar src='https://digitalsummit.com/wp-content/uploads/2017/01/bobby-singh.jpg' />
@@ -83,19 +86,21 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
                             </Comment.Content>
                         </Comment>
                     </Comment.Group>
+                    </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                    <Grid.Column width={8}>
+                    <Grid.Column width={9}>
                         <Form>
                             <TextArea autoHeight placeholder='Enter your Message here' rows={1} />
                         </Form>
                     </Grid.Column>
-                    <Grid.Column width={2}>
+                    <Grid.Column width={1}>
                         <Button primary>Send</Button>
                     </Grid.Column>
                 </Grid.Row>
 
             </Grid>
+            
         </div >;
     }
 }

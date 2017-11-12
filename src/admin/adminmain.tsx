@@ -4,7 +4,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Grid, Button, Container, Segment, Menu, Icon, Header } from 'semantic-ui-react';
+import { Grid, Button, Container, Segment, Menu, Icon, Header, Divider } from 'semantic-ui-react';
 import { StatusFeed } from "../components/Feed";
 import { UserSelector } from "../components/userselector";
 import { UserDetail } from "../components/userdetail";
@@ -126,7 +126,14 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
                 <div className="admin-scrollabale">
                     <Header inverted as='h1'>Code Class</Header>
                     <UserSelector messages={this.state.messages} users={this.state.users} onSelectedUser={this.setSelectedUser.bind(this)} />
-                    <div> Settings </div>
+                    <div className="settings">
+                        <Divider inverted />
+                        <Menu vertical inverted fluid borderless className="user-selector">
+                        <Menu.Item >
+                            <Header inverted as='h4'> <Icon inverted name='settings' />Settings </Header>
+                        </Menu.Item>
+                        </Menu>
+                    </div>
                 </div>
             </div>
             <div className="admin-body">
