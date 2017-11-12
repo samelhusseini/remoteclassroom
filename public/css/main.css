@@ -216,7 +216,16 @@ body {
     width: 300px;
     transition: all 0.5s ease;
     background: #ecf0f1;
+    
 }
 .main-sidebar.sidebar-visible {
     right: 0;
 }
+
+.messages-sidebar{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
