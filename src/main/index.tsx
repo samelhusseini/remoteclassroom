@@ -24,12 +24,14 @@ export interface MainAppProps {
 export interface MainAppState {
     iframeUrl?: string;
     sidebarOpen?: boolean;
+    messages?: any[];
 }
 
 export class MainApp extends React.Component<MainAppProps, MainAppState> {
     private pusher: any;
     private configChannel: any;
     private pingChannel: any;
+    private messageChannel: any;
 
     constructor(props: MainAppProps) {
         super(props);
@@ -49,6 +51,8 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         });
         this.configChannel = this.pusher.subscribe('config' + courseId);
         this.pingChannel = this.pusher.subscribe('private-ping' + courseId);
+        this.messageChannel = this.pusher.subscribe('messages' + courseId);
+        this.messageChannel.bind('pusher:subscription_succeeded', this.retrieveMessageHistory, this);
     }
 
     componentDidMount() {
@@ -64,6 +68,8 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 Util.showNotification('Ping! Headphones On!', `Teacher is trying to contact you!`, '/public/images/notification/headphones.png');
             }
         })
+        this.messageChannel.bind('new-message', this.addMessage, this);
+
         window.addEventListener('message', (e: any) => {
             const snapData = e.data;
             if (snapData && snapData.action && snapData.action == "save") {
@@ -97,6 +103,42 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         //             console.log("Sharing screen");
         //         }
         //     });
+        // });
+    }
+
+    addMessage(message: any) {
+        if (this.messageExists(message)) {
+            console.warn('Duplicate message detected');
+            return;
+        }
+        let messages = this.state.messages.concat(message);
+        messages.sort((a: any, b: any) => {
+            return (a.time > b.time);
+        });
+        this.setState({ messages: messages });
+
+        //$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
+    }
+
+    messageExists(message: any) {
+        let getId = (e: any) => { return e.id };
+        let ids = this.state.messages.map(getId);
+        return ids.indexOf(message.id) !== -1;
+    }
+
+    retrieveMessageHistory() {
+        var self = this;
+        var lastMessage = this.state.messages[this.state.messages.length - 1];
+        var lastId = (lastMessage ? lastMessage.id : 0);
+        
+        fetch('/messages', {
+            method: 'GET',
+            credentials: 'include'
+        }).then((response: any) => {
+            response.results.forEach(self.addMessage, self);
+        })
+        // $.get('/messages', { after_id: lastId }).success(function (response) {
+        //     response.results.forEach(self.addMessage, self);
         // });
     }
 
@@ -166,7 +208,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
             <div className={`main-sidebar ${sidebarOpen ? 'sidebar-visible' : ''}`}>
                 <Messages />
             </div>
-            <NotificationModal open={false} type="ping"/>
+            <NotificationModal open={false} type="ping" />
         </div>;
     }
 }
