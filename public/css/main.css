@@ -191,7 +191,7 @@ body {
 
 .starter-menu {
     height: 40px;
-    background-color: #373737 !important;
+    background-color: #0072bc !important;
     border-radius: 0 !important;
 }
 
@@ -228,4 +228,6 @@ body {
     min-height: 100vh;
     padding: 1.5rem;
 }
-
+.raise-hand{
+    font-size: 0.8em !important;
+}

@@ -6,7 +6,7 @@ import * as ReactDOM from "react-dom";
 
 import * as SimpleWebRTC from 'simplewebrtc';
 
-import { Menu, Button, Icon } from "semantic-ui-react";
+import { Menu, Button, Icon, Image, Label, Header } from "semantic-ui-react";
 
 import Util from '../utils/util';
 
@@ -130,7 +130,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         var self = this;
         var lastMessage = this.state.messages[this.state.messages.length - 1];
         var lastId = (lastMessage ? lastMessage.id : 0);
-        
+
         fetch('/messages', {
             method: 'GET',
             credentials: 'include'
@@ -181,11 +181,10 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         return <div className="pusher">
             <div className={`main-body ${sidebarOpen ? 'sidebar-visible' : ''}`}>
-                <Menu inverted borderless className="starter-menu" size='mini'>
+                <Menu inverted borderless className="starter-menu">
                     <Menu.Menu position='left'>
                         <Menu.Item>
-                            <img className="ui avatar image" src={user_image} />
-                            <span>{full_name}</span>
+                        <Image spaced="right" avatar src='https://digitalsummit.com/wp-content/uploads/2017/01/bobby-singh.jpg' /> {full_name}
                         </Menu.Item>
                     </Menu.Menu>
                     {remote_link ?
@@ -193,13 +192,12 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                             <Button color="green" icon labelPosition='left' onClick={this.handleStartCall}><Icon name='call' /> Start Call</Button>
                         </Menu.Item> : undefined}
                     <Menu.Item>
-                        <Button color="blue" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
+                        <Button className="raise-hand" size='mini' color="yellow" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                     </Menu.Item>
-                    <Menu.Item>
-                        <Button color="blue" icon labelPosition='left' onClick={this.handleOpenSidebar.bind(this)}><Icon name='hand pointer' />Open Sidebar</Button>
+                    <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
+                        <Icon name='sidebar'/>Open Messages
+                        <Label size="small" className='white'>1</Label>
                     </Menu.Item>
-                    <Menu.Menu position='right'>
-                    </Menu.Menu>
                 </Menu>
                 <div className="frame-body">
                     <Frame url={snapUrl} />
