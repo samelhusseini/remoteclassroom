@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 
 import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input } from 'semantic-ui-react';
 
-import Util from '../utils/util';
+import Util from '../../utils/util';
 
 
 declare var Pusher: any;
@@ -23,7 +23,7 @@ export class NotificationModal extends React.Component<NotificationModalProps, N
     constructor(props: NotificationModalProps) {
         super(props);
         this.state = {
-            modalOpen: false
+            modalOpen: this.props.open
         }
     }
 
@@ -49,10 +49,10 @@ export class NotificationModal extends React.Component<NotificationModalProps, N
                 <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
             </Modal.Content>
             <Modal.Actions>
-                <Button basic color='red' inverted onClick={this.handleClose} >
+                <Button basic color='red' inverted onClick={this.handleClose.bind(this)} >
                     <Icon name='remove' /> No
           </Button>
-                <Button color='green' inverted onClick={this.handleClose} >
+                <Button color='green' inverted onClick={this.handleClose.bind(this)} >
                     <Icon name='checkmark' /> Yes
           </Button>
             </Modal.Actions>

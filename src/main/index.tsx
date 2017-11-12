@@ -10,18 +10,20 @@ import { Menu, Button, Icon } from "semantic-ui-react";
 
 import Util from '../utils/util';
 
-import { NotificationModal } from "../components/notificationmodal";
+import { NotificationModal } from "../components/user/notificationmodal";
+import { Frame } from "../components/user/frame";
+import { Messages } from "../components/user/messages";
 
 declare var Pusher: any;
 declare var config: RemoteConfig;
 declare var session: RemoteSession;
 
-export interface MainAppState {
-    iframeUrl?: string;
+export interface MainAppProps {
 }
 
-export interface MainAppProps {
-
+export interface MainAppState {
+    iframeUrl?: string;
+    sidebarOpen?: boolean;
 }
 
 export class MainApp extends React.Component<MainAppProps, MainAppState> {
@@ -113,8 +115,12 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         });
     }
 
+    handleOpenSidebar(e: any) {
+        this.setState({sidebarOpen: !this.state.sidebarOpen})
+    }
+
     render() {
-        const { iframeUrl } = this.state;
+        const { iframeUrl, sidebarOpen } = this.state;
         const { full_name, user_image, remote_link } = session;
 
         if (window.location.hash && Util.isInstructor()) {
@@ -129,8 +135,6 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 window.location.href = `/admin`
             }
         }
-
-        //<iframe id="content-iframe" src={snapUrl} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
 
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         return <div className="pusher">
@@ -148,11 +152,19 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 <Menu.Item>
                     <Button color="blue" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                 </Menu.Item>
+                <Menu.Item>
+                    <Button color="blue" icon labelPosition='left' onClick={this.handleOpenSidebar.bind(this)}><Icon name='hand pointer' />Open Sidebar</Button>
+                </Menu.Item>
                 <Menu.Menu position='right'>
                 </Menu.Menu>
             </Menu>
-            
-            <NotificationModal open={true}/>
+            <div className="main-body">
+                <Frame />
+            </div>
+            <div className="main-sidebar">
+                <Messages visible={sidebarOpen} />
+            </div>
+            <NotificationModal open={false} />
         </div>;
     }
 }
