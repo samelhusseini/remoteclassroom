@@ -139,7 +139,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         return <div className="pusher">
             <div className={`main-body ${sidebarOpen ? 'sidebar-visible' : ''}`}>
-                <Menu inverted className="starter-menu" size='mini'>
+                <Menu inverted borderless className="starter-menu" size='mini'>
                     <Menu.Menu position='left'>
                         <Menu.Item>
                             <img className="ui avatar image" src={user_image} />

@@ -160,27 +160,6 @@ body {
 }
 
 
-
-/* Starter menu */
-
-.starter-menu {
-    height: 40px;
-    background-color: #373737 !important;
-}
-
-
-/* Main iframe */
-
-#content-iframe {
-    position: relative;
-    border: 0;
-    height: 100%;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
 /*Semantic UI CSS*/
 .ui.label.white{
     background: white !important;
@@ -207,11 +186,17 @@ body {
 .main-body {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: black;
+    background: #ecf0f1;
     transition: all 0.5s ease;
 }
 .main-body.sidebar-visible {
     right: 300px;
+}
+
+.starter-menu {
+    height: 40px;
+    background-color: #373737 !important;
+    border-radius: 0 !important;
 }
 
 .frame-body {
@@ -219,11 +204,22 @@ body {
     top: 40px; left: 0; right: 0; bottom: 0;
 }
 
+#content-iframe {
+    position: relative;
+    border: 0;
+    height: 100%;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
 .main-sidebar {
     position: absolute;
     top: 0; right: -300px; bottom: 0;
     width: 300px;
     transition: all 0.5s ease;
+    background: #ecf0f1;
 }
 .main-sidebar.sidebar-visible {
     right: 0;
