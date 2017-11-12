@@ -1,5 +1,4 @@
 /// <reference path="../../localtypings/remoteclassroom.d.ts" />
-/// <reference path="../../localtypings/simplewebrtc.d.ts" />
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -9,8 +8,6 @@ import { StatusFeed } from "../components/Feed";
 import { Users } from "../components/Users";
 import { MainMenu } from "../components/MainMenu";
 import { Screen } from "../components/Screen";
-
-import * as SimpleWebRTC from 'simplewebrtc';
 
 import Util from '../utils/util';
 
@@ -70,19 +67,6 @@ export class MainView extends React.Component<MainViewProps, MainViewState> {
         })
         this.updateFeed();
         this.updateUsers();
-
-        let webrtc = new SimpleWebRTC({
-            localVideoEl: ReactDOM.findDOMNode((this as any).refs.local),
-            remoteVideosEl: "",
-            autoRequestMedia: true
-            //url: 'https://your-production-signalserver.com/'
-        });
-
-        // we have to wait until it's ready
-        webrtc.on('readyToCall', function () {
-            // you can name it anything
-            webrtc.joinRoom(Util.getCourseId() + '8791939');
-        });
     }
 
     updateUsers() {
@@ -114,10 +98,10 @@ export class MainView extends React.Component<MainViewProps, MainViewState> {
     }
 
     render() {
-        //<MainMenu activeItem="main" history={this.props.history} />
         return <div className="pusher">
             <Container>
-                <Grid padded>
+                <MainMenu activeItem="main" history={this.props.history} />
+                <Grid padded='vertically' style={{paddingTop: '5rem'}}>
                     <Grid.Column width={10}>
                         <Segment raised>
                             <Users messages={this.state.messages} users={this.state.users} channel={this.privateChannel} />

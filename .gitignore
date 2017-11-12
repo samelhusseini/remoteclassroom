@@ -1,4 +1,5 @@
 node_modules/
 lib/
+dist/
 *.pyc
 darringtonteals-8e58298eb992.json

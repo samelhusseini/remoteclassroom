@@ -10,6 +10,8 @@ import { Menu, Button, Icon } from "semantic-ui-react";
 
 import Util from '../utils/util';
 
+import { NotificationModal } from "../components/notificationmodal";
+
 declare var Pusher: any;
 declare var config: RemoteConfig;
 declare var session: RemoteSession;
@@ -73,27 +75,27 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
             }
         }, false);
 
-        let webrtc = new SimpleWebRTC({
-            localVideoEl: "",
-            remoteVideosEl: "",
-            autoRequestMedia: true,
-            media: { audio: true, video: false, screen: true }
-            //url: 'https://your-production-signalserver.com/'
-        });
+        // let webrtc = new SimpleWebRTC({
+        //     localVideoEl: "",
+        //     remoteVideosEl: "",
+        //     autoRequestMedia: true,
+        //     media: { audio: true, video: false, screen: true }
+        //     //url: 'https://your-production-signalserver.com/'
+        // });
 
-        // we have to wait until it's ready
-        webrtc.on('readyToCall', function () {
-            // you can name it anything
-            webrtc.joinRoom(Util.getCourseId() + Util.getStudentId());
+        // // we have to wait until it's ready
+        // webrtc.on('readyToCall', function () {
+        //     // you can name it anything
+        //     webrtc.joinRoom(Util.getCourseId() + Util.getStudentId());
 
-            webrtc.shareScreen(function (err: any) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Sharing screen");
-                }
-            });
-        });
+        //     webrtc.shareScreen(function (err: any) {
+        //         if (err) {
+        //             console.log(err);
+        //         } else {
+        //             console.log("Sharing screen");
+        //         }
+        //     });
+        // });
     }
 
     handleStartCall(e: any) {
@@ -128,6 +130,8 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
             }
         }
 
+        //<iframe id="content-iframe" src={snapUrl} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
+
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         return <div className="pusher">
             <Menu inverted className="fixed starter-menu" size='mini'>
@@ -147,7 +151,8 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 <Menu.Menu position='right'>
                 </Menu.Menu>
             </Menu>
-            <iframe id="content-iframe" src={snapUrl} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
+            
+            <NotificationModal open={true}/>
         </div>;
     }
 }

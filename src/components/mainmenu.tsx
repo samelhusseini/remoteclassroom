@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-
+import * as React from "react";
 import { Menu, Icon } from 'semantic-ui-react';
 
 import Util from '../utils/util';
@@ -12,7 +11,7 @@ export interface MainMenuProps {
     activeItem: string;
 }
 
-export class MainMenu extends Component<MainMenuProps, undefined> {
+export class MainMenu extends React.Component<MainMenuProps, {}> {
 
     constructor(props: MainMenuProps) {
         super(props);
@@ -33,7 +32,7 @@ export class MainMenu extends Component<MainMenuProps, undefined> {
         const { activeItem } = this.props;
         const { full_name, user_image, remote_link } = session;
 
-        return <Menu inverted icon='labeled' className="main-menu">
+        return <Menu fixed='top' inverted icon='labeled' className="main-menu">
             <Menu.Menu position='left'>
                 <Menu.Item>
                     <img className="ui avatar image" src={user_image} style={{ marginBottom: 3 }} />

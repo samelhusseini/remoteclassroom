@@ -35,7 +35,8 @@ export class Screen extends React.Component<ScreenProps, ScreenState> {
         let webrtc = new SimpleWebRTC({
             localVideoEl: '',
             remoteVideosEl: '', // empty string
-            autoRequestMedia: true
+            autoRequestMedia: true,
+            media: { audio: true, video: false, screen: true }
             //url: 'https://your-production-signalserver.com/'
         });
 
