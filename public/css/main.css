@@ -111,17 +111,23 @@ body {
 }
 
 .admin-sidebar {
-    position: fixed;
+    position: absolute;
+    top: 0;
+    bottom: 0;
     left: 0;
+    width: 300px;
+    background-color: #0072bc;
+}
+.admin-scrollabale {
+    padding: 1rem;
+    position: relative;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    width: 300px;
-    background-color: #0072bc;
-    padding: 1rem;
 }
 
-.side-admin-menu {
+.user-selector {
     flex: 1;
     background-color: transparent !important;
     color: #fff !important;
@@ -132,9 +138,19 @@ body {
 }
 
 .admin-user-detail-panel {
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     margin-left: 300px;
     color: #333333;
     padding: 1.5rem;
+}
+.space-filler {
+    flex: 1;
+    background-color: transparent !important;
+    color: #fff !important;
 }
 
 

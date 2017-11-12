@@ -123,9 +123,11 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
 
         return <div className="pusher">
             <div className="admin-sidebar">
-                <Header inverted as='h1'>Code Class</Header>
-                <UserSelector messages={this.state.messages} users={this.state.users} onSelectedUser={this.setSelectedUser.bind(this)} />
-                <div> Settings </div>
+                <div className="admin-scrollabale">
+                    <Header inverted as='h1'>Code Class</Header>
+                    <UserSelector messages={this.state.messages} users={this.state.users} onSelectedUser={this.setSelectedUser.bind(this)} />
+                    <div> Settings </div>
+                </div>
             </div>
             <UserDetail messages={this.state.messages} user={selectedUser} channel={this.privateChannel} />
         </div>;

@@ -33,7 +33,7 @@ export class UserSelector extends React.Component<UsersProps, UsersState> {
         const { users, messages } = this.props;
         const { open, edit } = this.state;
 
-        return <Menu vertical inverted fluid borderless className="side-admin-menu">
+        return <Menu vertical inverted fluid borderless className="user-selector">
                 {users.map((user) =>
                 <Menu.Item onClick={() => this.props.onSelectedUser.call(this, user)}>
                             <Label className='white'>1</Label>

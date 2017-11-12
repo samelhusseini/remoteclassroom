@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment} from 'semantic-ui-react';
+import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea} from 'semantic-ui-react';
 
 import Util from '../utils/util';
 
@@ -40,7 +40,7 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
         return <div className="admin-user-detail-panel">
             <Grid padded>
                 <Grid.Row>
-                    <Grid.Column width={8}>
+                    <Grid.Column width={10}>
                         <h1>{user.fullName}</h1>
                         <Screen channel={this.props.channel} />
                     </Grid.Column>
@@ -56,6 +56,10 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
                         </h4>
                     </Grid.Column>
                 </Grid.Row>
+            </Grid>
+            <div className="user-selector">
+            </div>
+            <Grid padded>
                 <Grid.Row>
                     <Comment.Group>
                         <Comment>
@@ -79,7 +83,16 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
                             </Comment.Content>
                         </Comment>
                     </Comment.Group>
-
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column width={8}>
+                        <Form>
+                            <TextArea autoHeight placeholder='Enter your Message here' rows={1} />
+                        </Form>
+                    </Grid.Column>
+                    <Grid.Column width={2}>
+                        <Button primary>Send</Button>
+                    </Grid.Column>
                 </Grid.Row>
 
             </Grid>
