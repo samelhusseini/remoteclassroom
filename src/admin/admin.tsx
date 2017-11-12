@@ -4,8 +4,9 @@ import * as ReactDOM from "react-dom";
 
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
-import { MainView } from './Main';
-import { SettingsView } from './Settings';
+import { MainView } from './main';
+import { AdminMainView } from './adminmain';
+import { SettingsView } from './settings';
 
 export class AdminApp extends React.Component<undefined, undefined> {
     private pusher: any;
@@ -23,7 +24,7 @@ export class AdminApp extends React.Component<undefined, undefined> {
         return <HashRouter>
             <Switch>
                 <Route path="/settings" component={SettingsView} />
-                <Route path="/" component={MainView} />
+                <Route path="/" component={AdminMainView} />
             </Switch>
         </HashRouter>
     }

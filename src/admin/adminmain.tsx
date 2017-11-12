@@ -4,9 +4,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Grid, Button, Container, Segment, Menu, Icon } from 'semantic-ui-react';
+import { Grid, Button, Container, Segment, Menu, Icon, Header } from 'semantic-ui-react';
 import { StatusFeed } from "../components/Feed";
-import { Users } from "../components/Users";
+import { UserSelector } from "../components/userselector";
+import { UserDetail } from "../components/userdetail";
 import { MainMenu } from "../components/MainMenu";
 
 import * as SimpleWebRTC from 'simplewebrtc';
@@ -17,21 +18,22 @@ declare var Pusher: any;
 declare var config: RemoteConfig;
 declare var session: RemoteSession;
 
-export interface MainViewProps {
+export interface AdminMainViewProps {
     history: any;
 }
-export interface MainViewState {
+export interface AdminMainViewState {
     users: RemoteUser[];
     messages: any[];
+    selectedUser?: RemoteUser;
 }
 
-export class MainView extends React.Component<MainViewProps, MainViewState> {
+export class AdminMainView extends React.Component<AdminMainViewProps, AdminMainViewState> {
     private pusher: any;
     private configChannel: any;
     private feedChannel: any;
     private privateChannel: any;
 
-    constructor(props: MainViewProps) {
+    constructor(props: AdminMainViewProps) {
         super(props);
         this.state = {
             users: [],
@@ -67,22 +69,21 @@ export class MainView extends React.Component<MainViewProps, MainViewState> {
                 this.updateUsers();
             }
         })
-        this.updateFeed();
+        //this.updateFeed();
         this.updateUsers();
 
+        // let webrtc = new SimpleWebRTC({
+        //     localVideoEl: ReactDOM.findDOMNode((this as any).refs.local),
+        //     remoteVideosEl: "",
+        //     autoRequestMedia: true
+        //     //url: 'https://your-production-signalserver.com/'
+        // });
 
-        let webrtc = new SimpleWebRTC({
-            localVideoEl: ReactDOM.findDOMNode((this as any).refs.local),
-            remoteVideosEl: "",
-            autoRequestMedia: true
-            //url: 'https://your-production-signalserver.com/'
-        });
-
-        // we have to wait until it's ready
-        webrtc.on('readyToCall', function () {
-            // you can name it anything
-            webrtc.joinRoom(Util.getCourseId() + '8791939');
-        });
+        // // we have to wait until it's ready
+        // webrtc.on('readyToCall', function () {
+        //     // you can name it anything
+        //     webrtc.joinRoom(Util.getCourseId() + '8791939');
+        // });
     }
 
     updateUsers() {
@@ -113,30 +114,20 @@ export class MainView extends React.Component<MainViewProps, MainViewState> {
             });
     }
 
-    render() {
-        //<MainMenu activeItem="main" history={this.props.history} />
-        return <div className="pusher">
-            <Container>
-                <Grid padded>
-                    <Grid.Column width={10}>
-                        <Segment raised>
-                            <Users messages={this.state.messages} users={this.state.users} channel={this.privateChannel} />
-                        </Segment>
-                    </Grid.Column>
-                    <Grid.Column width={6}>
-                        <Segment raised>
-                            <StatusFeed messages={this.state.messages} />
-                        </Segment>
-                    </Grid.Column>
-                </Grid>
+    setSelectedUser(user: RemoteUser) {
+        this.setState({ selectedUser: user });
+    }
 
-                <video className="local"
-                    id="localVideo"
-                    ref="local" > </video>
-                <div className="remotes"
-                    id="remoteVideos"
-                    ref="remotes"> </div>
-            </Container>
+    render() {
+        const { selectedUser } = this.state;
+
+        return <div className="pusher">
+            <div className="admin-sidebar">
+                <Header inverted as='h1'>Code Class</Header>
+                <UserSelector messages={this.state.messages} users={this.state.users} onSelectedUser={this.setSelectedUser.bind(this)} />
+                <div> Settings </div>
+            </div>
+            <UserDetail messages={this.state.messages} user={selectedUser} channel={this.privateChannel} />
         </div>;
     }
 }

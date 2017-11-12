@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { Component } from "react";
 
 import { Menu, Icon } from 'semantic-ui-react';
 
@@ -12,7 +12,7 @@ export interface MainMenuProps {
     activeItem: string;
 }
 
-export class MainMenu extends React.Component<MainMenuProps, undefined> {
+export class MainMenu extends Component<MainMenuProps, undefined> {
 
     constructor(props: MainMenuProps) {
         super(props);
@@ -36,14 +36,14 @@ export class MainMenu extends React.Component<MainMenuProps, undefined> {
         return <Menu inverted icon='labeled' className="main-menu">
             <Menu.Menu position='left'>
                 <Menu.Item>
-                    <img className="ui avatar image" src={user_image} style={{marginBottom: 3}} />
+                    <img className="ui avatar image" src={user_image} style={{ marginBottom: 3 }} />
                     <span>{full_name}</span>
                 </Menu.Item>
 
                 <Menu.Item name='class' active={activeItem === 'class'} onClick={this.handleClassClick}>
                     <Icon name='users' />
                     Join Class
-            </Menu.Item>
+                </Menu.Item>
             </Menu.Menu>
 
             <Menu.Item name='settings' active={activeItem === 'settings'} onClick={this.handleSettingsClick}>

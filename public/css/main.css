@@ -101,9 +101,7 @@
 /* Body */
 
 body {
-    background: linear-gradient(45deg, #2c3e50, #2980b9 50%, #bdc3c7);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-color: #fff;
 }
 
 /* Main admin menu */
@@ -111,6 +109,34 @@ body {
 .main-menu {
     background-color: #e74c3c !important;
 }
+
+.admin-sidebar {
+    position: fixed;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 300px;
+    background-color: #0072bc;
+    padding: 1rem;
+}
+
+.side-admin-menu {
+    flex: 1;
+    background-color: transparent !important;
+    color: #fff !important;
+}
+
+.side-admin-menu .ui.avatar.image {
+    margin-right:0.75rem;
+}
+
+.admin-user-detail-panel {
+    margin-left: 300px;
+    color: #333333;
+    padding: 1.5rem;
+}
+
 
 /* Starter menu */
 
@@ -131,4 +157,12 @@ body {
     left: 0;
     right: 0;
     top: 40px;
+}
+
+/*Semantic UI CSS*/
+.ui.label.white{
+    background: white !important;
+    color: #00aff0 !important;
+    margin-top: 0.2em !important;
+    border-radius: 1rem !important;
 }

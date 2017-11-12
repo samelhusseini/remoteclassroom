@@ -5,7 +5,7 @@ import * as React from "react";
 import { Grid, Button, Container, Segment, Menu, Icon, Form, Input} from 'semantic-ui-react';
 import { StatusFeed } from "../components/Feed";
 import { Users } from "../components/Users";
-import { MainMenu } from "../components/Menu";
+import { MainMenu } from "../components/MainMenu";
 
 import Util from '../utils/util';
 
