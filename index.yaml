@@ -18,6 +18,13 @@ indexes:
 
 - kind: Log
   properties:
+  - name: courseId
+  - name: student
+  - name: date
+    direction: desc
+
+- kind: Log
+  properties:
   - name: student
   - name: date
     direction: desc

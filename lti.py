@@ -2,7 +2,7 @@ import cgi
 from google.appengine.ext import ndb
 import ndb_json
 
-from flask import Flask, render_template, session, request, redirect, Response
+from flask import Flask, render_template, session, request, redirect, Response, jsonify
 from pylti.flask import lti
 from pylti.common import LTI_SESSION_KEY
 
@@ -15,7 +15,7 @@ import urllib
 from common import app, p, pusher_key_config
 from model import Log, Setting, Student, SourceCode, entity_to_dict, DateTimeJSONEncoder
 
-from common import feedUpdated, registerUpdated, configChanged, loadedUpdated
+from common import feedUpdated, newMessage, newStudentMessage, registerUpdated, configChanged, loadedUpdated
 
 from canvas_read import CanvasReader
 
@@ -194,9 +194,9 @@ def xml_class():
             please contact support.''')
 
 @app.route("/importusers", methods=['POST'])
-#@lti(request='session', error=error, role='staff', app=app)
-#def import_users(lti=lti):
-def import_users():
+@lti(request='session', error=error, role='staff', app=app)
+def import_users(lti=lti):
+#def import_users():
     content = request.get_json(silent=True)
     oauth_token = cgi.escape(content['token'])
     courseId = cgi.escape(content['courseId'])
@@ -220,9 +220,9 @@ def import_users():
 
 
 @app.route("/feed", methods=['POST'])
-#@lti(request='session', error=error, role='staff', app=app)
-#def get_feed(lti=lti):
-def get_feed():
+@lti(request='session', error=error, role='staff', app=app)
+def get_feed(lti=lti):
+#def get_feed():
     content = request.get_json(silent=True)
     courseId = cgi.escape(content['courseId'])
     feeds = Log.get_by_course(courseId)
@@ -237,10 +237,170 @@ def get_feed():
         jsonfeeds.append(jsonfeed)
     return json.dumps(jsonfeeds)
 
+@app.route("/messages", methods=['GET'])
+@lti(request='session', error=error, role='any', app=app)
+def get_messages(lti=lti):
+#def get_messages():
+    after_id = request.args.get('after_id', 0)
+    courseId = request.args.get('courseId', 0)
+
+    messages = Log.get_by_course(courseId)
+    messagefeeds = []
+    for message in messages:
+        messagefeed = entity_to_dict(message, ['student', 'type', 'content'], ['date', 'key'])
+        messagefeed["date"] = DateTimeJSONEncoder().encode(message.date).replace('"', '')
+        student = ndb.Key('Student', courseId + (message.teacher if message.teacher else message.student)).get()
+        if (student):
+            messagefeed["fullName"] = student.fullName
+            messagefeed["avatarUrl"] = student.avatarUrl
+        messagefeeds.append(messagefeed)
+    return json.dumps(messagefeeds)
+
+@app.route("/studentmessages", methods=['GET'])
+@lti(request='session', error=error, role='any', app=app)
+def get_student_messages(lti=lti):
+#def get_student_messages():
+    after_id = request.args.get('after_id', 0)
+    courseId = request.args.get('courseId', 0)
+    studentId = request.args.get('studentId', 0)
+
+    messages = Log.get_by_course_and_student(courseId, studentId)
+    messagefeeds = []
+    for message in messages:
+        messagefeed = entity_to_dict(message, ['student', 'type', 'content'], ['date', 'key'])
+        messagefeed["date"] = DateTimeJSONEncoder().encode(message.date).replace('"', '')
+        student = ndb.Key('Student', courseId + (message.teacher if message.teacher else message.student)).get()
+        
+        if (student):
+            messagefeed["fullName"] = student.fullName
+            messagefeed["avatarUrl"] = student.avatarUrl
+        messagefeeds.append(messagefeed)
+    return json.dumps(messagefeeds)
+
+@app.route("/new_student_message", methods=['POST'])
+@lti(request='session', error=error, role='student', app=app)
+def new_student_message(lti=lti):
+#def new_student_message():
+    content = request.get_json(silent=True)
+    logging.info(content)
+    studentId = cgi.escape(content['studentId'])
+    courseId = cgi.escape(content['courseId'])
+    text = cgi.escape(content['text'])
+
+    student_key = ndb.Key('Student', courseId + studentId)
+    student = student_key.get()
+    message = Log(type='text', courseId=courseId, student=studentId)
+    message.content = text
+    message.put()
+
+    fullName = student.fullName if student else 'Unknown student'
+    avatarUrl = student.avatarUrl if student else ''
+
+    newStudentMessage(courseId, studentId, {
+        'student': studentId,
+        'courseId': courseId,
+        'id': message.key.id(),
+        'type': 'text',
+        'avatarUrl': avatarUrl,
+        'content': text,
+        'fullName': fullName,
+        'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
+    })
+    newMessage(courseId, {
+        'student': studentId,
+        'courseId': courseId,
+        'id': message.key.id(),
+        'type': 'text',
+        'avatarUrl': avatarUrl,
+        'content': text,
+        'fullName': fullName,
+        'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
+    })
+    return "Message received"
+
+
+@app.route("/new_teacher_message", methods=['POST'])
+@lti(request='session', error=error, role='student', app=app)
+def new_teacher_message(lti=lti):
+#def new_teacher_message():
+    content = request.get_json(silent=True)
+    logging.info(content)
+    studentId = cgi.escape(content['studentId'])
+    teacherId = cgi.escape(content['teacherId'])
+    courseId = cgi.escape(content['courseId'])
+    text = cgi.escape(content['text'])
+
+    student_key = ndb.Key('Student', courseId + studentId)
+    student = student_key.get()
+    teacher_key = ndb.Key('Student', courseId + teacherId)
+    teacher = teacher_key.get()
+
+    message = Log(type='text', courseId=courseId, student=studentId)
+    message.content = text
+    message.teacher = teacherId
+    message.put()
+
+    teacherFullName = teacher.fullName if teacher else 'Unknown teacher'
+    avatarUrl = student.avatarUrl if student else ''
+
+    newStudentMessage(courseId, studentId, {
+        'student': teacherId,
+        'courseId': courseId,
+        'id': message.key.id(),
+        'type': 'text',
+        'avatarUrl': avatarUrl,
+        'content': text,
+        'fullName': teacherFullName,
+        'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
+    })
+    newMessage(courseId, {
+        'student': studentId,
+        'courseId': courseId,
+        'id': message.key.id(),
+        'type': 'text',
+        'avatarUrl': avatarUrl,
+        'content': text,
+        'fullName': teacherFullName,
+        'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
+    })
+    return "Message received"
+
+@app.route("/new_message", methods=['POST'])
+@lti(request='session', error=error, role='staff', app=app)
+def new_message(lti=lti):
+#def new_message():
+    content = request.get_json(silent=True)
+    logging.info(content)
+    studentId = cgi.escape(content['studentId']) #From Field
+    courseId = cgi.escape(content['courseId'])
+    text = cgi.escape(content['text'])
+
+    student_key = ndb.Key('Student', courseId + studentId)
+    student = student_key.get()
+    message = Log(type='text', courseId=courseId, student=studentId)
+    message.content = text
+    message.put()
+
+    fullName = student.fullName if student else 'Unknown student'
+    avatarUrl = student.avatarUrl if student else ''
+
+    newMessage(courseId, {
+        'student': studentId, #Broadcast message from:
+        'courseId': courseId,
+        'id': message.key.id(),
+        'type': 'text',
+        'avatarUrl': avatarUrl,
+        'content': text,
+        'fullName': fullName,
+        'date': ''
+    })
+    return "Message received"
+
+
 @app.route("/users", methods=['POST'])
-#@lti(request='session', error=error, role='staff', app=app)
-#def get_users(lti=lti):
-def get_users():
+@lti(request='session', error=error, role='staff', app=app)
+def get_users(lti=lti):
+#def get_users():
     content = request.get_json(silent=True)
     courseId = cgi.escape(content['courseId'])
     users = Student.get_by_course(courseId)
@@ -429,3 +589,19 @@ def SNAP_Service(URL):
     if (URL[0:4] == ".9.0"):
         return "Not supported"
     return "Unknown API call"
+
+
+@app.route("/pusher/auth", methods=['POST'])
+@lti(request='session', error=error, role='any', app=app)
+def pusher_authentication():
+  auth = p.authenticate(
+    channel=request.form['channel_name'],
+    socket_id=request.form['socket_id'],
+    custom_data={
+      u'user_id': session['user_id'],
+      u'user_info': {
+        u'twitter': u'@pusher'
+      }
+    }
+  )
+  return json.dumps(auth)

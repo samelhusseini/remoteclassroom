@@ -11,7 +11,7 @@ export namespace Util {
     }
 
     export function getStudentId() {
-        return session.user_id || '8791939';
+        return session.user_id || 'asdasdas'; //'8791939';
     }
 
     export function isStudent() {

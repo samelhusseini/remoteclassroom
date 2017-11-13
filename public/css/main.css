@@ -128,10 +128,23 @@ body {
     color: #fff !important;
 }
 
+.presense-label {
+    position: absolute;
+    z-index: 100;
+    bottom: 1rem;
+    left: 2rem;
+    width: 1rem;
+    height: 1rem;    
+}
+
+.ui.avatar.image.user-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
 .settings {
     text-align:center;
     color: #fff !important;
-
 }
 
 .side-admin-menu .ui.avatar.image {
@@ -184,6 +197,7 @@ body {
     top: 0; left: 0; right: 0; bottom: 0;
     background: #ecf0f1;
     transition: all 0.5s ease;
+    overflow: hidden;
 }
 .main-body.sidebar-visible {
     right: 300px;
@@ -228,6 +242,23 @@ body {
     min-height: 100vh;
     padding: 1.5rem;
 }
+
+.scrolling-messages {
+    position: absolute;
+    top: 4rem;
+    bottom: 5rem;
+    right: 0;
+    width: 300px;
+    overflow-y: auto;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+}
+
 .raise-hand{
     font-size: 0.8em !important;
 }

@@ -73,6 +73,12 @@ def getStudentName(student):
 
 def feedUpdated(courseId, new_message):
     p.trigger('feed'+courseId, 'update', {'message': new_message})
+
+def newMessage(courseId, new_message):
+    p.trigger('messages'+courseId, 'new_message', new_message)
+
+def newStudentMessage(courseId, studentId, new_message):
+    p.trigger('messages'+courseId+studentId, 'new_message', new_message)
     
 def registerUpdated(courseId, user):
     p.trigger('feed'+courseId, 'registered', {'user': user})
@@ -82,11 +88,3 @@ def loadedUpdated(courseId, user):
 
 def configChanged(courseId, name, value):
     p.trigger('config'+courseId, 'changed', {name: value})
-
-@app.route("/pusher/auth", methods=['POST'])
-def pusher_authentication():
-    auth = p.authenticate(
-        channel=request.form['channel_name'],
-        socket_id=request.form['socket_id']
-    )
-    return json.dumps(auth)

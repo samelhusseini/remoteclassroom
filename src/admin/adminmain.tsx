@@ -33,7 +33,9 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
     private pusher: any;
     private configChannel: any;
     private feedChannel: any;
+    private messageChannel: any;
     private privateChannel: any;
+    private presenceChannel: any;
 
     constructor(props: AdminMainViewProps) {
         super(props);
@@ -52,26 +54,29 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
         this.configChannel = this.pusher.subscribe('config' + courseId);
         this.feedChannel = this.pusher.subscribe('feed' + courseId);
         this.privateChannel = this.pusher.subscribe('private-ping' + courseId);
+        this.presenceChannel = this.pusher.subscribe('presence-channel' + courseId);
+        this.messageChannel = this.pusher.subscribe('messages' + courseId);
+        this.messageChannel.bind('pusher:subscription_succeeded', this.retrieveMessageHistory, this);
     }
 
     componentDidMount() {
         this.feedChannel.bind('update', (data: any) => {
-            this.updateFeed();
+            //this.updateFeed();
             const studentName = data.message.fullName;
             Util.showNotification('Help needed!', `${studentName} raised his/her hand!`, data.message.avatarUrl);
         }, this);
         this.feedChannel.bind('loaded', (data: any) => {
-            this.updateFeed();
+            console.log("loaded");
         })
         this.feedChannel.bind('registered', (data: any) => {
-            this.updateFeed();
+            console.log("registered")
         })
         this.configChannel.bind('changed', (data: any) => {
             if (data.config == 'users') {
                 this.updateUsers();
             }
         })
-        //this.updateFeed();
+        this.messageChannel.bind('new_message', this.addMessage, this);
         this.updateUsers();
 
         // let webrtc = new SimpleWebRTC({
@@ -88,6 +93,49 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
         // });
     }
 
+    retrieveMessageHistory() {
+        let self = this;
+        let lastMessage = this.state.messages[this.state.messages.length - 1];
+        let lastId = (lastMessage ? lastMessage.id : 0);
+        const url = `/messages?after_id=${lastId}&courseId=${Util.getCourseId()}`
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                let messages = this.state.messages;
+                responseJson.map((m: any) => { messages = messages.concat(self.addMessage(m, true)) }, self);
+                messages.sort((a: any, b: any) => {
+                    return (a.date > b.date) ? 1 : 0;
+                });
+                this.setState({ messages: messages });
+            })
+    }
+
+    addMessage(message: any, skipUpdate: boolean = false) {
+        if (this.messageExists(message)) {
+            console.warn('Duplicate message detected');
+            return;
+        }
+        message.read = skipUpdate || message.student == Util.getStudentId();
+        if (!skipUpdate) {
+            let messages = this.state.messages.concat(message);
+            messages.sort((a: any, b: any) => {
+                return (a.date > b.date) ? 1 : 0;
+            });
+            this.setState({ messages: messages });
+        }
+        return message;
+        //$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
+    }
+
+    messageExists(message: any) {
+        let getId = (e: any) => { return e.id };
+        let ids = this.state.messages.map(getId);
+        return ids.indexOf(message.id) !== -1;
+    }
+
     updateUsers() {
         Util.POSTCourse('/users')
             .then((response: Response) => {
@@ -102,21 +150,12 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
             });
     }
 
-    updateFeed() {
-        Util.POSTCourse('/feed')
-            .then((response: Response) => {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-                }
-                return response.json();
-            })
-            .then((data: any) => {
-                //console.log(data);
-                this.setState({ messages: data });
-            });
-    }
-
     setSelectedUser(user: RemoteUser) {
+        // Mark all messages as read
+        const messages = this.state.messages.map((m) => {
+            if (m.student == user.studentId)
+                m.read = true;
+        });
         this.setState({ selectedUser: user });
     }
 
@@ -136,7 +175,7 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                    <UserSelector messages={this.state.messages} users={this.state.users} selectedUser={selectedUser} onSelectedUser={this.setSelectedUser.bind(this)} />
+                    <UserSelector messages={this.state.messages} users={this.state.users} presenceChannel={this.presenceChannel} selectedUser={selectedUser} onSelectedUser={this.setSelectedUser.bind(this)} />
                     <div className="settings">
                         <Divider inverted />
                         <Menu vertical inverted fluid borderless className="user-selector">
@@ -148,7 +187,7 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
                 </div>
             </div>
             <div className="admin-body">
-                <UserDetail messages={this.state.messages} user={selectedUser} channel={this.privateChannel} />
+                <UserDetail messages={this.state.messages.filter(m => selectedUser ? m.student == selectedUser.studentId : false)} user={selectedUser} channel={this.privateChannel} />
             </div>
         </div>;
     }

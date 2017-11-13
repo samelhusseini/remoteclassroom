@@ -100,7 +100,7 @@ def show_starter():
     jsonsession = {
         'full_name': 'test',
         'course_id': '1207667',
-        'user_id': '8791939',
+        'user_id': 'asdasdas', #'8791939',
         'role': 'Instructor'
     }
     student = ndb.Key('Student', jsonsession['course_id'] + jsonsession['user_id']).get()

@@ -19,6 +19,8 @@ class Log(ndb.Model):
     student = ndb.StringProperty(required=True, indexed=True)
     courseId = ndb.StringProperty(required=True, indexed=True)
     type = ndb.StringProperty(required=True, indexed=True)
+    teacher = ndb.StringProperty(indexed=True)
+    content = ndb.StringProperty()
 
     @classmethod
     def get_by_type(cls, studentId, courseId, type): 
@@ -30,9 +32,14 @@ class Log(ndb.Model):
         return cls.query(ndb.AND(cls.courseId == courseId,(cls.date > day_ago))).order(-cls.date).fetch(15)
 
     @classmethod
+    def get_by_course_and_student(cls, courseId, studentId):
+        day_ago = datetime.now() - timedelta(hours=8)
+        return cls.query(ndb.AND(ndb.AND(cls.courseId == courseId,(cls.date > day_ago)), cls.student == studentId)).order(-cls.date).fetch(15)
+
+    @classmethod
     def get_by_type_weekly(cls, student, type):
         week_ago = datetime.now() - timedelta(days=7)
-        return cls.query(ndb.AND(ndb.AND(cls.type == type,cls.student == student),(cls.date > week_ago))).order(-cls.date)
+        return cls.query(ndb.AND(ndb.AND(cls.type == type, cls.student == student),(cls.date > week_ago))).order(-cls.date)
 
 class Poll(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)

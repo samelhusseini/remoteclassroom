@@ -28,6 +28,5 @@ export class Frame extends React.Component<FrameProps, FrameState> {
     render() {
         const { url } = this.props;
         return <iframe id="content-iframe" src={url} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
-        //return <div />
     }
 }

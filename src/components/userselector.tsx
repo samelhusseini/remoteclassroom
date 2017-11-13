@@ -13,11 +13,10 @@ export interface UsersProps {
     selectedUser?: RemoteUser;
     messages: any[];
     onSelectedUser: (user: RemoteUser) => void;
+    presenceChannel: any;
 }
 
 export interface UsersState {
-    open: boolean;
-    edit: boolean;
 }
 
 export class UserSelector extends React.Component<UsersProps, UsersState> {
@@ -25,22 +24,41 @@ export class UserSelector extends React.Component<UsersProps, UsersState> {
     constructor(props: UsersProps) {
         super(props);
         this.state = {
-            open: false,
-            edit: false
         }
     }
 
+    componentDidMount() {
+        const { presenceChannel } = this.props;
+        let that = this;
+        presenceChannel.bind('pusher:member_added', function (member: any) {
+            that.forceUpdate();
+        });
+        presenceChannel.bind('pusher:member_removed', function (member: any) {
+            that.forceUpdate();
+        });
+    }
+
     render() {
-        const { users, messages, selectedUser } = this.props;
-        const { open, edit } = this.state;
+        const { users, messages, selectedUser, presenceChannel } = this.props;
+
+        const getUnreadMessageCount = (user: RemoteUser) => {
+            let unreadMessages = 0;
+            messages.forEach(m => {
+                if (m.student == user.studentId && m.read == false) unreadMessages++;
+            })
+            return unreadMessages;
+        }
+
+        const presenceIndicator = (user: RemoteUser) => {
+            return (presenceChannel.members.get(user.studentId)) ? 'green' : 'grey';
+        }
 
         return <Menu vertical inverted fluid borderless className="user-selector">
             {users.map((user) =>
                 <Menu.Item active={user == selectedUser} onClick={() => this.props.onSelectedUser.call(this, user)}>
-                    <Label className='white'>1</Label>
-                    <p><Image avatar src='https://digitalsummit.com/wp-content/uploads/2017/01/bobby-singh.jpg' /> {user.fullName}</p>
-
-
+                    {getUnreadMessageCount(user) > 0 ? <Label className='white'>{getUnreadMessageCount(user)}</Label> : undefined}
+                    <Label circular color={presenceIndicator(user)} className="presense-label" empty />
+                    <p><Image spaced="right" avatar className='user-avatar' src={user.avatarUrl} /> {user.fullName}</p>
                 </Menu.Item>
             )}
         </Menu>;

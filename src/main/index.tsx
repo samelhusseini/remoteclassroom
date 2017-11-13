@@ -32,11 +32,15 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
     private configChannel: any;
     private pingChannel: any;
     private messageChannel: any;
+    private userChatChannel: any;
+
+    private messagesComponent: Messages;
 
     constructor(props: MainAppProps) {
         super(props);
         this.state = {
-            iframeUrl: config.iframeUrl
+            iframeUrl: config.iframeUrl,
+            messages: []
         }
 
         this.handleNeedHelp = this.handleNeedHelp.bind(this);
@@ -45,14 +49,26 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
 
     componentWillMount() {
         const courseId = Util.getCourseId();
+        const studentId = Util.getStudentId();
         Pusher.logToConsole = true;
         this.pusher = new Pusher(config.PUSHER_APP_KEY, {
             encrypted: true
         });
         this.configChannel = this.pusher.subscribe('config' + courseId);
         this.pingChannel = this.pusher.subscribe('private-ping' + courseId);
-        this.messageChannel = this.pusher.subscribe('messages' + courseId);
-        this.messageChannel.bind('pusher:subscription_succeeded', this.retrieveMessageHistory, this);
+        //this.messageChannel = this.pusher.subscribe('messages' + courseId);
+        //this.messageChannel.bind('pusher:subscription_succeeded', this.retrieveMessageHistory, this);
+        this.userChatChannel = this.pusher.subscribe('messages' + courseId + studentId);
+        this.userChatChannel.bind('pusher:subscription_succeeded', this.retrieveStudentMessageHistory, this);
+        let presenceChannel = this.pusher.subscribe('presence-channel' + courseId, {
+
+        });
+        presenceChannel.bind('pusher:subscription_succeeded', function () {
+            var me = presenceChannel.members.me;
+            var userId = me.id;
+            var userInfo = me.info;
+            console.log(userInfo);
+        });
     }
 
     componentDidMount() {
@@ -68,7 +84,8 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 Util.showNotification('Ping! Headphones On!', `Teacher is trying to contact you!`, '/public/images/notification/headphones.png');
             }
         })
-        this.messageChannel.bind('new-message', this.addMessage, this);
+        //this.messageChannel.bind('new_message', this.addMessage, this);
+        this.userChatChannel.bind('new_message', this.addMessage, this);
 
         window.addEventListener('message', (e: any) => {
             const snapData = e.data;
@@ -106,18 +123,39 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         // });
     }
 
-    addMessage(message: any) {
-        if (this.messageExists(message)) {
-            console.warn('Duplicate message detected');
-            return;
-        }
-        let messages = this.state.messages.concat(message);
-        messages.sort((a: any, b: any) => {
-            return (a.time > b.time);
-        });
-        this.setState({ messages: messages });
+    retrieveMessageHistory() {
+        let self = this;
+        let lastMessage = this.state.messages[this.state.messages.length - 1];
+        let lastId = (lastMessage ? lastMessage.id : 0);
+        const url = `/messages?after_id=${lastId}&courseId=${Util.getCourseId()}`
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                responseJson.forEach(self.addMessage, self);
+            })
+    }
 
-        //$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
+    retrieveStudentMessageHistory() {
+        let self = this;
+        let lastMessage = this.state.messages[this.state.messages.length - 1];
+        let lastId = (lastMessage ? lastMessage.id : 0);
+        const url = `/studentmessages?after_id=${lastId}&courseId=${Util.getCourseId()}&studentId=${Util.getStudentId()}`
+        fetch(url, {
+            method: 'GET',
+            credentials: 'include'
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                let messages = this.state.messages;
+                responseJson.map((m: any) => { messages = messages.concat(self.addMessage(m, true)) }, self);
+                messages.sort((a: any, b: any) => {
+                    return (a.date > b.date) ? 1 : 0;
+                });
+                this.setState({ messages: messages });
+            })
     }
 
     messageExists(message: any) {
@@ -126,20 +164,21 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         return ids.indexOf(message.id) !== -1;
     }
 
-    retrieveMessageHistory() {
-        var self = this;
-        var lastMessage = this.state.messages[this.state.messages.length - 1];
-        var lastId = (lastMessage ? lastMessage.id : 0);
-
-        fetch('/messages', {
-            method: 'GET',
-            credentials: 'include'
-        }).then((response: any) => {
-            response.results.forEach(self.addMessage, self);
-        })
-        // $.get('/messages', { after_id: lastId }).success(function (response) {
-        //     response.results.forEach(self.addMessage, self);
-        // });
+    addMessage(message: any, skipUpdate: boolean = false) {
+        if (this.messageExists(message)) {
+            console.warn('Duplicate message detected');
+            return;
+        }
+        message.read = skipUpdate || this.state.sidebarOpen;
+        if (!skipUpdate) {
+            let messages = this.state.messages.concat(message);
+            messages.sort((a: any, b: any) => {
+                return (a.date > b.date) ? 1 : 0;
+            });
+            this.setState({ messages: messages });
+        }
+        return message;
+        //$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
     }
 
     handleStartCall(e: any) {
@@ -158,11 +197,20 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
     }
 
     handleOpenSidebar(e: any) {
-        this.setState({ sidebarOpen: !this.state.sidebarOpen })
+        const sideBarOpen = !this.state.sidebarOpen;
+        // Mark all messages as read
+        const messages = this.state.messages.map((m) => {
+            m.read = true;
+            return m;
+        });
+        this.setState({ sidebarOpen: sideBarOpen, messages: messages })
+        if (sideBarOpen) {
+            if (this.messagesComponent) this.messagesComponent.scrollToBottom();
+        }
     }
 
     render() {
-        const { iframeUrl, sidebarOpen } = this.state;
+        const { iframeUrl, sidebarOpen, messages } = this.state;
         const { full_name, user_image, remote_link } = session;
 
         if (window.location.hash && Util.isInstructor()) {
@@ -179,12 +227,14 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         }
 
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
+        let unreadMessageCount = 0;
+        messages.forEach(m => !m.read ? unreadMessageCount++ : undefined);
         return <div className="pusher">
             <div className={`main-body ${sidebarOpen ? 'sidebar-visible' : ''}`}>
                 <Menu inverted borderless className="starter-menu">
                     <Menu.Menu position='left'>
                         <Menu.Item>
-                        <Image spaced="right" avatar src='http://clipart-library.com/images/5iRrg8LRT.jpg' /> Mary Smith
+                            <Image spaced="right" avatar src={user_image} /> {full_name}
                         </Menu.Item>
                     </Menu.Menu>
                     {remote_link ?
@@ -195,7 +245,8 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                         <Button className="raise-hand" size='mini' color="yellow" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                     </Menu.Item>
                     <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
-                        <Icon name='sidebar'/>Messages
+                        <Icon name='sidebar' />Messages
+                        {unreadMessageCount > 0 ? <Label size="small" className='white'>{unreadMessageCount}</Label> : undefined}
                     </Menu.Item>
                 </Menu>
                 <div className="frame-body">
@@ -203,7 +254,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 </div>
             </div>
             <div className={`main-sidebar ${sidebarOpen ? 'sidebar-visible' : ''}`}>
-                <Messages />
+                <Messages ref={e => this.messagesComponent = e} messages={messages} />
             </div>
             <NotificationModal open={false} type="ping" />
         </div>;

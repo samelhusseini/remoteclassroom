@@ -1,6 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
+import Moment from 'react-moment';
+
 import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea, Card } from 'semantic-ui-react';
 
 import Util from '../../utils/util';
@@ -11,6 +13,7 @@ declare var config: RemoteConfig;
 declare var session: RemoteSession;
 
 export interface MessagesProps {
+    messages: any[];
 }
 
 export interface MessagesState {
@@ -24,82 +27,93 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
         }
     }
 
-    handleClose() {
-        this.setState({ open: false });
+    handleSendMessage(e: any) {
+        const text = document.getElementById('studentMessageText') as HTMLTextAreaElement;
+        if (text && text.value) {
+            Util.POST('/new_student_message', {
+                studentId: Util.getStudentId(),
+                courseId: Util.getCourseId(),
+                text: text.value
+            });
+        }
+        text.value = '';
+        let that = this;
+        setTimeout(function () {
+            that.scrollToBottom();
+        }, 500);
+    }
+
+    scrollToBottom() {
+        let objDiv = document.getElementById("scrolling-messages");
+        objDiv.scrollTop = objDiv.scrollHeight;        
     }
 
     render() {
+        const { messages } = this.props;
+
         return <div className='messages-sidebar'>
 
-            <Grid>
-                <Grid.Row>
-                    <Grid.Column width={16}>
-                        <Header>Messages</Header>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-            <div className="user-selector">
+            <Header>Messages</Header>
+            <div id="scrolling-messages" className="scrolling-messages">
+                <Grid padded>
+                    <Grid.Row>
+                        <Grid.Column width={16}>
+                            <Comment.Group>
+                                {messages.map((message) =>
+                                    message.type == "link" && (
+                                        <Comment>
+                                            <Comment.Content>
+                                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
+                                                <Comment.Metadata>
+                                                    <div><Moment fromNow utc>{message.date}</Moment></div>
+                                                </Comment.Metadata>
+                                                <Comment.Text>
+                                                    <Card color='orange' fluid>
+                                                        <Card.Content><a href='http://www.google.com'> www.google.com</a></Card.Content>
+                                                    </Card>
+                                                </Comment.Text>
+                                            </Comment.Content>
+                                        </Comment>) ||
+                                    message.type == "text" && (
+                                        <Comment>
+                                            <Comment.Content>
+                                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
+                                                <Comment.Metadata>
+                                                    <div><Moment fromNow utc>{message.date}</Moment></div>
+                                                </Comment.Metadata>
+                                                <Comment.Text>{message.content}</Comment.Text>
+                                            </Comment.Content>
+                                        </Comment>) ||
+                                    message.type == "ping" && (
+                                        <Comment>
+                                            <Comment.Content>
+                                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
+                                                <Comment.Metadata>
+                                                    <div><Moment fromNow utc>{message.date}</Moment></div>
+                                                </Comment.Metadata>
+                                                <Comment.Text>
+                                                    <Card color='blue' fluid>
+                                                        <Card.Content>The class will start in 5 minutes</Card.Content>
+                                                    </Card>
+                                                </Comment.Text>
+                                            </Comment.Content>
+                                        </Comment>)
+                                )}
+                            </Comment.Group>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
             </div>
-            <Grid>
-                <Grid.Row>
-                    <Grid.Column width={16}>
-                        <Comment.Group>
-                            <Comment>
-                                <Comment.Content>
-                                    <Comment.Author as='a'>Mary</Comment.Author>
-                                    <Comment.Metadata>
-                                        <div>5:42PM</div>
-                                    </Comment.Metadata>
-                                    <Comment.Text>Hi Matt, I'm really excited about this class</Comment.Text>
-                                </Comment.Content>
-                            </Comment>
-                            <Comment>
-                                <Comment.Content>
-                                    <Comment.Author as='a'>Matt</Comment.Author>
-                                    <Comment.Metadata>
-                                        <div>5:43PM</div>
-                                    </Comment.Metadata>
-                                    <Comment.Text>Hi Mary, I am glad you're excited. Our class today is going to be awesome!</Comment.Text>
-                                </Comment.Content>
-                            </Comment>
-                            <Comment>
-                                <Comment.Content>
-                                    <Comment.Author as='a'>Matt</Comment.Author>
-                                    <Comment.Metadata>
-                                        <div>5:45PM</div>
-                                    </Comment.Metadata>
-                                    <Comment.Text>
-                                        <Card color='blue' fluid>
-                                            <Card.Content>The class will start in 15 minutes</Card.Content>
-                                        </Card>
-                                    </Comment.Text>
-                                </Comment.Content>
-                            </Comment>
-                            <Comment>
-                                <Comment.Content>
-                                    <Comment.Author as='a'>Kat</Comment.Author>
-                                    <Comment.Metadata>
-                                        <div>6:10PM</div>
-                                    </Comment.Metadata>
-                                    <Comment.Text>Can we chat about how you add a block to do step 2?</Comment.Text>
-                                </Comment.Content>
-                            </Comment>
-                        </Comment.Group>
-                    </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                    <Grid.Column width={16}>
-                        <Form>
-                            <Form.Group>
-                                <Form.TextArea autoHeight placeholder='Enter Message here' rows={1} />
-                                <Form.Button primary>Send</Form.Button>
-                            </Form.Group>
-                        </Form>
-                    </Grid.Column>
-
-                </Grid.Row>
-
-            </Grid>
+            <div className="sidebar-footer">
+                <Grid padded>
+                    <Form>
+                        <Form.Group>
+                            <Form.TextArea id='studentMessageText' autoHeight placeholder='Enter Message here' rows={1} />
+                            <Form.Button primary onClick={this.handleSendMessage.bind(this)}>Send</Form.Button>
+                        </Form.Group>
+                    </Form>
+                </Grid>
+            </div>
         </div>
     }
 }
