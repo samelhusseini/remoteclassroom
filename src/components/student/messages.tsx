@@ -46,35 +46,31 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                         <Comment.Group>
                             <Comment>
                                 <Comment.Content>
-                                    <Comment.Author as='a'>Matt</Comment.Author>
+                                    <Comment.Author as='a'>Mary</Comment.Author>
                                     <Comment.Metadata>
                                         <div>5:42PM</div>
                                     </Comment.Metadata>
-                                    <Comment.Text>
-                                        <Card color='orange' fluid>
-                                            <Card.Content><a href = 'http://www.google.com'> www.google.com</a></Card.Content>
-                                        </Card>
-                                    </Comment.Text>
+                                    <Comment.Text>Hi Matt, I'm really excited about this class</Comment.Text>
                                 </Comment.Content>
                             </Comment>
                             <Comment>
                                 <Comment.Content>
                                     <Comment.Author as='a'>Matt</Comment.Author>
                                     <Comment.Metadata>
-                                        <div>5:42PM</div>
+                                        <div>5:43PM</div>
                                     </Comment.Metadata>
-                                    <Comment.Text>How artistic!</Comment.Text>
+                                    <Comment.Text>Hi Mary, I am glad you're excited. Our class today is going to be awesome!</Comment.Text>
                                 </Comment.Content>
                             </Comment>
                             <Comment>
                                 <Comment.Content>
                                     <Comment.Author as='a'>Matt</Comment.Author>
                                     <Comment.Metadata>
-                                        <div>5:42PM</div>
+                                        <div>5:45PM</div>
                                     </Comment.Metadata>
                                     <Comment.Text>
                                         <Card color='blue' fluid>
-                                            <Card.Content>The class will start in 5 minutes</Card.Content>
+                                            <Card.Content>The class will start in 15 minutes</Card.Content>
                                         </Card>
                                     </Comment.Text>
                                 </Comment.Content>
@@ -83,9 +79,9 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                                 <Comment.Content>
                                     <Comment.Author as='a'>Kat</Comment.Author>
                                     <Comment.Metadata>
-                                        <div>5:42PM</div>
+                                        <div>6:10PM</div>
                                     </Comment.Metadata>
-                                    <Comment.Text>That is incredible, you should do stuff like that more often.</Comment.Text>
+                                    <Comment.Text>Can we chat about how you add a block to do step 2?</Comment.Text>
                                 </Comment.Content>
                             </Comment>
                         </Comment.Group>

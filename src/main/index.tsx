@@ -184,7 +184,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                 <Menu inverted borderless className="starter-menu">
                     <Menu.Menu position='left'>
                         <Menu.Item>
-                        <Image spaced="right" avatar src='https://digitalsummit.com/wp-content/uploads/2017/01/bobby-singh.jpg' /> {full_name}
+                        <Image spaced="right" avatar src='http://clipart-library.com/images/5iRrg8LRT.jpg' /> Mary Smith
                         </Menu.Item>
                     </Menu.Menu>
                     {remote_link ?
@@ -196,7 +196,6 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                     </Menu.Item>
                     <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
                         <Icon name='sidebar'/>Messages
-                        <Label size="small" className='white'>1</Label>
                     </Menu.Item>
                 </Menu>
                 <div className="frame-body">
