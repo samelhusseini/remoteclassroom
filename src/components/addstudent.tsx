@@ -17,12 +17,12 @@ export class AddStudent extends React.Component<AddStudentProps> {
             <Modal.Description>
                 <Container text>
                     <p></p>
-                    <Header as='h3'>CLASS SHARELINK</Header>
+                    <Header as='h3'>Class sharelink</Header>
                     <p>Send students the following share link and they will be added to the class</p>
                     <p><Input size='medium' fluid
                               action={{color: 'blue', labelPosition: 'right', icon: 'copy', content: 'Copy'}}
                               defaultValue='remoteclass.school/s3d4edw'/></p>
-                    <Header as='h3'>EMAIL INVITE</Header>
+                    <Header as='h3'>Email invite</Header>
                     <p>Send students an email requesting them to join the class</p>
                     <p><Input focus placeholder='Enter email address'/> <Button primary size='large'> Send
                         Invite</Button></p>
@@ -30,11 +30,11 @@ export class AddStudent extends React.Component<AddStudentProps> {
                         <Table.Body>
                             <Table.Row>
                                 <Table.Cell>john@test.com</Table.Cell>
-                                <Table.Cell>EMAIL SENT</Table.Cell>
+                                <Table.Cell>Email sent</Table.Cell>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>john@test.com</Table.Cell>
-                                <Table.Cell>EMAIL SENT</Table.Cell>
+                                <Table.Cell>Email sent</Table.Cell>
                             </Table.Row>
                         </Table.Body>
                     </Table>
