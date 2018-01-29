@@ -1,7 +1,8 @@
 module.exports = {
     entry: {
-        main: "./src/main/index.tsx",
-        admin: "./src/admin/admin.tsx"
+        main: "./src/main/main.tsx",
+        admin: "./src/admin/admin.tsx",
+        student: "./src/student/student.tsx"
     },
     output: {
         filename: "[name]_bundle.js",

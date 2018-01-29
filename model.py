@@ -75,6 +75,27 @@ class Setting(ndb.Model):
     def get_value_by_course(cls, courseId, name):
         return cls.query(ndb.AND(cls.courseId == courseId, cls.name == name)).fetch()
 
+class User(ndb.Model):
+    date = ndb.DateTimeProperty(auto_now_add=True)
+    userId = ndb.StringProperty(indexed=False, required=True)
+    courseId = ndb.StringProperty(indexed=True, required=True)
+    namespace = ndb.StringProperty(indexed=True, required=True)
+
+    fullName = ndb.StringProperty(indexed=True)
+    avatarUrl = ndb.StringProperty(indexed=False)
+    role = ndb.StringProperty(indexed=True)
+
+    @classmethod
+    def get_by_course(cls, courseId):
+        return json.dumps([l.to_dict() for l in cls.query(cls.courseId == courseId).order(cls.fullName).fetch()], cls=DateTimeEncoder)
+
+
+class Course(ndb.Model):
+    date = ndb.DateTimeProperty(auto_now_add=True)
+    courseId = ndb.StringProperty(indexed=True, required=True)
+
+
+# To be deprecated
 class Student(ndb.Model): 
     date = ndb.DateTimeProperty(auto_now_add=True)
     studentId = ndb.StringProperty(indexed=False, required=True)

@@ -48,6 +48,30 @@ Install python ([https://www.python.org/downloads/](https://www.python.org/downl
 pip2.7 install -t lib -r requirements.txt
 ```
 
+Install node_modules
+
+```
+npm install
+```
+
+Install webpack globally
+
+```
+npm install -g webpack
+```
+
+## Running locally
+
+In a terminal window, run webpack: 
+```
+webpack --watch
+```
+
+In another terminal window, run the local server: 
+```
+dev_appserver.py app.yaml
+```
+
 ### Configuration
 
 There are two configuration files you'll need to touch: 

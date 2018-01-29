@@ -43,7 +43,8 @@ export namespace Util {
                 'Content-Type': 'application/json',
             } as any,
             body: JSON.stringify(data),
-            credentials: 'include'
+            credentials: 'include',
+            redirect: 'follow'
         })
     }
 

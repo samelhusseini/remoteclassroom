@@ -193,6 +193,36 @@ def xml_class():
         return return_error('''Error with XML. Please refresh and try again. If this error persists,
             please contact support.''')
 
+
+@app.route("/.well-known/acme-challenge/ZCYg-4cp9zP3ihybHYQOa7wSIWV0ffVvboGnBdkSzbk", methods=['GET'])
+def verification():
+    """
+    Returns the lti.xml file for the app.
+    """
+    try:
+        return Response(render_template(
+            'verification.xml'), mimetype='application/text'
+        )
+    except:
+        app.logger.error("Error with XML.")
+        return return_error('''Error with XML. Please refresh and try again. If this error persists,
+            please contact support.''')
+
+
+@app.route("/.well-known/acme-challenge/yUYJl_O1Z6LCXNT5nzyfSERZDyU4437sUY5uvjlT0Dw", methods=['GET'])
+def www_verification():
+    """
+    Returns the lti.xml file for the app.
+    """
+    try:
+        return Response(render_template(
+            'www.verification.xml'), mimetype='application/text'
+        )
+    except:
+        app.logger.error("Error with XML.")
+        return return_error('''Error with XML. Please refresh and try again. If this error persists,
+            please contact support.''')
+
 @app.route("/importusers", methods=['POST'])
 @lti(request='session', error=error, role='staff', app=app)
 def import_users(lti=lti):

@@ -27,7 +27,7 @@ export interface MainAppState {
     messages?: any[];
 }
 
-export class MainApp extends React.Component<MainAppProps, MainAppState> {
+export class StudentApp extends React.Component<MainAppProps, MainAppState> {
     private pusher: any;
     private configChannel: any;
     private pingChannel: any;
@@ -229,6 +229,7 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         let unreadMessageCount = 0;
         messages.forEach(m => !m.read ? unreadMessageCount++ : undefined);
+        const showMessages = false;
         return <div className="pusher">
             <div className={`main-body ${sidebarOpen ? 'sidebar-visible' : ''}`}>
                 <Menu inverted borderless className="starter-menu">
@@ -239,15 +240,16 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
                     </Menu.Menu>
                     {remote_link ?
                         <Menu.Item>
-                            <Button color="green" icon labelPosition='left' onClick={this.handleStartCall}><Icon name='call' /> Start Call</Button>
-                        </Menu.Item> : undefined}
+                            <Button className="raise-hand" size='mini' color="green" icon labelPosition='left' onClick={this.handleStartCall}><Icon name='call' /> Start Call</Button>
+                        </Menu.Item>
+                        : undefined}
                     <Menu.Item>
                         <Button className="raise-hand" size='mini' color="yellow" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                     </Menu.Item>
-                    <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
+                    {showMessages ? <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
                         <Icon name='sidebar' />Messages
                         {unreadMessageCount > 0 ? <Label size="small" className='white'>{unreadMessageCount}</Label> : undefined}
-                    </Menu.Item>
+                    </Menu.Item> : undefined}
                 </Menu>
                 <div className="frame-body">
                     <Frame url={snapUrl} />
@@ -262,6 +264,6 @@ export class MainApp extends React.Component<MainAppProps, MainAppState> {
 }
 
 ReactDOM.render(
-    <MainApp />,
+    <StudentApp />,
     document.getElementById("root")
 );

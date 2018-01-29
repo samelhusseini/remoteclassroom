@@ -1,19 +1,25 @@
 import os
 import cgi
 from google.appengine.ext import ndb
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, make_response, url_for
 from datetime import datetime, timedelta
 import json
 import logging
 
 from common import app, p, getStudents, getMeetings, getStudent, pusher_key_config
-from model import Log, Student
+from model import Log, Student, User, Course
+from counter import increment, get_count
 
 from common import feedUpdated, configChanged
 import admin
 import lti
 
+from hashids import Hashids
+
 from canvas_read import CanvasReader
+
+SALT = '5d25e02d-0657-41d4-a717-e5e2b61f1f77'
+DEFAULT_COURSE_PREFIX = 'remoteclass.school/'
 
 '''
 @app.route("/class")
@@ -86,6 +92,119 @@ def show_index():
 def show_test():
     return render_template('test.html')
 
+
+@app.route("/main")
+def main():
+    return render_template('main.html')
+
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    if request.method == 'POST':
+        content = request.get_json(silent=True)
+        fullName = cgi.escape(content['username'])
+        className = cgi.escape(content['classname'])
+
+        hashids = Hashids(salt=SALT,min_length=6)
+        increment()
+        count = get_count()
+        hashid = hashids.encode(count)
+
+        courseId = DEFAULT_COURSE_PREFIX + hashid
+        userId = request.cookies.get('remote_userid') if 'remote_userid' in request.cookies else generate_user_id()
+
+        host = app.config.get('host')
+        resp = make_response(hashid)
+
+        # Add course to database
+        key = courseId
+        course = Course.get_or_insert(key, courseId=courseId)
+        course.put()
+
+        # Set user cookies (teacher role)
+        auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
+        auth[hashid] = {
+            'role': 'Instructor'
+        }
+        resp.set_cookie('fullname', fullName)
+        resp.set_cookie('remote_auth', json.dumps(auth))
+        resp.set_cookie('remote_userid', userId)
+
+        return resp
+    return redirect('/main#/create')
+
+
+@app.route('/join', methods=['POST'])
+def join():
+    content = request.get_json(silent=True)
+    hashid = cgi.escape(content['hashid'])
+    fullName = cgi.escape(content['username'])
+    userId = request.cookies.get('remote_userid') if 'remote_userid' in request.cookies else generate_user_id()
+
+    resp = make_response(hashid)
+
+    # Ensure course exists
+    courseId = DEFAULT_COURSE_PREFIX + hashid
+    course = ndb.Key('Course', courseId).get()
+
+    # Add user to course
+    key = courseId + userId
+    user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName)
+    user.put()
+
+    # Set user cookies (student role)
+    auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
+    auth[hashid] = {
+        'role': 'Student'
+    }
+    resp.set_cookie('fullname', fullName)
+    resp.set_cookie('remote_auth', json.dumps(auth))
+    resp.set_cookie('remote_userid', userId)
+    return resp
+
+def generate_user_id():
+    hashids = Hashids(salt=SALT,min_length=6)
+    increment()
+    count = get_count()
+    hashid = hashids.encode(count)
+    return hashid
+
+@app.route("/<launch_id>")
+def launch_by_id(launch_id):
+    #session['course_id'] = launch_id
+    #classSkype = ndb.Key('Setting', session['course_id'] + 'classSkype').get()
+    #iframeUrl = ndb.Key('Setting', session['course_id'] + 'iframeUrl').get()
+    jsonconfig = {
+        'PUSHER_APP_KEY': json.dumps(pusher_key_config['PUSHER_APP_KEY']).replace('"', ''),
+        #'iframeUrl': json.dumps(iframeUrl.value).replace('"', '') if iframeUrl else '',
+        #'classSkype': json.dumps(classSkype.value).replace('"', '') if classSkype else ''
+    }
+
+    # Lookup course id
+    courseId = DEFAULT_COURSE_PREFIX + launch_id
+    course = ndb.Key('Course', courseId).get()
+
+    if course:
+        if 'remote_auth' in request.cookies:
+            auth = json.loads(request.cookies.get('remote_auth'))
+            userId = request.cookies.get('remote_userid')
+            fullName = request.cookies.get('fullname')
+            role = auth[launch_id]['role'] if launch_id in auth else ''
+            if role:
+                jsonsession = {
+                    #'guid': session['guid'],
+                    'course_id': DEFAULT_COURSE_PREFIX + launch_id,
+                    'user_id': userId, #session['user_id'],
+                    'full_name': fullName,
+                    #'user_image': session['user_image'],
+                    'role': role
+                }
+                if 'Instructor' in role:
+                    return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
+                else:
+                    return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
+        return redirect('/main?launch='+launch_id+'#join')
+    return "Error: No such course code"
+
 @app.route("/test-starter")
 def show_starter():
     host = app.config.get('host')
@@ -106,7 +225,7 @@ def show_starter():
     student = ndb.Key('Student', jsonsession['course_id'] + jsonsession['user_id']).get()
     if (student and student.primaryRemoteLink):
         jsonsession['remote_link'] = json.dumps(student.primaryRemoteLink).replace('"', '')
-    return render_template('index.html', jsconfig=jsonconfig, jssession=jsonsession, host=host)
+    return render_template('student.html', jsconfig=jsonconfig, jssession=jsonsession, host=host)
 
 
 @app.route("/test-admin")
