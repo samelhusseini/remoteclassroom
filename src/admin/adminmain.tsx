@@ -185,16 +185,7 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
             <div className="admin-sidebar">
 
                 <div className="admin-scrollabale">
-                    <Grid>
-                        <Grid.Row>
-                            <Grid.Column width={12}>
-                                <Header inverted as='h2'>Untitled Class</Header>
-                            </Grid.Column>
-                            <Grid.Column width={4} textAlign="left">
-                                <NewPostModal trigger={<Button circular inverted color={'white' as any} icon='add' size='mini' />} />
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
+                    <Header inverted as='h2' className="inlineEdit default">Untitled Class</Header>
                     <WorkspaceSelector isSelected={this.state.currentView == ViewType.Workspace} onSelect={this.selectWorkspaceView.bind(this)} />
                     <UserSelector messages={this.state.messages} users={this.state.users} presenceChannel={this.presenceChannel} selectedUser={selectedUser} onSelectedUser={this.setSelectedUser.bind(this)} />
                     <div className="settings">

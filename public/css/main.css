@@ -283,3 +283,17 @@ h3.actioned button:hover {
 .applications .card button {
     width: 100%;
 }
+
+h2.inlineEdit {
+    padding: 3px !important;
+}
+h2.inlineEdit.default {
+    font-style: italic;
+    opacity: .8;
+}
+
+h2.inlineEdit:hover {
+    border: 1px solid rgba(255, 255, 255, .3);
+    padding: 2px !important;
+    cursor: text;
+}
