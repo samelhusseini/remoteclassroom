@@ -229,7 +229,6 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
         const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         let unreadMessageCount = 0;
         messages.forEach(m => !m.read ? unreadMessageCount++ : undefined);
-        const showMessages = false;
         return <div className="pusher">
             <div className={`main-body ${sidebarOpen ? 'sidebar-visible' : ''}`}>
                 <Menu inverted borderless className="starter-menu">
@@ -246,10 +245,10 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
                     <Menu.Item>
                         <Button className="raise-hand" size='mini' color="yellow" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                     </Menu.Item>
-                    {showMessages ? <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
+                    <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
                         <Icon name='sidebar' />Messages
                         {unreadMessageCount > 0 ? <Label size="small" className='white'>{unreadMessageCount}</Label> : undefined}
-                    </Menu.Item> : undefined}
+                    </Menu.Item>
                 </Menu>
                 <div className="frame-body">
                     <Frame url={snapUrl} />
