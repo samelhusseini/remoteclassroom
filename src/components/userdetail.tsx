@@ -32,8 +32,6 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
     render() {
         const { user, messages } = this.props;
 
-        if (!user) return <div />; // No user selected
-
         return <div className="admin-user-detail-panel">
             <Grid padded>
                 <Grid.Row>

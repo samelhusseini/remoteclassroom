@@ -7,7 +7,9 @@ import * as ReactDOM from "react-dom";
 import { Grid, Button, Container, Segment, Menu, Icon, Header, Divider } from 'semantic-ui-react';
 import { StatusFeed } from "../components/Feed";
 import { UserSelector } from "../components/userselector";
+import { WorkspaceSelector } from "../components/workspaceselector";
 import { UserDetail } from "../components/userdetail";
+import { WorkspaceDetail } from "../components/workspacedetail";
 import { MainMenu } from "../components/MainMenu";
 
 import { NewPostModal } from "../components/teacher/newpostmodal";
@@ -20,12 +22,16 @@ declare var Pusher: any;
 declare var config: RemoteConfig;
 declare var session: RemoteSession;
 
+enum ViewType {
+    Workspace, User
+}
 export interface AdminMainViewProps {
     history: any;
 }
 export interface AdminMainViewState {
     users: RemoteUser[];
     messages: any[];
+    currentView: ViewType,
     selectedUser?: RemoteUser;
 }
 
@@ -41,12 +47,13 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
         super(props);
         this.state = {
             users: [],
-            messages: []
+            messages: [],
+            currentView: ViewType.Workspace
         }
     }
 
     componentWillMount() {
-        const courseId = session.course_id || '1207667';
+        const courseId = session.course_id || 'TEST';
         Pusher.logToConsole = true;
         this.pusher = new Pusher(config.PUSHER_APP_KEY, {
             encrypted: true
@@ -156,25 +163,39 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
             if (m.student == user.studentId)
                 m.read = true;
         });
-        this.setState({ selectedUser: user });
+        this.setState({ selectedUser: user, currentView: ViewType.User });
+    }
+
+    selectWorkspaceView() {
+        this.setState({selectedUser: null, currentView: ViewType.Workspace})
     }
 
     render() {
         const { selectedUser } = this.state;
 
+        let content;
+        if (this.state.currentView == ViewType.Workspace) {
+            content = <WorkspaceDetail />;
+        } else {
+            content = <UserDetail
+                messages={this.state.messages.filter(m => selectedUser ? m.student == selectedUser.studentId : false)}
+                user={selectedUser} channel={this.privateChannel}/>;
+        }
         return <div className="pusher">
             <div className="admin-sidebar">
+
                 <div className="admin-scrollabale">
                     <Grid>
                         <Grid.Row>
                             <Grid.Column width={12}>
-                                <Header inverted as='h2'>Code Class</Header>
+                                <Header inverted as='h2'>Untitled Class</Header>
                             </Grid.Column>
                             <Grid.Column width={4} textAlign="left">
                                 <NewPostModal trigger={<Button circular inverted color={'white' as any} icon='add' size='mini' />} />
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
+                    <WorkspaceSelector isSelected={this.state.currentView == ViewType.Workspace} onSelect={this.selectWorkspaceView.bind(this)} />
                     <UserSelector messages={this.state.messages} users={this.state.users} presenceChannel={this.presenceChannel} selectedUser={selectedUser} onSelectedUser={this.setSelectedUser.bind(this)} />
                     <div className="settings">
                         <Divider inverted />
@@ -187,7 +208,7 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
                 </div>
             </div>
             <div className="admin-body">
-                <UserDetail messages={this.state.messages.filter(m => selectedUser ? m.student == selectedUser.studentId : false)} user={selectedUser} channel={this.privateChannel} />
+                {content}
             </div>
         </div>;
     }

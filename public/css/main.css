@@ -122,10 +122,27 @@ body {
     min-height: 100vh;
 }
 
-.user-selector {
+.admin-sidebar .menu {
     flex: 1;
     background-color: transparent !important;
     color: #fff !important;
+}
+
+h3.actioned .icon {
+    margin-right: 0 !important;
+}
+
+h3.actioned {
+    vertical-align: middle;
+}
+
+h3.actioned button {
+    padding: 11px 13px !important;
+    background: rgba(0, 0, 0, 0) !important;;
+}
+
+h3.actioned button:hover {
+    background: rgba(0, 0, 0, .15) !important;
 }
 
 .presense-label {
@@ -261,4 +278,9 @@ body {
 
 .raise-hand{
     font-size: 0.8em !important;
+}
+
+
+.applications .card button {
+    width: 100%;
 }
