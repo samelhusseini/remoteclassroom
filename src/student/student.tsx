@@ -211,7 +211,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
 
     render() {
         const { iframeUrl, sidebarOpen, messages } = this.state;
-        const { full_name, user_image, remote_link } = session;
+        const { full_name, user_image, remote_link, user_color, user_initials } = session;
 
         if (window.location.hash && Util.isInstructor()) {
             // Redirect to SNAP present
@@ -234,7 +234,8 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
                 <Menu inverted borderless className="starter-menu">
                     <Menu.Menu position='left'>
                         <Menu.Item>
-                            <Image spaced="right" avatar src={user_image} /> {full_name}
+                            {user_image ? <Image spaced="right" avatar src={user_image} /> :
+                            <div className='ui avatar right spaced image no-user-avatar' style={{backgroundColor: user_color || '#512DA8'}}>{user_initials}</div>} {full_name}
                         </Menu.Item>
                     </Menu.Menu>
                     {remote_link ?

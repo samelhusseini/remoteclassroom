@@ -117,7 +117,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                     <Form>
                         <Form.Group>
                             <Form.TextArea id='studentMessageText' autoHeight placeholder='Type a message...' rows={1} onKeyPress={this.handleMessageKeyPress.bind(this)} />
-                            {false ? <Form.Button primary onClick={this.handleSendMessage.bind(this)}>Send</Form.Button> : undefined}
+                            <Form.Button primary onClick={this.handleSendMessage.bind(this)}>Send</Form.Button>
                         </Form.Group>
                     </Form>
                 </Grid>

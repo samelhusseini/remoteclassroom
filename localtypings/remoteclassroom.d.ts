@@ -9,6 +9,8 @@ interface RemoteSession {
     course_id: string;
     user_id: string;
     user_image: string;
+    user_color: string;
+    user_initials: string;
     remote_link?: string;
     role?: string;
 }

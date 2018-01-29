@@ -70,7 +70,7 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
         this.feedChannel.bind('update', (data: any) => {
             //this.updateFeed();
             const studentName = data.message.fullName;
-            Util.showNotification('Help needed!', `${studentName} raised his/her hand!`, data.message.avatarUrl);
+            Util.showNotification('Hand raised!', `${studentName} raised his/her hand!`, data.message.avatarUrl);
         }, this);
         this.feedChannel.bind('loaded', (data: any) => {
             console.log("loaded");

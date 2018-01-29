@@ -13,6 +13,8 @@ import os
 CONSUMER_KEY = os.environ.get("CONSUMER_KEY", "CHANGEME")
 SHARED_SECRET = os.environ.get("SHARED_SECRET", "CHANGEME")
 
+HASHID_SALT = '5d25e02d-0657-41d4-a717-e5e2b61f1f77'
+
 # Configuration for LTI
 PYLTI_CONFIG = {
     'consumers': {

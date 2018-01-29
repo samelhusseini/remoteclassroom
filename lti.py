@@ -15,7 +15,7 @@ import urllib
 from common import app, p, pusher_key_config
 from model import Log, Setting, Student, SourceCode, entity_to_dict, DateTimeJSONEncoder
 
-from common import feedUpdated, newMessage, newStudentMessage, registerUpdated, configChanged, loadedUpdated
+from common import feedUpdated, newMessage, newStudentMessage, registerUpdated, configChanged, loadedUpdated, generate_color
 
 from canvas_read import CanvasReader
 
@@ -119,6 +119,7 @@ def launch(lti=lti):
     session['guid'] = request.form.get('tool_consumer_instance_guid')
     session['course_id'] = request.form.get('custom_canvas_course_id')
     session['user_id'] = request.form.get('custom_canvas_user_id')
+    session['user_color'] = generate_color()
 
     roles = request.form.get('roles')
     session['user_image'] = request.form.get('user_image')
@@ -146,6 +147,7 @@ def student(lti=lti):
         'user_id': session['user_id'],
         'full_name': session['full_name'],
         'user_image': session['user_image'],
+        'user_color': session['user_color'],
         'role': session['roles']
     }
     classSkype = ndb.Key('Setting', session['course_id'] + 'classSkype').get()
@@ -159,6 +161,7 @@ def student(lti=lti):
         student = ndb.Key('Student', session['course_id'] + session['user_id']).get()
         if (student and student.primaryRemoteLink):
             jsonsession['remote_link'] = json.dumps(student.primaryRemoteLink).replace('"', '')
+        jsonsession['user_initials'] = student.initials
         host = app.config.get('host')
         trigger_loaded(session['course_id'], session['user_id'])
         return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession), host=host)
@@ -179,6 +182,8 @@ def admin(lti=lti):
         'user_id': session['user_id'],
         'full_name': session['full_name'],
         'user_image': session['user_image'],
+        'user_color': session['user_color'],
+        'user_initials': session['user_initials'],
         'role': session['roles']
     }
     classSkype = ndb.Key('Setting', session['course_id'] + 'classSkype').get()

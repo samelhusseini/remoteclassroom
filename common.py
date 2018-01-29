@@ -11,6 +11,10 @@ from protorpc import messages
 import logging
 import json
 import settings
+import random
+
+from hashids import Hashids
+from counter import increment, get_count
 
 app = Flask(__name__)
 app.secret_key = settings.secret_key
@@ -32,6 +36,17 @@ p = pusher.Pusher(
   secret=pusher_config['PUSHER_APP_SECRET'],
   backend=pusher.gae.GAEBackend
 )
+
+def generate_user_id():
+    hashids = Hashids(salt=settings.HASHID_SALT,min_length=6)
+    increment()
+    count = get_count()
+    hashid = hashids.encode(count)
+    return hashid
+
+def generate_color():
+    return "#%06x" % random.randint(0, 0xFFFFFF)
+
 
 def getStudents():
     studentlist = app.config.get('students')

@@ -6,13 +6,12 @@ from flask import Flask, render_template, redirect, session, request, make_respo
 from datetime import datetime, timedelta
 import json
 import logging
-import random
 
 from common import app, p, getStudents, getMeetings, getStudent, pusher_key_config
 from model import Log, Student, Course
 from counter import increment, get_count
 
-from common import feedUpdated, configChanged
+from common import feedUpdated, configChanged, generate_color, generate_user_id
 import admin
 import lti
 
@@ -20,11 +19,8 @@ from pylti.common import LTI_SESSION_KEY
 
 import settings
 
-from hashids import Hashids
-
 from canvas_read import CanvasReader
 
-SALT = '5d25e02d-0657-41d4-a717-e5e2b61f1f77'
 DEFAULT_COURSE_PREFIX = 'remoteclassschool'
 
 '''
@@ -110,13 +106,14 @@ def create():
         fullName = cgi.escape(content['username'])
         className = cgi.escape(content['classname'])
 
-        hashids = Hashids(salt=SALT,min_length=6)
+        hashids = Hashids(salt=settings.HASHID_SALT,min_length=6)
         increment()
         count = get_count()
         hashid = hashids.encode(count)
 
         courseId = DEFAULT_COURSE_PREFIX + hashid
         userId = request.cookies.get('remote_userid') if 'remote_userid' in request.cookies else generate_user_id()
+        userColor = request.cookies.get('remote_usercolor') if 'remote_usercolor' in request.cookies else generate_user_color()
 
         host = app.config.get('host')
         resp = make_response(hashid)
@@ -126,14 +123,23 @@ def create():
         course = Course.get_or_insert(key, courseId=courseId)
         course.put()
 
+        # Add user to course
+        '''
+        key = courseId + userId
+        user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=userColor)
+        user.put()
+        '''
+
         # Set user cookies (teacher role)
         auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
         auth[hashid] = {
             'role': 'Instructor'
         }
-        resp.set_cookie('fullname', fullName)
+        resp.set_cookie('remote_userfullname', fullName)
         resp.set_cookie('remote_auth', json.dumps(auth))
         resp.set_cookie('remote_userid', userId)
+        resp.set_cookie('remote_usercolor', userColor)
+        #resp.set_cookie('remote_userinitials', userInitials)
 
         return resp
     return redirect('/main#/create')
@@ -145,6 +151,7 @@ def join():
     hashid = cgi.escape(content['hashid'])
     fullName = cgi.escape(content['username'])
     userId = request.cookies.get('remote_userid') if 'remote_userid' in request.cookies else generate_user_id()
+    userColor = request.cookies.get('remote_usercolor') if 'remote_usercolor' in request.cookies else generate_color()
 
     resp = make_response(hashid)
 
@@ -154,7 +161,8 @@ def join():
 
     # Add user to course
     key = courseId + userId
-    user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=generate_color())
+    user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=userColor)
+    userInitials = user.initials
     user.put()
 
     # Set user cookies (student role)
@@ -162,20 +170,12 @@ def join():
     auth[hashid] = {
         'role': 'Student'
     }
-    resp.set_cookie('fullname', fullName)
+    resp.set_cookie('remote_userfullname', fullName)
     resp.set_cookie('remote_auth', json.dumps(auth))
     resp.set_cookie('remote_userid', userId)
+    resp.set_cookie('remote_usercolor', userColor)
+    resp.set_cookie('remote_userinitials', userInitials)
     return resp
-
-def generate_user_id():
-    hashids = Hashids(salt=SALT,min_length=6)
-    increment()
-    count = get_count()
-    hashid = hashids.encode(count)
-    return hashid
-
-def generate_color():
-    return "#%06x" % random.randint(0, 0xFFFFFF)
 
 @app.route("/<launch_id>")
 def launch_by_id(launch_id):
@@ -196,7 +196,9 @@ def launch_by_id(launch_id):
         if 'remote_auth' in request.cookies:
             auth = json.loads(request.cookies.get('remote_auth'))
             userId = request.cookies.get('remote_userid')
-            fullName = request.cookies.get('fullname')
+            userColor = request.cookies.get('remote_usercolor')
+            fullName = request.cookies.get('remote_userfullname')
+            userInitials = request.cookies.get('remote_userinitials')
             role = auth[launch_id]['role'] if launch_id in auth else ''
 
             # Setup fake LTI session
@@ -204,6 +206,8 @@ def launch_by_id(launch_id):
             session['guid'] = str(uuid.uuid4()) # Generate new UUID
             session['course_id'] = courseId
             session['user_id'] = userId
+            session['user_color'] = userColor
+            session['user_initials'] = userInitials
             #session['user_image'] = request.form.get('user_image')
 
             session[LTI_SESSION_KEY] = True
@@ -215,6 +219,8 @@ def launch_by_id(launch_id):
                     'course_id': DEFAULT_COURSE_PREFIX + launch_id,
                     'user_id': userId, #session['user_id'],
                     'full_name': fullName,
+                    'user_color': userColor,
+                    'user_initials': userInitials,
                     #'user_image': session['user_image'],
                     'role': role
                 }
