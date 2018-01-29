@@ -2,7 +2,7 @@ import * as React from "react";
 
 import {Grid, Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Menu, Label} from 'semantic-ui-react';
 
-import Util from '../utils/util';
+import { AddStudent } from "../components/addstudent";
 
 declare var Pusher: any;
 declare var config: RemoteConfig;
@@ -53,7 +53,7 @@ export class UserSelector extends React.Component<UsersProps, UsersState> {
         }
 
         return <div>
-            <Header inverted as='h3' className="actioned">Students<Button circular floated="right"><Icon inverted name="add user" /></Button></Header>
+            <Header inverted as='h3' className="actioned">Students<AddStudent trigger={<Button circular floated="right"><Icon inverted name="add user" /></Button>} /></Header>
             <Menu vertical inverted fluid borderless className="user-selector">
                 {users.map((user) =>
                     <Menu.Item active={user == selectedUser} onClick={() => this.props.onSelectedUser.call(this, user)}>
