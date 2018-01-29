@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 import ndb_json
 
 from flask import Flask, render_template, session, request, redirect, Response, jsonify
-from pylti.flask import lti
+from pylti.flask import lti, default_error, wraps, LTIException, LTI
 from pylti.common import LTI_SESSION_KEY
 
 import settings
@@ -27,7 +27,7 @@ import requests_toolbelt.adapters.appengine
 requests_toolbelt.adapters.appengine.monkeypatch()
 
 # ============================================
-# Utility Functions
+# Utility Functions, Decorators
 # ============================================
 
 def return_error(msg):
@@ -41,13 +41,68 @@ def error(exception=None):
         please contact support.''')
 
 
+def auth(app=None, request='any', error=default_error, role='any',
+        *lti_args, **lti_kwargs):
+    """
+    Auth decorator
+    :param: app - Flask App object (optional).
+        :py:attr:`flask.current_app` is used if no object is passed in.
+    :param: error - Callback if LTI throws exception (optional).
+        :py:attr:`pylti.flask.default_error` is the default.
+    :param: request - Request type from
+        :py:attr:`pylti.common.LTI_REQUEST_TYPE`. (default: any)
+    :param: roles - LTI Role (default: any)
+    :return: wrapper
+    """
+
+    def _auth(function):
+        """
+        Inner LTI decorator
+        :param: function:
+        :return:
+        """
+
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+            """
+            Pass LTI reference to function or return error.
+            """
+            try:
+                the_lti = LTI(lti_args, lti_kwargs)
+                the_lti.verify()
+                the_lti._check_role()  # pylint: disable=protected-access
+                kwargs['lti'] = the_lti
+                return function(*args, **kwargs)
+            except LTIException as lti_exception:
+
+                error = lti_kwargs.get('error')
+                exception = dict()
+                exception['exception'] = lti_exception
+                exception['kwargs'] = kwargs
+                exception['args'] = args
+                return error(exception=exception)
+
+        return wrapper
+
+    lti_kwargs['request'] = request
+    lti_kwargs['error'] = error
+    lti_kwargs['role'] = role
+
+    if (not app) or isinstance(app, Flask):
+        lti_kwargs['app'] = app
+        return _auth
+    else:
+        # We are wrapping without arguments
+        lti_kwargs['app'] = None
+        return _auth(app)
+
 # ============================================
 # Web Views / Routes
 # ============================================
 
 # LTI Launch
 @app.route('/launch', methods=['POST', 'GET'])
-@lti(error=error, request='initial', role='any', app=app)
+@auth(error=error, request='initial', role='any', app=app)
 def launch(lti=lti):
     """
     Returns the launch page
@@ -83,7 +138,7 @@ def launch(lti=lti):
 
 # Student Launch
 @app.route("/student", methods=['POST', 'GET'])
-@lti(request='session', error=error, role='any', app=app)
+@auth(request='session', error=error, role='any', app=app)
 def student(lti=lti):
     jsonsession = {
         'guid': session['guid'],
@@ -106,17 +161,17 @@ def student(lti=lti):
             jsonsession['remote_link'] = json.dumps(student.primaryRemoteLink).replace('"', '')
         host = app.config.get('host')
         trigger_loaded(session['course_id'], session['user_id'])
-        return render_template('index.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession), host=host)
+        return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession), host=host)
     if session['roles'] == "Instructor":
         host = app.config.get('host')
-        return render_template('index.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession), host=host)
+        return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession), host=host)
     return "Please launch Remote Class to verify login"
 
 
 
 # Instructor Launch
 @app.route("/admin", methods=['POST', 'GET'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def admin(lti=lti):
     jsonsession = {
         'guid': session['guid'],
@@ -140,7 +195,7 @@ def admin(lti=lti):
 
 # LTI Launch
 @app.route('/launch_class', methods=['POST', 'GET'])
-@lti(error=error, request='initial', role='any', app=app)
+@auth(error=error, request='initial', role='any', app=app)
 def launch_class(lti=lti):
     """
     Returns the launch page
@@ -223,8 +278,9 @@ def www_verification():
         return return_error('''Error with XML. Please refresh and try again. If this error persists,
             please contact support.''')
 
+'''
 @app.route("/importusers", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def import_users(lti=lti):
 #def import_users():
     content = request.get_json(silent=True)
@@ -247,10 +303,10 @@ def import_users(lti=lti):
         student.put()
     configChanged(courseId, 'config', 'users')
     return ""
-
+'''
 
 @app.route("/feed", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def get_feed(lti=lti):
 #def get_feed():
     content = request.get_json(silent=True)
@@ -268,7 +324,7 @@ def get_feed(lti=lti):
     return json.dumps(jsonfeeds)
 
 @app.route("/messages", methods=['GET'])
-@lti(request='session', error=error, role='any', app=app)
+@auth(request='session', error=error, role='any', app=app)
 def get_messages(lti=lti):
 #def get_messages():
     after_id = request.args.get('after_id', 0)
@@ -287,7 +343,7 @@ def get_messages(lti=lti):
     return json.dumps(messagefeeds)
 
 @app.route("/studentmessages", methods=['GET'])
-@lti(request='session', error=error, role='any', app=app)
+@auth(request='session', error=error, role='any', app=app)
 def get_student_messages(lti=lti):
 #def get_student_messages():
     after_id = request.args.get('after_id', 0)
@@ -308,7 +364,7 @@ def get_student_messages(lti=lti):
     return json.dumps(messagefeeds)
 
 @app.route("/new_student_message", methods=['POST'])
-@lti(request='session', error=error, role='student', app=app)
+@auth(request='session', error=error, role='student', app=app)
 def new_student_message(lti=lti):
 #def new_student_message():
     content = request.get_json(silent=True)
@@ -350,7 +406,7 @@ def new_student_message(lti=lti):
 
 
 @app.route("/new_teacher_message", methods=['POST'])
-@lti(request='session', error=error, role='student', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def new_teacher_message(lti=lti):
 #def new_teacher_message():
     content = request.get_json(silent=True)
@@ -396,7 +452,7 @@ def new_teacher_message(lti=lti):
     return "Message received"
 
 @app.route("/new_message", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def new_message(lti=lti):
 #def new_message():
     content = request.get_json(silent=True)
@@ -428,7 +484,7 @@ def new_message(lti=lti):
 
 
 @app.route("/users", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def get_users(lti=lti):
 #def get_users():
     content = request.get_json(silent=True)
@@ -437,7 +493,7 @@ def get_users(lti=lti):
     return users
 
 @app.route("/delete_user", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def delete_user(lti=lti):
     content = request.get_json(silent=True)
     studentId = cgi.escape(content['studentId'])
@@ -448,7 +504,7 @@ def delete_user(lti=lti):
     return "Deleted"
 
 @app.route("/update_primary", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def update_primary(lti=lti):
 #def update_primary():
     content = request.get_json(silent=True)
@@ -462,7 +518,7 @@ def update_primary(lti=lti):
     return "Updated primary"
 
 @app.route("/update_secondary", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def update_secondary(lti=lti):
     content = request.get_json(silent=True)
     studentId = cgi.escape(content['studentId'])
@@ -475,7 +531,7 @@ def update_secondary(lti=lti):
     return "Updated primary"
 
 @app.route("/update_settings", methods=['POST'])
-@lti(request='session', error=error, role='staff', app=app)
+@auth(request='session', error=error, role='staff', app=app)
 def update_settings(lti=lti):
 #def update_settings():
     content = request.get_json(silent=True)
@@ -489,7 +545,7 @@ def update_settings(lti=lti):
     return "Updated settings"
 
 @app.route("/help", methods=['POST'])
-@lti(request='session', error=error, role='student', app=app)
+@auth(request='session', error=error, role='student', app=app)
 def trigger_help(lti=lti):
 #def trigger_help():
     content = request.get_json(silent=True)
@@ -513,7 +569,7 @@ def trigger_help(lti=lti):
     return "Help received"
 
 @app.route("/register", methods=['POST'])
-@lti(request='session', error=error, role='student', app=app)
+@auth(request='session', error=error, role='student', app=app)
 def trigger_register(lti=lti):
     content = request.get_json(silent=True)
     studentId = cgi.escape(content['studentId'])
@@ -622,8 +678,8 @@ def SNAP_Service(URL):
 
 
 @app.route("/pusher/auth", methods=['POST'])
-@lti(request='session', error=error, role='any', app=app)
-def pusher_authentication():
+@auth(request='session', error=error, role='any', app=app)
+def pusher_authentication(lti=lti):
   auth = p.authenticate(
     channel=request.form['channel_name'],
     socket_id=request.form['socket_id'],

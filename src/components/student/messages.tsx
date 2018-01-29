@@ -27,6 +27,14 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
         }
     }
 
+    handleMessageKeyPress(e: KeyboardEvent) {
+        if (e.key == 'Enter') {
+            this.handleSendMessage(e);
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
     handleSendMessage(e: any) {
         const text = document.getElementById('studentMessageText') as HTMLTextAreaElement;
         if (text && text.value) {
@@ -45,7 +53,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
 
     scrollToBottom() {
         let objDiv = document.getElementById("scrolling-messages");
-        objDiv.scrollTop = objDiv.scrollHeight;        
+        objDiv.scrollTop = objDiv.scrollHeight;
     }
 
     render() {
@@ -108,8 +116,8 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                 <Grid padded>
                     <Form>
                         <Form.Group>
-                            <Form.TextArea id='studentMessageText' autoHeight placeholder='Enter Message here' rows={1} />
-                            <Form.Button primary onClick={this.handleSendMessage.bind(this)}>Send</Form.Button>
+                            <Form.TextArea id='studentMessageText' autoHeight placeholder='Type a message...' rows={1} onKeyPress={this.handleMessageKeyPress.bind(this)} />
+                            {false ? <Form.Button primary onClick={this.handleSendMessage.bind(this)}>Send</Form.Button> : undefined}
                         </Form.Group>
                     </Form>
                 </Grid>

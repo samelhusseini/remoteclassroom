@@ -1,25 +1,31 @@
 import os
 import cgi
+import uuid
 from google.appengine.ext import ndb
-from flask import Flask, render_template, redirect, request, make_response, url_for
+from flask import Flask, render_template, redirect, session, request, make_response, url_for
 from datetime import datetime, timedelta
 import json
 import logging
+import random
 
 from common import app, p, getStudents, getMeetings, getStudent, pusher_key_config
-from model import Log, Student, User, Course
+from model import Log, Student, Course
 from counter import increment, get_count
 
 from common import feedUpdated, configChanged
 import admin
 import lti
 
+from pylti.common import LTI_SESSION_KEY
+
+import settings
+
 from hashids import Hashids
 
 from canvas_read import CanvasReader
 
 SALT = '5d25e02d-0657-41d4-a717-e5e2b61f1f77'
-DEFAULT_COURSE_PREFIX = 'remoteclass.school/'
+DEFAULT_COURSE_PREFIX = 'remoteclassschool'
 
 '''
 @app.route("/class")
@@ -148,7 +154,7 @@ def join():
 
     # Add user to course
     key = courseId + userId
-    user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName)
+    user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=generate_color())
     user.put()
 
     # Set user cookies (student role)
@@ -167,6 +173,9 @@ def generate_user_id():
     count = get_count()
     hashid = hashids.encode(count)
     return hashid
+
+def generate_color():
+    return "#%06x" % random.randint(0, 0xFFFFFF)
 
 @app.route("/<launch_id>")
 def launch_by_id(launch_id):
@@ -189,6 +198,17 @@ def launch_by_id(launch_id):
             userId = request.cookies.get('remote_userid')
             fullName = request.cookies.get('fullname')
             role = auth[launch_id]['role'] if launch_id in auth else ''
+
+            # Setup fake LTI session
+            session['full_name'] = fullName
+            session['guid'] = str(uuid.uuid4()) # Generate new UUID
+            session['course_id'] = courseId
+            session['user_id'] = userId
+            #session['user_image'] = request.form.get('user_image')
+
+            session[LTI_SESSION_KEY] = True
+            session['oauth_consumer_key'] = settings.CONSUMER_KEY
+
             if role:
                 jsonsession = {
                     #'guid': session['guid'],
@@ -199,8 +219,10 @@ def launch_by_id(launch_id):
                     'role': role
                 }
                 if 'Instructor' in role:
+                    session['roles'] = 'Instructor'
                     return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
                 else:
+                    session['roles'] = 'Student'
                     return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
         return redirect('/main?launch='+launch_id+'#join')
     return "Error: No such course code"

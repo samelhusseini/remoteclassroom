@@ -16,6 +16,8 @@ interface RemoteSession {
 interface RemoteUser {
     studentId: string;
     fullName: string;
+    initials: string;
+    color: string;
     avatarUrl: string;
     role: string;
     primaryRemoteLink: string;

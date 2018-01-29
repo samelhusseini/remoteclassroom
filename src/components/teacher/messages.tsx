@@ -28,6 +28,14 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
         }
     }
 
+    handleMessageKeyPress(e: KeyboardEvent) {
+        if (e.key == 'Enter') {
+            this.handleSendMessage(e);
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
     handleSendMessage(e: any) {
         const {user} = this.props;
         const text = document.getElementById('teacherMessageText') as HTMLTextAreaElement;
@@ -98,7 +106,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
             <Grid.Row>
                 <Grid.Column width={9}>
                     <Form>
-                        <TextArea id='teacherMessageText' autoHeight placeholder='Enter your Message here' rows={1} />
+                        <TextArea id='teacherMessageText' autoHeight placeholder='Type a message...' rows={1} onKeyPress={this.handleMessageKeyPress.bind(this)} />
                     </Form>
                 </Grid.Column>
                 <Grid.Column width={1}>
