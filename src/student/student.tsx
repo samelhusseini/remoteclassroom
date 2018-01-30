@@ -50,7 +50,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
     componentWillMount() {
         const courseId = Util.getCourseId();
         const studentId = Util.getStudentId();
-        Pusher.logToConsole = true;
+        Pusher.logToConsole = false;
         this.pusher = new Pusher(config.PUSHER_APP_KEY, {
             encrypted: true
         });
@@ -100,27 +100,29 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             }
         }, false);
 
-        // let webrtc = new SimpleWebRTC({
-        //     localVideoEl: "",
-        //     remoteVideosEl: "",
-        //     autoRequestMedia: true,
-        //     media: { audio: true, video: false, screen: true }
-        //     //url: 'https://your-production-signalserver.com/'
-        // });
+        let webrtc = new SimpleWebRTC({
+            localVideoEl: "",
+            remoteVideosEl: "",
+            autoRequestMedia: true,
+            media: { audio: true, video: false, screen: true }
+            //url: 'https://your-production-signalserver.com/'
+        });
 
-        // // we have to wait until it's ready
-        // webrtc.on('readyToCall', function () {
-        //     // you can name it anything
-        //     webrtc.joinRoom(Util.getCourseId() + Util.getStudentId());
+        // we have to wait until it's ready
+        webrtc.on('readyToCall', function () {
+            // you can name it anything
+            webrtc.joinRoom(Util.getCourseId() + Util.getStudentId());
 
-        //     webrtc.shareScreen(function (err: any) {
-        //         if (err) {
-        //             console.log(err);
-        //         } else {
-        //             console.log("Sharing screen");
-        //         }
-        //     });
-        // });
+            console.log("Joined call: " + Util.getCourseId() + Util.getStudentId());
+
+            webrtc.shareScreen(function (err: any) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Sharing screen");
+                }
+            });
+        });
     }
 
     retrieveMessageHistory() {
@@ -235,7 +237,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
                     <Menu.Menu position='left'>
                         <Menu.Item>
                             {user_image ? <Image spaced="right" avatar src={user_image} /> :
-                            <div className='ui avatar right spaced image no-user-avatar' style={{backgroundColor: user_color || '#512DA8'}}>{user_initials}</div>} {full_name}
+                                <div className='ui avatar right spaced image no-user-avatar' style={{ backgroundColor: user_color || '#512DA8' }}>{user_initials}</div>} {full_name}
                         </Menu.Item>
                     </Menu.Menu>
                     {remote_link ?

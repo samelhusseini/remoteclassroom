@@ -83,7 +83,7 @@ export class WorkspaceDetail extends React.Component<WorkspaceDetailProps, Works
         return <div className="admin-workspace-detail-panel">
             <Grid padded verticalAlign='middle'>
                 <Grid.Row centered>
-                    <h1>Class Actions</h1>
+                    <h1>Classroom</h1>
                 </Grid.Row>
                 <Grid.Row centered>
                     <Card.Group>

@@ -12,7 +12,7 @@ export interface UsersProps {
     users: RemoteUser[];
     selectedUser?: RemoteUser;
     messages: any[];
-    onSelectedUser: (user: RemoteUser) => void;
+    onSelectedUser: (user: RemoteUser, isOnline: boolean) => void;
     presenceChannel: any;
 }
 
@@ -52,11 +52,15 @@ export class UserSelector extends React.Component<UsersProps, UsersState> {
             return (presenceChannel.members.get(user.studentId)) ? 'green' : 'grey';
         }
 
-        return <div>
+        const isOnline = (user: RemoteUser) => {
+            return (presenceChannel.members.get(user.studentId));
+        }
+
+        return <div className="user-selector">
             <Header inverted as='h3' className="actioned">Students<AddStudent trigger={<Button circular floated="right"><Icon inverted name="add user" /></Button>} /></Header>
             <Menu vertical inverted fluid borderless className="user-selector">
                 {users.map((user) =>
-                    <Menu.Item active={user == selectedUser} onClick={() => this.props.onSelectedUser.call(this, user)}>
+                    <Menu.Item active={user == selectedUser} onClick={() => this.props.onSelectedUser.call(this, user, isOnline(user))}>
                         {getUnreadMessageCount(user) > 0 ?
                             <Label className='white'>{getUnreadMessageCount(user)}</Label> : undefined}
                         <Label circular color={presenceIndicator(user)} className="presense-label" empty />

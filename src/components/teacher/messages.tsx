@@ -28,6 +28,7 @@ declare var session: RemoteSession;
 export interface MessagesProps {
     user: RemoteUser;
     messages: any[];
+    sendMessage: (to: RemoteUser, message: string) => void;
 }
 
 export interface MessagesState {
@@ -41,7 +42,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
     }
 
     handleMessageKeyPress(e: KeyboardEvent) {
-        if (e.key == 'Enter') {
+        if (e.key == 'Enter' && !e.shiftKey) {
             this.handleSendMessage(e);
             e.preventDefault();
             e.stopPropagation();
@@ -49,28 +50,23 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
     }
 
     handleSendMessage(e: any) {
-        const {user} = this.props;
+        const { user, sendMessage } = this.props;
         const text = document.getElementById('teacherMessageText') as HTMLTextAreaElement;
         if (text && text.value) {
-            Util.POST('/new_teacher_message', {
-                studentId: user.studentId,
-                teacherId: Util.getStudentId(),
-                courseId: Util.getCourseId(),
-                text: text.value
-            });
+            sendMessage(user, text.value);
         }
         text.value = '';
     }
 
     render() {
-        const {messages} = this.props;
+        const { messages } = this.props;
 
-        return <div>
+        return <div className="teachermessages">
             <Comment.Group>
                 {messages.map((message) =>
                     message.type == "ping" && (
                         <Comment>
-                            <Comment.Avatar src={message.avatarUrl}/>
+                            <Comment.Avatar src={message.avatarUrl} />
                             <Comment.Content>
                                 <Comment.Author as='a'>{message.fullName}</Comment.Author>
                                 <Comment.Metadata>
@@ -85,7 +81,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                         </Comment>) ||
                     message.type == "text" && (
                         <Comment>
-                            <Comment.Avatar src={message.avatarUrl}/>
+                            <Comment.Avatar src={message.avatarUrl} />
                             <Comment.Content>
                                 <Comment.Author as='a'>{message.fullName}</Comment.Author>
                                 <Comment.Metadata>
@@ -96,7 +92,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                         </Comment>) ||
                     message.type == "link" && (
                         <Comment>
-                            <Comment.Avatar src={message.avatarUrl}/>
+                            <Comment.Avatar src={message.avatarUrl} />
                             <Comment.Content>
                                 <Comment.Author as='a'>{message.fullName}</Comment.Author>
                                 <Comment.Metadata>
@@ -115,7 +111,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
             <Form>
                 <Form.Group>
                     <TextArea id='teacherMessageText' autoHeight placeholder='Type a message...' rows={1}
-                              onKeyPress={this.handleMessageKeyPress.bind(this)}/>
+                        onKeyPress={this.handleMessageKeyPress.bind(this)} />
                     <Button primary onClick={this.handleSendMessage.bind(this)}>Send</Button>
                 </Form.Group>
             </Form>

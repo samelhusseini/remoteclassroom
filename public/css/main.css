@@ -167,12 +167,17 @@ h3.actioned button:hover {
     width: 2.5rem;
     height: 2.5rem;
 }
+
 .ui.avatar.image.no-user-avatar {
     border-radius: 50%;
     font-size: 20px;
     color: #fff;
     text-align: center;
     line-height: 2.5rem;
+}
+
+.user-selector {
+    flex-grow: 1;
 }
 
 .settings {
@@ -201,6 +206,10 @@ h3.actioned button:hover {
     padding: 1.5rem;
 }
 
+.admin-user-detail-panel > .grid {
+    flex-grow: 1;
+}
+
 .admin-workspace-detail-panel {
     height: 80%;
     display: flex;
@@ -223,8 +232,10 @@ h3.actioned button:hover {
 
 .videoContainer {
     position: relative;
-    width: 200px;
-    height: 150px;
+    width: 100%;
+    height: 100%;
+    /*width: 200px;
+    height: 150px;*/
 }
 
 .videoContainer video {
@@ -289,6 +300,8 @@ h3.actioned button:hover {
     right: 0;
 }
 
+/* Student messages */
+
 .messages-sidebar {
     display: flex;
     flex-direction: column;
@@ -323,6 +336,7 @@ h3.actioned button:hover {
 h2.inlineEdit {
     padding: 3px !important;
 }
+
 h2.inlineEdit.default {
     font-style: italic;
     opacity: .8;
@@ -334,16 +348,76 @@ h2.inlineEdit:hover {
     cursor: text;
 }
 
-.starter-background{
+.starter-background {
     background-image: url("https://images.unsplash.com/photo-1509223029680-bf5c4fe21130?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=833586f5bd235c24e0d0f88105163473&auto=format&fit=crop&w=6000&q=80") !important;
     padding: '1em 0em';
-    width: 100% !important; 
+    width: 100% !important;
     background-position: center;
     background-repeat: no-repeat !important;
     background-size: cover !important;
     min-height: 1000px;
 }
 
-.chat {
-    border-left: 1px solid rgba(34, 36, 38, 0.15) !important;
+.volume {
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    bottom: 2px;
+    height: 10px;
+}
+
+/* Student admin screen */
+
+.ui.segment.screen {
+    width: 100%;
+    padding-bottom: 40%;
+    background: #dfe6e9;
+    border: solid 2px #b2bec3;
+}
+
+.ui.segment.screen .status {
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.ui.segment.screen .content {
+    width: 100%;
+    height: 100%;
+    display: table;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+.ui.segment.screen .center {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.ui.segment.screen .center i {
+    font-size: 70px;
+}
+
+/* Teacher messages */
+
+.chat-column {
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+}
+
+.ui.segment.chat {
+    height: 100%;
+}
+
+.ui.segment.chat .teachermessages {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
+.chat .teachermessages > .ui.comments {
+    flex-grow: 1;
 }

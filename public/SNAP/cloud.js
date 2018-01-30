@@ -36,7 +36,7 @@ modules.cloud = '2017-December-15';
 
 var Cloud;
 var SnapCloud = new Cloud(
-    //'http://localhost:30080/SnapCloud'
+    //'http://localhost:8080/SnapCloud'
     'https://remoteclass.school/SnapCloud'
 );
 

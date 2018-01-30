@@ -85,7 +85,7 @@ class Student(ndb.Model):
     studentId = ndb.StringProperty(indexed=False, required=True)
     courseId = ndb.StringProperty(indexed=True, required=True)
     fullName = ndb.StringProperty(indexed=True)
-    role = ndb.StringProperty(required=True, default='STUDENT')
+    role = ndb.StringProperty(required=True, indexed=True, default='STUDENT')
 
     initials = ndb.ComputedProperty(lambda self: ''.join([x[0].upper() for x in self.fullName.split(' ')]))
     color = ndb.StringProperty(indexed=False)

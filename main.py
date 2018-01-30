@@ -177,6 +177,8 @@ def join():
     resp.set_cookie('remote_userid', userId)
     resp.set_cookie('remote_usercolor', userColor)
     resp.set_cookie('remote_userinitials', userInitials)
+
+    configChanged(courseId, 'config', 'users')
     return resp
 
 @app.route("/<launch_id>")

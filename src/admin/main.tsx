@@ -39,7 +39,7 @@ export class MainView extends React.Component<MainViewProps, MainViewState> {
 
     componentWillMount() {
         const courseId = session.course_id || 'TEST';
-        Pusher.logToConsole = true;
+        Pusher.logToConsole = false;
         this.pusher = new Pusher(config.PUSHER_APP_KEY, {
             encrypted: true
         });

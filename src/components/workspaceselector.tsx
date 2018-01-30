@@ -14,7 +14,7 @@ export class WorkspaceSelector extends React.Component<WorkspaceProps> {
     render() {
         return <Menu vertical inverted fluid borderless className="workspace-selector">
             <Menu.Item active={this.props.isSelected} onClick={() => this.props.onSelect.call(this)}>
-                <p><Icon name="configure" size="large" /> Class Actions</p>
+                <p><Icon name="group" size="large" /> Classroom</p>
             </Menu.Item>
         </Menu>;
     }

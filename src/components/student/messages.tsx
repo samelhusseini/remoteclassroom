@@ -28,7 +28,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
     }
 
     handleMessageKeyPress(e: KeyboardEvent) {
-        if (e.key == 'Enter') {
+        if (e.key == 'Enter' && !e.shiftKey) {
             this.handleSendMessage(e);
             e.preventDefault();
             e.stopPropagation();

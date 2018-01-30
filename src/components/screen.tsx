@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as SimpleWebRTC from 'simplewebrtc';
 
-import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input } from 'semantic-ui-react';
+import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Segment, Loader, Dimmer } from 'semantic-ui-react';
 
 import Util from '../utils/util';
 
@@ -13,9 +13,15 @@ declare var session: RemoteSession;
 
 export interface ScreenProps {
     channel: any;
+    studentId: string;
+    isOnline: boolean;
+    connect: (studentId: string, callback: any) => void;
+    disconnect: () => void;
 }
 
 export interface ScreenState {
+    connecting: boolean;
+    isReady: boolean;
 }
 
 export class Screen extends React.Component<ScreenProps, ScreenState> {
@@ -25,80 +31,75 @@ export class Screen extends React.Component<ScreenProps, ScreenState> {
     constructor(props: ScreenProps) {
         super(props);
         this.state = {
-            open: false,
-            edit: false
+            connecting: true,
+            isReady: false
         }
     }
 
-    componentDidMount() {
-
-        let webrtc = new SimpleWebRTC({
-            localVideoEl: '',
-            remoteVideosEl: '', // empty string
-            autoRequestMedia: true,
-            media: { audio: true, video: false, screen: true }
-            //url: 'https://your-production-signalserver.com/'
-        });
-
-        // we have to wait until it's ready
-        webrtc.on('readyToCall', function() {
-            // you can name it anything
-            webrtc.joinRoom(Util.getCourseId() + '8791939');
-        });
-
-        let screenContainer = this.screenContainer;
-
-        // a peer video has been added
-        webrtc.on('videoAdded', function (video: any, peer: any) {
-            console.log('video added', peer);
-            var remotes = document.getElementById('remotes');
-            if (remotes) {
-                var container = document.createElement('div');
-                container.className = 'videoContainer';
-                container.id = 'container_' + webrtc.getDomId(peer);
-                container.appendChild(video);
-
-                // suppress contextmenu
-                video.oncontextmenu = function () { return false; };
-
-                remotes.appendChild(container);
-            }
-        });
-
-        // a peer video was removed
-        webrtc.on('videoRemoved', function (video: any, peer: any) {
-            console.log('video removed ', peer);
-            var remotes = document.getElementById('remotes');
-            var el = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
-            if (remotes && el) {
-                remotes.removeChild(el);
-            }
-        });
-
-        // // local screen obtained
-        // webrtc.on('localScreenAdded', function(video: any) {
-        //     video.onclick = function() {
-        //         video.style.width = video.videoWidth + 'px';
-        //         video.style.height = video.videoHeight + 'px';
-        //     };
-        //     screenContainer.appendChild(video);
-        //     screenContainer.style.display = 'block';
-        // });
-        // // local screen removed
-        // webrtc.on('localScreenRemoved', function(video: any) {
-        //     screenContainer.removeChild(video);
-        //     screenContainer.style.display = 'none';
-        // });
+    componentWillMount() {
+        const { studentId, isOnline } = this.props;
+        if (studentId && isOnline) this.connect(studentId);
     }
 
-    render() {
+    componentWillUnmount() {
+        this.disconnect();
+    }
 
-        return <Image src='http://arve0.github.io/example_lessons/scratch/Term%201/Lost%20in%20Space/space-scratch.png' />;
-        // return <div>
-        //     <div id="remotes"></div>
-        //     <div id="localScreenContainer"
-        //         ref={e => this.screenContainer = e}>
-        //     </div>
-        // </div >;
+    componentWillReceiveProps(nextProps: ScreenProps) {
+        if (this.props.studentId != nextProps.studentId) {
+            const { studentId, isOnline } = nextProps;
+            // Disconnect from previous channel, and connect to a new one
+            if (this.props.studentId) {
+                this.disconnect();
+            }
+
+            if (isOnline) {
+                this.connect(studentId);
+            }
+        }
+    }
+
+    connect(studentId: string) {
+        const { isReady } = this.state;
+        const { connect } = this.props;
+
+        this.setState({connecting: true});
+
+        const connectedCallback = () => {
+            this.setState({connecting: false});
+        };
+
+        connect.call(this, studentId, connectedCallback);
+    }
+
+    disconnect() {
+        const { disconnect } = this.props;
+        disconnect.call(this);
+    }
+    
+    render() {
+        const { isOnline } = this.props;
+        const { connecting } = this.state;
+
+        return <Segment className="screen">
+            {!isOnline ? 
+            <div className="status">
+                <div className="content">
+                    <div className="center">
+                        <Icon name="hide" />
+                        <div>Student is Offline</div>
+                    </div>
+            </div> </div> : undefined}
+            {connecting && isOnline ? <Dimmer active>
+                <Loader>Loading</Loader>
+            </Dimmer> : undefined}
+
+            <div id="localVideo"></div>
+            <div id="localVolume"></div>
+            <div id="remotes"></div>
+            <div id="localScreenContainer"
+                ref={e => this.screenContainer = e}>
+            </div>
+        </Segment>;
     }
 }
