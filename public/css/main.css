@@ -343,3 +343,7 @@ h2.inlineEdit:hover {
     background-size: cover !important;
     min-height: 1000px;
 }
+
+.chat {
+    border-left: 1px solid rgba(34, 36, 38, 0.15) !important;
+}

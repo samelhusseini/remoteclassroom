@@ -3,7 +3,20 @@ import * as ReactDOM from "react-dom";
 
 import Moment from 'react-moment';
 
-import { Grid, Comment, TextArea, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Card } from 'semantic-ui-react';
+import {
+    Grid,
+    Comment,
+    TextArea,
+    Checkbox,
+    Button,
+    Icon,
+    Modal,
+    Form,
+    Header,
+    Image,
+    Input,
+    Card
+} from 'semantic-ui-react';
 
 import Util from '../../utils/util';
 
@@ -24,8 +37,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
 
     constructor(props: MessagesProps) {
         super(props);
-        this.state = {
-        }
+        this.state = {}
     }
 
     handleMessageKeyPress(e: KeyboardEvent) {
@@ -51,67 +63,63 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
     }
 
     render() {
-        const { messages } = this.props;
+        const {messages} = this.props;
 
-        return <Grid padded>
-            <Grid.Row>
-                <Grid.Column width={10}>
-                    <Comment.Group>
-                        {messages.map((message) =>
-                            message.type == "ping" && (
-                                <Comment>
-                                    <Comment.Avatar src={message.avatarUrl} />
-                                    <Comment.Content>
-                                        <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                        <Comment.Metadata>
-                                            <div><Moment fromNow utc>{message.date}</Moment></div>
-                                        </Comment.Metadata>
-                                        <Comment.Text>
-                                            <Card color='blue' fluid>
-                                                <Card.Content></Card.Content>
-                                            </Card>
-                                        </Comment.Text>
-                                    </Comment.Content>
-                                </Comment>) ||
-                            message.type == "text" && (
-                                <Comment>
-                                    <Comment.Avatar src={message.avatarUrl} />
-                                    <Comment.Content>
-                                        <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                        <Comment.Metadata>
-                                            <div><Moment fromNow utc>{message.date}</Moment></div>
-                                        </Comment.Metadata>
-                                        <Comment.Text>{message.content}</Comment.Text>
-                                    </Comment.Content>
-                                </Comment>) ||
-                            message.type == "link" && (
-                                <Comment>
-                                    <Comment.Avatar src={message.avatarUrl} />
-                                    <Comment.Content>
-                                        <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                        <Comment.Metadata>
-                                            <div><Moment fromNow utc>{message.date}</Moment></div>
-                                        </Comment.Metadata>
-                                        <Comment.Text>
-                                            <Card color='orange' fluid>
-                                                <Card.Content><a href='http://www.google.com'> www.google.com</a></Card.Content>
-                                            </Card>
-                                        </Comment.Text>
-                                    </Comment.Content>
-                                </Comment>)
-                        )}
-                    </Comment.Group>
-                </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-                <Grid.Column width={16}>
-                    <Form>
-                        <TextArea id='teacherMessageText' autoHeight placeholder='Type a message...' rows={1} onKeyPress={this.handleMessageKeyPress.bind(this)} />
-                        <Button primary onClick={this.handleSendMessage.bind(this)}>Send</Button>
-                    </Form>
-                </Grid.Column>
-            </Grid.Row>
+        return <div>
+            <Comment.Group>
+                {messages.map((message) =>
+                    message.type == "ping" && (
+                        <Comment>
+                            <Comment.Avatar src={message.avatarUrl}/>
+                            <Comment.Content>
+                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
+                                <Comment.Metadata>
+                                    <div><Moment fromNow utc>{message.date}</Moment></div>
+                                </Comment.Metadata>
+                                <Comment.Text>
+                                    <Card color='blue' fluid>
+                                        <Card.Content></Card.Content>
+                                    </Card>
+                                </Comment.Text>
+                            </Comment.Content>
+                        </Comment>) ||
+                    message.type == "text" && (
+                        <Comment>
+                            <Comment.Avatar src={message.avatarUrl}/>
+                            <Comment.Content>
+                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
+                                <Comment.Metadata>
+                                    <div><Moment fromNow utc>{message.date}</Moment></div>
+                                </Comment.Metadata>
+                                <Comment.Text>{message.content}</Comment.Text>
+                            </Comment.Content>
+                        </Comment>) ||
+                    message.type == "link" && (
+                        <Comment>
+                            <Comment.Avatar src={message.avatarUrl}/>
+                            <Comment.Content>
+                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
+                                <Comment.Metadata>
+                                    <div><Moment fromNow utc>{message.date}</Moment></div>
+                                </Comment.Metadata>
+                                <Comment.Text>
+                                    <Card color='orange' fluid>
+                                        <Card.Content><a href='http://www.google.com'> www.google.com</a></Card.Content>
+                                    </Card>
+                                </Comment.Text>
+                            </Comment.Content>
+                        </Comment>)
+                )}
+            </Comment.Group>
 
-        </Grid>
+            <Form>
+                <Form.Group>
+                    <TextArea id='teacherMessageText' autoHeight placeholder='Type a message...' rows={1}
+                              onKeyPress={this.handleMessageKeyPress.bind(this)}/>
+                    <Button primary onClick={this.handleSendMessage.bind(this)}>Send</Button>
+                </Form.Group>
+            </Form>
+        </div>
+
     }
 }
