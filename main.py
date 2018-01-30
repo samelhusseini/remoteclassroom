@@ -115,7 +115,7 @@ def create():
 
         courseId = DEFAULT_COURSE_PREFIX + hashid
         userId = request.cookies.get('remote_userid') if 'remote_userid' in request.cookies else generate_user_id()
-        userColor = request.cookies.get('remote_usercolor') if 'remote_usercolor' in request.cookies else generate_user_color()
+        userColor = request.cookies.get('remote_usercolor') if 'remote_usercolor' in request.cookies else generate_color()
 
         host = app.config.get('host')
         resp = make_response(hashid)
