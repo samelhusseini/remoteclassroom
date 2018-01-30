@@ -9,6 +9,8 @@ import logging
 
 from common import app, p, getStudents, getMeetings, getStudent, pusher_key_config
 from model import Log, Student, Course
+
+from hashids import Hashids
 from counter import increment, get_count
 
 from common import feedUpdated, configChanged, generate_color, generate_user_id
