@@ -494,7 +494,7 @@ def get_users(lti=lti):
 #def get_users():
     content = request.get_json(silent=True)
     courseId = cgi.escape(content['courseId'])
-    users = Student.get_by_course(courseId)
+    users = Student.get_students_by_course(courseId)
     return users
 
 @app.route("/delete_user", methods=['POST'])

@@ -44,6 +44,12 @@ indexes:
 - kind: Student
   properties:
   - name: courseId
+  - name: role
+  - name: fullName
+
+- kind: Student
+  properties:
+  - name: courseId
   - name: fullName
 
 - kind: Student

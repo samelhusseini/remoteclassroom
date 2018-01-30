@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea} from 'semantic-ui-react';
+import { Segment, Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea} from 'semantic-ui-react';
 
 import Util from '../utils/util';
 
@@ -35,28 +35,29 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
         return <div className="admin-user-detail-panel">
             <Grid padded>
                 <Grid.Row>
-                    <Grid.Column width={10}>
+                    <Grid.Column width={16}>
                         <h1>{user.fullName}</h1>
-                        <Screen channel={this.props.channel} />
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                    <Grid.Column width={8} textAlign='center'>
+                    <Grid.Column width={10}>
+                        <Screen channel={this.props.channel} />
                         <h4> Voice Chat:
-                        <Button.Group size='small'>
+                            <Button.Group size='small'>
                                 <Button>On</Button>
                                 <Button.Or />
                                 <Button negative>Off</Button>
                             </Button.Group>
                         </h4>
                     </Grid.Column>
+                    <Grid.Column width={6}>
+                        <Segment>
+                            <h3>Messages</h3>
+                            <Messages messages={messages} user={user}/>
+                        </Segment>
+                    </Grid.Column>
                 </Grid.Row>
             </Grid>
-
-            <div className="user-selector">
-            </div>
-
-            <Messages messages={messages} user={user}/>
         </div >;
     }
 }

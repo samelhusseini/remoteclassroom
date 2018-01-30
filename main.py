@@ -126,11 +126,11 @@ def create():
         course.put()
 
         # Add user to course
-        '''
+
         key = courseId + userId
-        user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=userColor)
+        user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=userColor, role='TEACHER')
         user.put()
-        '''
+
 
         # Set user cookies (teacher role)
         auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}

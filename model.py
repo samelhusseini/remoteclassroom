@@ -79,11 +79,13 @@ class Course(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     courseId = ndb.StringProperty(indexed=True, required=True)
 
+
 class Student(ndb.Model): 
     date = ndb.DateTimeProperty(auto_now_add=True)
     studentId = ndb.StringProperty(indexed=False, required=True)
     courseId = ndb.StringProperty(indexed=True, required=True)
     fullName = ndb.StringProperty(indexed=True)
+    role = ndb.StringProperty(required=True, default='STUDENT')
 
     initials = ndb.ComputedProperty(lambda self: ''.join([x[0].upper() for x in self.fullName.split(' ')]))
     color = ndb.StringProperty(indexed=False)
@@ -93,8 +95,8 @@ class Student(ndb.Model):
     secondaryRemoteLink = ndb.StringProperty(indexed=False)
 
     @classmethod
-    def get_by_course(cls, courseId):
-        return json.dumps([l.to_dict() for l in cls.query(cls.courseId == courseId).order(cls.fullName).fetch()], cls=DateTimeEncoder)
+    def get_students_by_course(cls, courseId):
+        return json.dumps([l.to_dict() for l in cls.query(ndb.AND(cls.courseId == courseId, cls.role == 'STUDENT')).order(cls.fullName).fetch()], cls=DateTimeEncoder)
 
 class SourceCode(ndb.Model):
     studentKey = ndb.StringProperty(indexed=True, required=True)

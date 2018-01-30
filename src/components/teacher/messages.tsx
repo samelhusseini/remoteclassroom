@@ -42,7 +42,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
         if (text && text.value) {
             Util.POST('/new_teacher_message', {
                 studentId: user.studentId,
-                teacherId: 'asdasdasda', //Util.getStudentId(),
+                teacherId: Util.getStudentId(),
                 courseId: Util.getCourseId(),
                 text: text.value
             });
@@ -104,13 +104,11 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-                <Grid.Column width={9}>
+                <Grid.Column width={16}>
                     <Form>
                         <TextArea id='teacherMessageText' autoHeight placeholder='Type a message...' rows={1} onKeyPress={this.handleMessageKeyPress.bind(this)} />
+                        <Button primary onClick={this.handleSendMessage.bind(this)}>Send</Button>
                     </Form>
-                </Grid.Column>
-                <Grid.Column width={1}>
-                    <Button primary onClick={this.handleSendMessage.bind(this)}>Send</Button>
                 </Grid.Column>
             </Grid.Row>
 
