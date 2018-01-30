@@ -81,7 +81,7 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
                 style={{ fontSize: '1.4em', fontWeight: 'normal' }}
               />
               <p><Input size='large'  focus placeholder='Your Name' required ref="username" value={this.state.userName} onChange={this.userNameChanged.bind(this)}/></p>
-              <Button primary size='huge' onClick={() => this.joinClass()}> Get Started <Icon name='right arrow' /></Button>
+              <Button primary size='huge' onClick={() => this.joinClass()}> Get Started <Icon name='arrow right' /></Button>
             </Container>
           </Segment>;
     }

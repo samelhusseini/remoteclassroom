@@ -10,33 +10,64 @@ export class WorkspaceDetail extends React.Component {
         return <div className="admin-workspace-detail-panel">
             <Grid padded>
                 <Grid.Row>
-                    <Grid.Column width={16}>
-                        <h1>Class Actions</h1>
+                <Grid.Column width={16}>
+                <h1>Class Actions</h1>
+                <Card>
+  <Card.Content textAlign="center">
+    This should be centered.
+  </Card.Content>
+</Card>
+                </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column width={5}>
+                        
 
-                        <ApplicationSelector />
+                        <Card>
+                    <Card.Content>
+                        <Image floated='right' size='mini' src='/public/images/apps/google-docs.png'/>
+                        <Card.Header>
+                            Google Docs
+                        </Card.Header>
+                        <Card.Meta>
+                            Google
+                        </Card.Meta>
+                        <Card.Description>
+                            Collaborative documents by Google.
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content extra>
+                        <Button>Change App</Button>
+                    </Card.Content>
+                </Card>
 
-                        <h3>Present</h3>
-                        <p>Start a presentation in order to communicate to the entire class.</p>
-                        <Button color="green">Start Presentation</Button>
-
-                        <h3>Broadcast message</h3>
+    
+                    </Grid.Column>
+                    <Grid.Column width={5}>
+                    <Card>
+                    <Card.Content>
+                        <Card.Header textAlign="center">
+                        <Icon size='huge' name='browser'/>
+                           
+                        </Card.Header>
+                        <Card.Description>
+                            <h3>Present</h3>
+                            Start a presentation in order to communicate to the entire class.
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content extra>
+                        <Button color='green'>Start Presentation</Button>
+                    </Card.Content>
+                    </Card>
+                    </Grid.Column>
+                    <Grid.Column width={5}>
+                    <h3>Broadcast message</h3>
                         <p>Broadcast a message to the entire class.</p>
                         <Form>
                             <Form.Field>
                                 <input placeholder='Message'/>
                             </Form.Field>
                             <Button type='submit'>Send</Button>
-                        </Form>
-
-                        <h3>Settings</h3>
-                        <Form>
-                            <Form.Group inline>
-                            <Form.Field>
-                                <label>Start time</label>
-                                <Input placeholder='00:00' width={3} />
-                            </Form.Field>
-                            <Button type='submit'>Save</Button>
-                            </Form.Group>
                         </Form>
                     </Grid.Column>
                 </Grid.Row>

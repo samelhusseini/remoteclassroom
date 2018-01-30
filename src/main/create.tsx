@@ -72,7 +72,7 @@ export class CreateView extends React.Component<CreateViewProps, CreateViewState
                     style={{ fontSize: '1.6em', fontWeight: 'normal' }}
                 />
                 <p><Input size='large' focus placeholder='Your Name' ref="username" required onChange={this.userNameChanged.bind(this)} /></p>
-                <Button primary size='huge' onClick={() => this.createClass()}> Get Started <Icon name='right arrow' /></Button>
+                <Button primary size='huge' onClick={() => this.createClass()}> Get Started <Icon name='arrow right' /></Button>
             </Container>
         </Segment>;
     }
