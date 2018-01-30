@@ -201,6 +201,13 @@ h3.actioned button:hover {
     padding: 1.5rem;
 }
 
+.admin-workspace-detail-panel {
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 /*Semantic UI CSS*/
 

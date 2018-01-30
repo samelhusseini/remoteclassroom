@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Card, Menu, Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea} from 'semantic-ui-react';
+import { Card, Menu, Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea, Divider} from 'semantic-ui-react';
 import {ApplicationSelector} from "./applicationselector";
 
 
@@ -8,68 +8,76 @@ export class WorkspaceDetail extends React.Component {
     render() {
 
         return <div className="admin-workspace-detail-panel">
-            <Grid padded>
-                <Grid.Row>
-                <Grid.Column width={16}>
+            <Grid padded verticalAlign='middle'>
+                <Grid.Row centered>
                 <h1>Class Actions</h1>
-                <Card>
-  <Card.Content textAlign="center">
-    This should be centered.
-  </Card.Content>
-</Card>
-                </Grid.Column>
                 </Grid.Row>
-                <Grid.Row>
-                    <Grid.Column width={5}>
-                        
-
-                        <Card>
-                    <Card.Content>
-                        <Image floated='right' size='mini' src='/public/images/apps/google-docs.png'/>
+                <Grid.Row centered>
+                <Card.Group>
+                    <Card>
+                    <Card.Content textAlign='center'>
                         <Card.Header>
-                            Google Docs
+                            <Icon size='massive' color='blue' name='add'/>
                         </Card.Header>
-                        <Card.Meta>
-                            Google
-                        </Card.Meta>
                         <Card.Description>
-                            Collaborative documents by Google.
+                            <h3>No App Selected</h3>
+                            Select an app for your class to use
                         </Card.Description>
                     </Card.Content>
-                    <Card.Content extra>
+                    <Card.Content extra textAlign='center'>
+                        <Button primary>Select an App</Button>
+                    </Card.Content>
+                    </Card>
+
+
+                    <Card>
+                    <Card.Content textAlign='center'>
+                        <Card.Header>
+                            <Image size='small' src='/public/images/apps/google-docs.png'/>
+                        </Card.Header>
+                        <Card.Description>
+                            <h3>Google Docs</h3>
+                            Google Docs will be the application seen by students
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content extra textAlign='center'>
                         <Button>Change App</Button>
                     </Card.Content>
-                </Card>
+                    </Card>
 
-    
-                    </Grid.Column>
-                    <Grid.Column width={5}>
                     <Card>
-                    <Card.Content>
-                        <Card.Header textAlign="center">
-                        <Icon size='huge' name='browser'/>
+                    <Card.Content textAlign='center'>
+                        <Card.Header>
+                        <Icon size='massive' color='blue' name='browser'/>
                            
                         </Card.Header>
                         <Card.Description>
                             <h3>Present</h3>
-                            Start a presentation in order to communicate to the entire class.
+                            Present your screen to the whole class
                         </Card.Description>
                     </Card.Content>
-                    <Card.Content extra>
+                    <Card.Content extra textAlign="center">
                         <Button color='green'>Start Presentation</Button>
                     </Card.Content>
                     </Card>
-                    </Grid.Column>
-                    <Grid.Column width={5}>
-                    <h3>Broadcast message</h3>
-                        <p>Broadcast a message to the entire class.</p>
-                        <Form>
-                            <Form.Field>
-                                <input placeholder='Message'/>
-                            </Form.Field>
-                            <Button type='submit'>Send</Button>
-                        </Form>
-                    </Grid.Column>
+                    
+                    <Card>
+                    <Card.Content textAlign='center'>
+                        <Card.Header>
+                        <Icon size='massive' color='blue' name='comments'/>
+                           
+                        </Card.Header>
+                        <Card.Description>
+                            <h3>Class message</h3>
+                            Broadcast a message to the entire class
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content extra textAlign="center">
+
+                            <Input action={{ color: 'blue', content: 'Send' }} placeholder='Message...' />
+                    </Card.Content>
+                    </Card>
+                </Card.Group>
                 </Grid.Row>
             </Grid>
 
