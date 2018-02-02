@@ -1,64 +1,33 @@
 # remoteclassroom
 Virtual Classroom for remote teaching
 
-![](https://travis-ci.org/samelhusseini/remoteclassroom.svg?branch=darrington)
+![](https://travis-ci.org/sammysamau/remoteclassroom.svg?branch=master)
 
-![](http://tealsclassroom.appspot.com/images/screenshots/starterscreenshot.png)
+Try it now at http://remoteclass.school/create
 
-Try it now:
-* [Starter Demo](http://tealsclassroom.appspot.com/starter)
-* [Admin Demo](http://tealsclassroom.appspot.com/admin)
+## Development
 
-## Running your own copy of remoteclassroom
-
-You can fork your own copy of remoteclassroom in a few easy steps:
-
-Begin by checking out this repo into a local folder
-
-### Pusher
-
-Create an account with [pusher.com](https://pusher.com/)
-and create an app
-
-You will need to note the following: 
-* APP_ID
-* APP_KEY
-* APP_SECRET
-
-#### Enable client events
-
-For full feature functionality, enable client events in pusher. 
-
-In pusher, go to App Settings, and select ```Enable client events```
-
-<img src="http://tealsclassroom.appspot.com/images/screenshots/clientevents.png" width="300" />
-
-### App Engine
-
-Create an account (if you don't already have one) with [appengine](https://appengine.google.com)
-and create an app
-
-Download the Google App SDK for Python and run throught the [setup](https://cloud.google.com/sdk/docs/) steps
-
-### Dependencies
-
-Install python ([https://www.python.org/downloads/](https://www.python.org/downloads/)). Then run the following: 
+1. Install python ([https://www.python.org/downloads/](https://www.python.org/downloads/)). Then run the following in the root of the project directory.
 
 ```
 pip2.7 install -t lib -r requirements.txt
 ```
 
-Install node_modules
+2. Install [node](https://nodejs.org/en/download/) and project dependencies using npm.
 
 ```
 npm install
 ```
 
-Install webpack globally
+3. Install webpack globally
 
 ```
 npm install -g webpack
 ```
+
+4. Follow the Google Cloud SDK install steps to install gcloud on your platform:
+https://cloud.google.com/sdk/downloads
+
 
 ## Running locally
 
@@ -71,50 +40,6 @@ In another terminal window, run the local server:
 ```
 dev_appserver.py app.yaml
 ```
-
-### Configuration
-
-There are two configuration files you'll need to touch: 
-* **app.yaml**
-* **config.json**
-
-Edit app.yaml and be sure to update: 
-* ```application```, with your Google Appengine application id
-* ```PUSHER_APP_ID```, ```PUSHER_APP_KEY```, and ```PUSHER_APP_SECRET``` with your pusher application details
-
-Create a copy of ```config.sample.json``` and name it ```config.json```:
-Edit ```config.json``` with:
-* student information and skype meetings
-* application configuration, like app name, school name and course name
-
-### Embed
-
-To embed the getting started page, in a CMS like Canvas, place the following HTML on the front page, and change the src to point to your hosted app engine website: 
-
-```HTML
-
-<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-    src="https://tealsclassroom.appspot.com/" width="300" height="500">
-  Your browser does not support iframes.</iframe>
-
-``` 
-
-## Student Instructions
-
-1. Login to the student CMS (where the main ```Let's get started``` page is embedded in an iframe).
-
-2. Hit the Let's get started button
-
-3. First visit: Click "Allow" to allow Chrome notifications for the site
-<img src="http://tealsclassroom.appspot.com/images/screenshots/chromenotifications.png" width="400" />
-
-4. Select your name from the list, and hit 'Start Session' 
-
-5. Leave the virtual classroom tab open to receive notifications.
-
-## Browser support
-
-Chrome 28+
 
 ## License
 
