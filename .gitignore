@@ -1,4 +1,6 @@
 node_modules/
 lib/
+dist/
 *.pyc
-tealsclassroom-89708b35ef44.json
+darringtonteals-8e58298eb992.json
+/.idea

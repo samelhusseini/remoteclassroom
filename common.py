@@ -10,8 +10,15 @@ from datetime import datetime, timedelta
 from protorpc import messages
 import logging
 import json
+import settings
+import random
+
+from hashids import Hashids
+from counter import increment, get_count
 
 app = Flask(__name__)
+app.secret_key = settings.secret_key
+app.config.from_object(settings.configClass)
 
 fName = './config.json'
 if not os.path.exists(fName): 
@@ -29,6 +36,17 @@ p = pusher.Pusher(
   secret=pusher_config['PUSHER_APP_SECRET'],
   backend=pusher.gae.GAEBackend
 )
+
+def generate_user_id():
+    hashids = Hashids(salt=settings.HASHID_SALT,min_length=6)
+    increment()
+    count = get_count()
+    hashid = hashids.encode(count)
+    return hashid
+
+def generate_color():
+    return "#%06x" % random.randint(0, 0xFFFFFF)
+
 
 def getStudents():
     studentlist = app.config.get('students')
@@ -68,10 +86,20 @@ def getStudentName(student):
         return student['first_name'] + " " + student['last_name']
     return "Anonymous"
 
-@app.route("/pusher/auth", methods=['POST'])
-def pusher_authentication():
-    auth = p.authenticate(
-        channel=request.form['channel_name'],
-        socket_id=request.form['socket_id']
-    )
-    return json.dumps(auth)
+def feedUpdated(courseId, new_message):
+    p.trigger('feed'+courseId, 'update', {'message': new_message})
+
+def newMessage(courseId, new_message):
+    p.trigger('messages'+courseId, 'new_message', new_message)
+
+def newStudentMessage(courseId, studentId, new_message):
+    p.trigger('messages'+courseId+studentId, 'new_message', new_message)
+    
+def registerUpdated(courseId, user):
+    p.trigger('feed'+courseId, 'registered', {'user': user})
+
+def loadedUpdated(courseId, user):
+    p.trigger('feed'+courseId, 'loaded', {'user': user})
+
+def configChanged(courseId, name, value):
+    p.trigger('config'+courseId, 'changed', {name: value})

@@ -1,4 +1,4 @@
-#application: tealsclassroom
+#application: darringtonteals2
 #version: 1
 runtime: python27
 api_version: 1
@@ -9,17 +9,25 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
-- url: /css
-  static_dir: css
+- url: /dist
+  static_dir: dist
 
-- url: /js
-  static_dir: js
+- url: /public/(.*)
+  static_files: public/\1
+  upload: public/(.*)
+  http_headers:
+    Access-Control-Allow-Origin: '*'
 
-- url: /images
-  static_dir: images
-
-- url: .*
+- url: /.*
   script: main.app
+
+skip_files:
+- ^(node_modules)
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
 
 libraries:
 - name: ssl

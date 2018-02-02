@@ -1,0 +1,423 @@
+.hidden.menu {
+    display: none;
+}
+
+.masthead.segment {
+    min-height: 500px;
+    padding: 1em 0em;
+}
+
+.masthead .logo.item img {
+    margin-right: 1em;
+}
+
+.masthead .ui.menu .ui.button {
+    margin-left: 0.5em;
+}
+
+.masthead h1.ui.header {
+    margin-top: 2em;
+    margin-bottom: 0em;
+    font-size: 4em;
+    font-weight: normal;
+}
+
+.masthead h2 {
+    font-size: 1.7em;
+    font-weight: normal;
+}
+
+
+/*
+.ui.card {
+    background-color:#00aff0;
+    color:white;
+}
+
+.ui.card>.content>.header:not(.ui), .ui.cards>.card>.content>.header:not(.ui) {
+    color:white;
+}*/
+
+.ui.card.selected, .ui.card.selected:hover {
+    border: 5px solid #75ab00 !important;
+}
+
+.ui.card:hover .header {
+    color: black !important;
+}
+
+.ui.item.link.selected, .ui.item.selected:hover {
+    border: 5px solid #75ab00 !important;
+}
+
+.owl-theme .owl-nav [class*=owl-]:hover {
+    background-color: #2b5464;
+}
+
+.owl-theme .owl-nav [class*=owl-] {
+    background-color: #00aff0;
+}
+
+.ui.button.get-started {
+    background-color: #75ab00;
+    color: white;
+}
+
+.ui.button.to-starter {
+    background-color: #75ab00;
+    color: white;
+}
+
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+    background-color: #75ab00;
+}
+
+.owl-stage {
+    margin: 10px;
+}
+
+.ui.card.green {
+    box-shadow: 0 1px 0 0 #D4D4D5, 0 4px 0 0 #21BA45, 0 1px 3px 0 #D4D4D5
+}
+
+.button.humongous {
+    font-size: 50px;
+}
+
+.icon.humongous {
+    font-size: 40px;
+}
+
+.ui.menu .item>img:not(.ui) {
+    width: 10em !important;
+    padding-top: 1em;
+}
+
+.ui.button.buttoncard {
+    height: 100%;
+    vertical-align: middle;
+    padding-top: 23%;
+}
+
+
+/* Body */
+
+body {
+    background-color: #fff;
+}
+
+
+/* Main admin menu */
+
+.main-menu {
+    background-color: #e74c3c !important;
+}
+
+.admin-sidebar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    background-color: #0072bc;
+    overflow-y: auto;
+}
+
+.admin-scrollabale {
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.admin-sidebar .menu {
+    background-color: transparent !important;
+    color: #fff !important;
+}
+
+h3.actioned .icon {
+    margin-right: 0 !important;
+}
+
+h3.actioned {
+    vertical-align: middle;
+}
+
+h3.actioned button {
+    padding: 11px 13px !important;
+    background: rgba(0, 0, 0, 0) !important;
+    ;
+}
+
+h3.actioned button:hover {
+    background: rgba(0, 0, 0, .15) !important;
+}
+
+.presense-label {
+    position: absolute;
+    z-index: 100;
+    bottom: 1rem;
+    left: 2rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.ui.avatar.image.user-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.ui.avatar.image.no-user-avatar {
+    border-radius: 50%;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    line-height: 2.5rem;
+}
+
+.user-selector {
+    flex-grow: 1;
+}
+
+.settings {
+    text-align: center;
+    color: #fff !important;
+}
+
+.side-admin-menu .ui.avatar.image {
+    margin-right: 0.75rem;
+}
+
+.admin-body {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 300px;
+    overflow-y: auto;
+}
+
+.admin-user-detail-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: #333333;
+    padding: 1.5rem;
+}
+
+.admin-user-detail-panel > .grid {
+    flex-grow: 1;
+}
+
+.admin-workspace-detail-panel {
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/*Semantic UI CSS*/
+
+.ui.label.white {
+    background: white !important;
+    color: #00aff0 !important;
+    margin-top: 0.2em !important;
+    border-radius: 1rem !important;
+}
+
+
+/* Screen share */
+
+.videoContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /*width: 200px;
+    height: 150px;*/
+}
+
+.videoContainer video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Index */
+
+.main-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ecf0f1;
+    transition: all 0.5s ease;
+    overflow: hidden;
+}
+
+.main-body.sidebar-visible {
+    right: 300px;
+}
+
+.starter-menu {
+    height: 40px;
+    background-color: #0072bc !important;
+    border-radius: 0 !important;
+}
+
+.frame-body {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#content-iframe {
+    position: relative;
+    border: 0;
+    height: 100%;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.main-sidebar {
+    position: absolute;
+    top: 0;
+    right: -300px;
+    bottom: 0;
+    width: 300px;
+    transition: all 0.5s ease;
+    background: #ecf0f1;
+}
+
+.main-sidebar.sidebar-visible {
+    right: 0;
+}
+
+/* Student messages */
+
+.messages-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
+.scrolling-messages {
+    position: absolute;
+    top: 4rem;
+    bottom: 5rem;
+    right: 0;
+    width: 300px;
+    overflow-y: auto;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+}
+
+.raise-hand {
+    font-size: 0.8em !important;
+}
+
+.applications .card button {
+    width: 100%;
+}
+
+h2.inlineEdit {
+    padding: 3px !important;
+}
+
+h2.inlineEdit.default {
+    font-style: italic;
+    opacity: .8;
+}
+
+h2.inlineEdit:hover {
+    border: 1px solid rgba(255, 255, 255, .3);
+    padding: 2px !important;
+    cursor: text;
+}
+
+.starter-background {
+    background-image: url("https://images.unsplash.com/photo-1509223029680-bf5c4fe21130?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=833586f5bd235c24e0d0f88105163473&auto=format&fit=crop&w=6000&q=80") !important;
+    padding: '1em 0em';
+    width: 100% !important;
+    background-position: center;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    min-height: 1000px;
+}
+
+.volume {
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    bottom: 2px;
+    height: 10px;
+}
+
+/* Student admin screen */
+
+.ui.segment.screen {
+    width: 100%;
+    padding-bottom: 40%;
+    background: #dfe6e9;
+    border: solid 2px #b2bec3;
+}
+
+.ui.segment.screen .status {
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.ui.segment.screen .content {
+    width: 100%;
+    height: 100%;
+    display: table;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+.ui.segment.screen .center {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.ui.segment.screen .center i {
+    font-size: 70px;
+}
+
+/* Teacher messages */
+
+.chat-column {
+    border-left: 1px solid rgba(34, 36, 38, 0.15);
+}
+
+.ui.segment.chat {
+    height: 100%;
+}
+
+.ui.segment.chat .teachermessages {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
+.chat .teachermessages > .ui.comments {
+    flex-grow: 1;
+}
