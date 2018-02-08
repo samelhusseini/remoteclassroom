@@ -9,8 +9,24 @@ Try it now at http://remoteclass.school/create
 
 1. Install python ([https://www.python.org/downloads/](https://www.python.org/downloads/)). Then run the following in the root of the project directory.
 
+1a.
+install `virtualenv`:
+
 ```
-pip2.7 install -t lib -r requirements.txt
+pip install virtualenv
+```
+
+1b. switch to a new Python' virtual environment called `env`:
+
+```
+virtualenv env
+source env/bin/activate
+```
+
+1c. install API dependencies:
+
+```
+pip install -t lib -r requirements.txt
 ```
 
 2. Install [node](https://nodejs.org/en/download/) and project dependencies using npm.
