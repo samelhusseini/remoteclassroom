@@ -422,6 +422,6 @@ h2.inlineEdit:hover {
 }
 
 
-.chat .teachermessages > .ui.comments {
+.chat .teachermessages > .ui.feed {
     flex-grow: 1;
 }

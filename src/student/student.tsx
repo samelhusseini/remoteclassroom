@@ -11,6 +11,8 @@ import { NotificationModal } from "../components/student/notificationmodal";
 import { Frame } from "../components/student/frame";
 import { Messages } from "../components/student/messages";
 
+import { UserAvatar } from "../components/common/useravatar";
+
 declare var Pusher: any;
 declare var config: RemoteConfig;
 declare var session: RemoteSession;
@@ -211,8 +213,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
                 <Menu inverted borderless className="starter-menu">
                     <Menu.Menu position='left'>
                         <Menu.Item>
-                            {user_image ? <Image spaced="right" avatar src={user_image} /> :
-                                <div className='ui avatar right spaced image no-user-avatar' style={{ backgroundColor: user_color || '#512DA8' }}>{user_initials}</div>} {full_name}
+                            <UserAvatar avatarUrl={user_image} color={user_color} initials={user_initials} fullName={full_name} /> {full_name}
                         </Menu.Item>
                     </Menu.Menu>
                     {remote_link ?

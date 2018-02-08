@@ -4,6 +4,10 @@ import { Grid, Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input,
 
 import { AddStudent } from "../components/addstudent";
 
+import {UserAvatar} from "../components/common/useravatar";
+
+import Util from '../utils/util';
+
 declare var Pusher: any;
 declare var config: RemoteConfig;
 declare var session: RemoteSession;
@@ -42,8 +46,12 @@ export class UserSelector extends React.Component<UsersProps, UsersState> {
     render() {
         const { users, messages, selectedUser, presenceChannel } = this.props;
 
+        const getHasRaisedHand = (user: RemoteUser) => {
+            return messages.filter(message => (message.type == "help" && message.student == user.studentId && message.read == false)).length;
+        }
+
         const getUnreadMessageCount = (user: RemoteUser) => {
-            return messages.filter(message => (message.student == user.studentId && message.read == false)).length;
+            return messages.filter(message => (message.type == "text" && message.student == user.studentId && message.read == false)).length;
         }
 
         const presenceIndicator = (user: RemoteUser) => {
@@ -62,17 +70,19 @@ export class UserSelector extends React.Component<UsersProps, UsersState> {
                 {users.map((user) =>
                     <Menu.Item active={user == selectedUser} onClick={() => this.props.onSelectedUser.call(this, user, isOnline(user))}>
                         {
-                            getUnreadMessageCount(user) > 0 ?
+                            selectedUser != user && getHasRaisedHand(user) ?
+                                <Icon name="hand pointer" size="large" /> : 
+                                undefined
+                        }
+                        {
+                            selectedUser != user && getUnreadMessageCount(user) > 0 ?
                                 <Label className="white">{getUnreadMessageCount(user)}</Label> : 
                                 undefined
                         }
                         <Label circular color={presenceIndicator(user)} className="presense-label" empty />
                         <p>
-                            {
-                                user.avatarUrl ? 
-                                    <Image spaced="right" avatar className="user-avatar" src={user.avatarUrl} /> :
-                                    <div className="ui avatar right spaced image user-avatar no-user-avatar" style={{backgroundColor: user.color || "#512DA8"}}>{user.initials}</div>
-                            } {user.fullName}
+                            <UserAvatar avatarUrl={user.avatarUrl} color={user.color} initials={user.initials} fullName={user.fullName} />
+                            {user.fullName}
                         </p>
                     </Menu.Item>
                 )}

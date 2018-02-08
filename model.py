@@ -96,6 +96,14 @@ class Student(ndb.Model):
     opentokSessionId = ndb.StringProperty(indexed=False)
     opentokToken = ndb.StringProperty(indexed=False)
 
+    def info(self):
+        return {
+            'avatarUrl': self.avatarUrl,
+            'fullName': self.fullName,
+            'initials': self.initials,
+            'color': self.color
+        }
+
     @classmethod
     def get_students_by_course(cls, courseId):
         return json.dumps([l.to_dict() for l in cls.query(ndb.AND(cls.courseId == courseId, cls.role == 'STUDENT')).order(cls.fullName).fetch()], cls=DateTimeEncoder)

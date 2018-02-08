@@ -16,6 +16,8 @@ from counter import increment, get_count
 from common import feedUpdated, configChanged, generate_color, generate_user_id
 import admin
 import lti
+import pusherauth
+import snap
 
 from opentok import OpenTok, MediaModes
 
