@@ -20,6 +20,7 @@ import {
 import {ApplicationSelector} from "./applicationselector";
 
 import Apps from '../utils/apps';
+import {TeacherTok} from "./teacher/teachertok";
 
 
 export interface WorkspaceDetailProps {
@@ -124,6 +125,8 @@ export class WorkspaceDetail extends React.Component<WorkspaceDetailProps, Works
                     </Card.Group>
                 </Grid.Row>
             </Grid>
+
+            <TeacherTok />
 
         </div>;
     }
