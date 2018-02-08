@@ -3,4 +3,6 @@ lib/
 dist/
 *.pyc
 darringtonteals-8e58298eb992.json
-/.idea
+.idea
+.vscode/
+env/
