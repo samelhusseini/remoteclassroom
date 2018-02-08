@@ -1,10 +1,7 @@
 /// <reference path="../../localtypings/remoteclassroom.d.ts" />
-/// <reference path="../../localtypings/simplewebrtc.d.ts" />
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-
-import * as SimpleWebRTC from 'simplewebrtc';
 
 import { Menu, Button, Icon, Image, Label, Header } from "semantic-ui-react";
 
@@ -83,7 +80,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             if (data.studentId == Util.getStudentId()) {
                 Util.showNotification('Ping! Headphones On!', `Teacher is trying to contact you!`, '/public/images/notification/headphones.png');
             }
-        })
+        });
         //this.messageChannel.bind('new_message', this.addMessage, this);
         this.userChatChannel.bind('new_message', this.addMessage, this);
 
@@ -100,29 +97,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             }
         }, false);
 
-        let webrtc = new SimpleWebRTC({
-            localVideoEl: "",
-            remoteVideosEl: "",
-            autoRequestMedia: true,
-            media: { audio: true, video: false, screen: true }
-            //url: 'https://your-production-signalserver.com/'
-        });
 
-        // we have to wait until it's ready
-        webrtc.on('readyToCall', function () {
-            // you can name it anything
-            webrtc.joinRoom(Util.getCourseId() + Util.getStudentId());
-
-            console.log("Joined call: " + Util.getCourseId() + Util.getStudentId());
-
-            webrtc.shareScreen(function (err: any) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Sharing screen");
-                }
-            });
-        });
     }
 
     retrieveMessageHistory() {

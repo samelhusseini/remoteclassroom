@@ -28,7 +28,6 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.6.0",
     "semantic-ui-react": "^0.77.2",
-    "simplewebrtc": "^3.0.1",
     "source-map-loader": "^0.2.1",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
