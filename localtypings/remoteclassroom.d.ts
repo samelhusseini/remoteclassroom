@@ -14,6 +14,7 @@ interface RemoteSession {
     host: string;
     remote_link?: string;
     role?: string;
+    launch_id: string;
 }
 
 interface RemoteUser {

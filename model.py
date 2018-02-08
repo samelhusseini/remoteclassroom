@@ -79,7 +79,6 @@ class Course(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     courseId = ndb.StringProperty(indexed=True, required=True)
 
-
 class Student(ndb.Model): 
     date = ndb.DateTimeProperty(auto_now_add=True)
     studentId = ndb.StringProperty(indexed=False, required=True)
@@ -93,6 +92,8 @@ class Student(ndb.Model):
     avatarUrl = ndb.StringProperty(indexed=False)
     primaryRemoteLink = ndb.StringProperty(indexed=False)
     secondaryRemoteLink = ndb.StringProperty(indexed=False)
+
+    opentokSessionId = ndb.StringProperty(indexed=False)
 
     @classmethod
     def get_students_by_course(cls, courseId):

@@ -92,6 +92,12 @@ def trigger_changeslide():
     return redirect("/changeslide")
 '''
 
+def create_opentok_session():
+    opentok_sdk = OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET)
+    # use tokbox server to route media streams;
+    # if you want to use p2p - change media_mode to MediaModes.relayed
+    return opentok_sdk.create_session(media_mode = MediaModes.routed)
+
 @app.route("/")
 def show_index():
     return render_template('www/index.html')
@@ -129,17 +135,20 @@ def create():
         course = Course.get_or_insert(key, courseId=courseId)
         course.put()
 
-        # Add user to course
+        # Add teacher to course
+
+        # Create OpenTok session
+        opentok_session = create_opentok_session()
 
         key = courseId + userId
-        user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=userColor, role='TEACHER')
+        user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=userColor, role='TEACHER', opentokSessionid=opentok_session.session_id)
         user.put()
-
 
         # Set user cookies (teacher role)
         auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
         auth[hashid] = {
-            'role': 'Instructor'
+            'role': 'Instructor',
+            'opentokSessionId': user.opentokSessionId
         }
         resp.set_cookie('remote_userfullname', fullName)
         resp.set_cookie('remote_auth', json.dumps(auth))
@@ -171,10 +180,16 @@ def join():
     userInitials = user.initials
     user.put()
 
+    if not user.opentokSessionId:
+        opentok_session = create_opentok_session()
+        user.opentokSessionId = opentok_session.session_id
+        user.put()
+
     # Set user cookies (student role)
     auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
     auth[hashid] = {
-        'role': 'Student'
+        'role': 'Student',
+        'opentokSessionId': user.opentokSessionId
     }
     resp.set_cookie('remote_userfullname', fullName)
     resp.set_cookie('remote_auth', json.dumps(auth))
@@ -213,12 +228,12 @@ def launch_by_id(launch_id):
     userInitials = request.cookies.get('remote_userinitials')
     role = auth[launch_id]['role'] if launch_id in auth else ''
     host = os.environ['HTTP_HOST']
+    opentok_session_id = auth[launch_id]['session_id']
+
+    if not role:
+        return redirect('/main?launch='+launch_id+'#join')
     
-    opentok_sdk = OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET)
-    # use tokbox server to route media streams;
-    # if you want to use p2p - change media_mode to MediaModes.relayed
-    opentok_session = opentok_sdk.create_session(media_mode = MediaModes.routed)
-    session['opentok_session_id'] = opentok_session.session_id
+    session['opentok_session_id'] = opentok_session_id
 
     # Setup fake LTI session
     session['full_name'] = fullName
@@ -233,26 +248,26 @@ def launch_by_id(launch_id):
     session[LTI_SESSION_KEY] = True
     session['oauth_consumer_key'] = settings.CONSUMER_KEY
 
-    if role:
-        jsonsession = {
-            #'guid': session['guid'],
-            'course_id': launch_id,
-            'user_id': userId, #session['user_id'],
-            'full_name': fullName,
-            'user_color': userColor,
-            'user_initials': userInitials,
-            'host': host,
-            #'user_image': session['user_image'],
-            'role': role,
-            'opentok_session_id': opentok_session.session_id
-        }
+    jsonsession = {
+        #'guid': session['guid'],
+        'course_id': DEFAULT_COURSE_PREFIX + launch_id,
+        'user_id': userId, #session['user_id'],
+        'full_name': fullName,
+        'user_color': userColor,
+        'user_initials': userInitials,
+        'host': host,
+        #'user_image': session['user_image'],
+        'role': role,
+        'opentok_session_id': opentok_session_id,
+        'launch_id': launch_id
+    }
 
-        if 'Instructor' in role:
-            session['roles'] = 'Instructor'
-            return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
-        else:
-            session['roles'] = 'Student'
-            return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
+    if 'Instructor' in role:
+        session['roles'] = 'Instructor'
+        return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
+    else:
+        session['roles'] = 'Student'
+        return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
 
 @app.route("/test-starter")
 def show_starter():

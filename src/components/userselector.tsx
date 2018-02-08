@@ -56,7 +56,7 @@ export class UserSelector extends React.Component<UsersProps, UsersState> {
 
         return <div className="user-selector">
             <Header inverted as="h3" className="actioned">Students 
-                <AddStudent courseLink={`${session.host}/${session.course_id}`} />
+                <AddStudent courseLink={`${session.host}/${session.launch_id}`} />
             </Header>
             <Menu vertical inverted fluid borderless className="user-selector">
                 {users.map((user) =>
