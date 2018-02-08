@@ -90,21 +90,7 @@ export class WorkspaceDetail extends React.Component<WorkspaceDetailProps, Works
                     <Card.Group>
                         {this.getApplication()}
 
-                        <Card>
-                            <Card.Content textAlign='center'>
-                                <Card.Header>
-                                    <Icon size='massive' color='blue' name='browser'/>
-
-                                </Card.Header>
-                                <Card.Description>
-                                    <h3>Present</h3>
-                                    Present your screen to the whole class
-                                </Card.Description>
-                            </Card.Content>
-                            <Card.Content extra textAlign="center">
-                                <Button color='green'>Start Presentation</Button>
-                            </Card.Content>
-                        </Card>
+                        <TeacherTok />
 
                         <Card>
                             <Card.Content textAlign='center'>
@@ -125,8 +111,6 @@ export class WorkspaceDetail extends React.Component<WorkspaceDetailProps, Works
                     </Card.Group>
                 </Grid.Row>
             </Grid>
-
-            <TeacherTok />
 
         </div>;
     }

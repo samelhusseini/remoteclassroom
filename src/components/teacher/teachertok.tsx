@@ -4,6 +4,25 @@ import * as React from "react";
 import "@opentok/client";
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react';
 
+
+import {
+    Card,
+    Menu,
+    Table,
+    Checkbox,
+    Button,
+    Icon,
+    Modal,
+    Form,
+    Header,
+    Image,
+    Input,
+    Grid,
+    Comment,
+    TextArea,
+    Divider
+} from 'semantic-ui-react';
+
 declare var session: RemoteSession;
 
 export interface TokBoxCredentials {
@@ -18,7 +37,7 @@ export interface TeacherTokProps {
 export interface TeacherTokState {
     error: OT.OTError,
     connection: string,
-    publishVideo: boolean
+    publishing: boolean
 }
 
 export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState> {
@@ -38,8 +57,8 @@ export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState
 
         this.state = {
             error: null,
-            connection: 'Connecting',
-            publishVideo: true,
+            connection: 'Disconnected',
+            publishing: false,
         };
 
         this.sessionEventHandlers = {
@@ -100,49 +119,59 @@ export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState
     };
 
     toggleVideo = () => {
-        this.setState({publishVideo: !this.state.publishVideo});
+        this.setState({publishing: !this.state.publishing});
     };
 
     render() {
         const {apiKey, sessionId, token} = this.credentials;
-        const {error, connection, publishVideo} = this.state;
-        return (
-            <div>
-                <div>Session Status: {connection}</div>
-                {error ? (
-                    <div className="error">
-                        <strong>Error:</strong> {error}
-                    </div>
-                ) : null}
-                <OTSession
-                    apiKey={apiKey}
-                    sessionId={sessionId}
-                    token={token}
-                    onError={this.onSessionError}
-                    eventHandlers={this.sessionEventHandlers}
-                >
-                    <button onClick={this.toggleVideo}>
-                        {publishVideo ? 'Disable' : 'Enable'} Video
-                    </button>
-                    <h2>Publisher</h2>
-                    <OTPublisher
-                        properties={{publishVideo, width: 100, height: 100, videoSource: 'screen'}}
-                        onPublish={this.onPublish}
-                        onError={this.onPublishError}
-                        eventHandlers={this.publisherEventHandlers}
-                    />
+        const {error, connection, publishing} = this.state;
 
-                    <h2>Subscriber</h2>
-                    <OTStreams>
-                        <OTSubscriber
-                            properties={{width: 200, height: 200}}
-                            onSubscribe={this.onSubscribe}
-                            onError={this.onSubscribeError}
-                            eventHandlers={this.subscriberEventHandlers}
-                        />
-                    </OTStreams>
-                </OTSession>
-            </div>
+        return (
+            <Card>
+                <Card.Content textAlign='center'>
+                    <Card.Header>
+
+                        <OTSession
+                            apiKey={apiKey}
+                            sessionId={sessionId}
+                            token={token}
+                            onError={this.onSessionError}
+                            eventHandlers={this.sessionEventHandlers}
+                        >
+                            {publishing ?
+                                <OTPublisher
+                                    properties={{
+                                        publishVideo: true,
+                                        publishAudio: true,
+                                        width: 262,
+                                        height: 164,
+                                        videoSource: 'screen'
+                                    }}
+                                    onPublish={this.onPublish}
+                                    onError={this.onPublishError}
+                                    eventHandlers={this.publisherEventHandlers}
+                                /> :
+                                <Icon size='massive' color='blue' name='browser'/>
+                            }
+
+                        </OTSession>
+                    </Card.Header>
+                    <Card.Description>
+                        <h3>Present</h3>
+                        Present your screen to the whole class
+                        {error ? (
+                            <div className="error">
+                                <strong>Error:</strong> {error}
+                            </div>
+                        ) : null}
+                        <div>Session Status: {connection}</div>
+                    </Card.Description>
+                </Card.Content>
+                <Card.Content extra textAlign="center">
+                    <Button onClick={this.toggleVideo}
+                            color={publishing ? 'red' : 'green'}>{publishing ? 'End' : 'Start'} Presentation</Button>
+                </Card.Content>
+            </Card>
         );
     }
 }
