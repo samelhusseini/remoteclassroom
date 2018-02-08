@@ -20,7 +20,7 @@ import {
 import {ApplicationSelector} from "./applicationselector";
 
 import Apps from '../utils/apps';
-import {TeacherTok} from "./teacher/teachertok";
+import {TeacherPresent} from "./teacher/teacherpresent";
 
 
 export interface WorkspaceDetailProps {
@@ -90,7 +90,7 @@ export class WorkspaceDetail extends React.Component<WorkspaceDetailProps, Works
                     <Card.Group>
                         {this.getApplication()}
 
-                        <TeacherTok />
+                        <TeacherPresent />
 
                         <Card>
                             <Card.Content textAlign='center'>

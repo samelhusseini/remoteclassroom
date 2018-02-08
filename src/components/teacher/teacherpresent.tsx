@@ -31,28 +31,28 @@ export interface TokBoxCredentials {
     token: string
 }
 
-export interface TeacherTokProps {
+export interface TeacherPresentProps {
 }
 
-export interface TeacherTokState {
+export interface TeacherPresentState {
     error: OT.OTError,
     connection: string,
     publishing: boolean
 }
 
-export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState> {
+export class TeacherPresent extends React.Component<TeacherPresentProps, TeacherPresentState> {
     private sessionEventHandlers: any;
     private publisherEventHandlers: any;
     private subscriberEventHandlers: any;
 
     private credentials: TokBoxCredentials = {
-        apiKey: session.opentok_api_key, // "46055162",
-        sessionId: session.opentok_session_id, // "2_MX40NjA1NTE2Mn5-MTUxODA1MDQwNzM5M35QdTl1OVVCTmN0b3l1ekR3T3BZY3hFSGV-fg",
-        token: session.opentok_token // "T1==cGFydG5lcl9pZD00NjA1NTE2MiZzaWc9M2E2ODY3ZDlhMmRmMGEzZjhiZDJlMmMxZDdlNWU2N2I5Y2VjMGNmMDpzZXNzaW9uX2lkPTJfTVg0ME5qQTFOVEUyTW41LU1UVXhPREExTURRd056TTVNMzVRZFRsMU9WVkNUbU4wYjNsMWVrUjNUM0JaWTNoRlNHVi1mZyZjcmVhdGVfdGltZT0xNTE4MDUwNTc0Jm5vbmNlPTAuOTg3MTg2MjczNzYyNjA3NCZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTE4NjU1MzczJmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
+        apiKey: session.opentok_api_key,
+        sessionId: session.opentok_session_id,
+        token: session.opentok_token
 
     };
 
-    constructor(props: TeacherTokProps) {
+    constructor(props: TeacherPresentProps) {
         super(props);
 
         this.state = {
@@ -107,14 +107,6 @@ export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState
     };
 
     onPublishError = (error: OT.OTError) => {
-        this.setState({error});
-    };
-
-    onSubscribe = () => {
-        console.log('Subscribe Success');
-    };
-
-    onSubscribeError = (error: OT.OTError) => {
         this.setState({error});
     };
 
