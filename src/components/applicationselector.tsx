@@ -20,18 +20,37 @@ import Apps from '../utils/apps';
 
 
 export interface ApplicationSelectorProps {
-    trigger: any,//todo not sure what type a react component is
-    onSetApplication: (app: string) => void
+    open: boolean;//todo not sure what type a react component is
+    onSetApplication: (app: string) => void;
 }
 
-export class ApplicationSelector extends React.Component<ApplicationSelectorProps> {
+export interface ApplicationSelectorState {
+    open?: boolean;
+}
+
+export class ApplicationSelector extends React.Component<ApplicationSelectorProps, ApplicationSelectorState> {
     constructor(props: ApplicationSelectorProps) {
         super(props);
+        this.state = {
+            open: this.props.open
+        }
+    }
+
+    hide() {
+        this.setState({ open: false });
+    }
+
+    componentWillReceiveProps(nextProps: ApplicationSelectorProps) {
+        const newState: ApplicationSelectorState = {};
+        if (nextProps.open != undefined) {
+            newState.open = nextProps.open;
+        }
+        if (Object.keys(newState).length > 0) this.setState(newState)
     }
 
     render() {
-        return <Modal size='large' trigger={this.props.trigger}>
-            <Header icon='plus' content='Select an App'/>
+        return <Modal size='large' open={this.state.open} onClose={this.hide.bind(this)}>
+            <Header icon='plus' content='Select an App' />
             <Modal.Description>
                 <Grid padded>
                     <Grid.Row centered>
@@ -41,7 +60,7 @@ export class ApplicationSelector extends React.Component<ApplicationSelectorProp
                                     <Card>
                                         <Card.Content>
                                             <Image floated='right' size='mini'
-                                                   src={'/public/images/apps/' + app.image}/>
+                                                src={'/public/images/apps/' + app.image} />
                                             <Card.Header>
                                                 {app.name}
                                             </Card.Header>
@@ -63,7 +82,7 @@ export class ApplicationSelector extends React.Component<ApplicationSelectorProp
                 </Grid>
             </Modal.Description>
             <Modal.Actions>
-                <Button>
+                <Button onClick={this.hide.bind(this)}>
                     Back
                 </Button>
             </Modal.Actions>
