@@ -92,12 +92,6 @@ def trigger_changeslide():
     return redirect("/changeslide")
 '''
 
-def create_opentok_session():
-    opentok_sdk = OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET)
-    # use tokbox server to route media streams;
-    # if you want to use p2p - change media_mode to MediaModes.relayed
-    return opentok_sdk.create_session(media_mode = MediaModes.routed)
-
 @app.route("/")
 def show_index():
     return render_template('www/index.html')
@@ -138,17 +132,31 @@ def create():
         # Add teacher to course
 
         # Create OpenTok session
-        opentok_session = create_opentok_session()
-
+        opentok_sdk = OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET)
+        # use tokbox server to route media streams;
+        # if you want to use p2p - change media_mode to MediaModes.relayed
+        opentok_session = opentok_sdk.create_session(media_mode = MediaModes.routed)
+        opentok_token = opentok_sdk.generate_token(opentok_session.session_id)
+        
         key = courseId + userId
-        user = Student.get_or_insert(key, courseId=courseId, studentId=userId, fullName=fullName, color=userColor, role='TEACHER', opentokSessionid=opentok_session.session_id)
+        user = Student.get_or_insert(key, 
+            courseId = courseId,
+            studentId = userId,
+            fullName = fullName,
+            color = userColor,
+            role = 'TEACHER',
+            opentokSessionId = opentok_session.session_id,
+            opentokToken = opentok_token
+        )
         user.put()
 
         # Set user cookies (teacher role)
         auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
         auth[hashid] = {
             'role': 'Instructor',
-            'opentokSessionId': user.opentokSessionId
+            'opentok_api_key': OPENTOK_API_KEY,
+            'opentok_session_id': user.opentokSessionId,
+            'opentok_token': user.opentokToken
         }
         resp.set_cookie('remote_userfullname', fullName)
         resp.set_cookie('remote_auth', json.dumps(auth))
@@ -181,15 +189,23 @@ def join():
     user.put()
 
     if not user.opentokSessionId:
-        opentok_session = create_opentok_session()
+        opentok_sdk = OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET)
+        # use tokbox server to route media streams;
+        # if you want to use p2p - change media_mode to MediaModes.relayed
+        opentok_session = opentok_sdk.create_session(media_mode = MediaModes.routed)
+        opentok_token = opentok_sdk.generate_token(opentok_session.session_id)
+
         user.opentokSessionId = opentok_session.session_id
+        user.opentokToken = opentok_token
         user.put()
 
     # Set user cookies (student role)
     auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
     auth[hashid] = {
         'role': 'Student',
-        'opentokSessionId': user.opentokSessionId
+        'opentok_api_key': OPENTOK_API_KEY,
+        'opentok_session_id': user.opentokSessionId,
+        'opentok_token': user.opentokToken,
     }
     resp.set_cookie('remote_userfullname', fullName)
     resp.set_cookie('remote_auth', json.dumps(auth))
@@ -228,7 +244,8 @@ def launch_by_id(launch_id):
     userInitials = request.cookies.get('remote_userinitials')
     role = auth[launch_id]['role'] if launch_id in auth else ''
     host = os.environ['HTTP_HOST']
-    opentok_session_id = auth[launch_id]['session_id']
+    opentok_session_id = auth[launch_id]['opentok_session_id']
+    opentok_token = auth[launch_id]['opentok_token']
 
     if not role:
         return redirect('/main?launch='+launch_id+'#join')
@@ -258,7 +275,9 @@ def launch_by_id(launch_id):
         'host': host,
         #'user_image': session['user_image'],
         'role': role,
+        'opentok_api_key': OPENTOK_API_KEY,
         'opentok_session_id': opentok_session_id,
+        'opentok_token': opentok_token,
         'launch_id': launch_id
     }
 

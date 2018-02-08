@@ -94,6 +94,7 @@ class Student(ndb.Model):
     secondaryRemoteLink = ndb.StringProperty(indexed=False)
 
     opentokSessionId = ndb.StringProperty(indexed=False)
+    opentokToken = ndb.StringProperty(indexed=False)
 
     @classmethod
     def get_students_by_course(cls, courseId):

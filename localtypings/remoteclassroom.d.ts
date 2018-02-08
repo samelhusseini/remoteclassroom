@@ -15,6 +15,9 @@ interface RemoteSession {
     remote_link?: string;
     role?: string;
     launch_id: string;
+    opentok_api_key: string;
+    opentok_session_id: string;
+    opentok_token: string;
 }
 
 interface RemoteUser {
