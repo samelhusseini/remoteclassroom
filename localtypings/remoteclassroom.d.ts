@@ -11,6 +11,7 @@ interface RemoteSession {
     user_image: string;
     user_color: string;
     user_initials: string;
+    host: string;
     remote_link?: string;
     role?: string;
 }

@@ -204,6 +204,7 @@ def launch_by_id(launch_id):
             fullName = request.cookies.get('remote_userfullname')
             userInitials = request.cookies.get('remote_userinitials')
             role = auth[launch_id]['role'] if launch_id in auth else ''
+            host = os.environ['HTTP_HOST']
 
             # Setup fake LTI session
             session['full_name'] = fullName
@@ -212,6 +213,7 @@ def launch_by_id(launch_id):
             session['user_id'] = userId
             session['user_color'] = userColor
             session['user_initials'] = userInitials
+            session['host'] = host
             #session['user_image'] = request.form.get('user_image')
 
             session[LTI_SESSION_KEY] = True
@@ -220,11 +222,12 @@ def launch_by_id(launch_id):
             if role:
                 jsonsession = {
                     #'guid': session['guid'],
-                    'course_id': DEFAULT_COURSE_PREFIX + launch_id,
+                    'course_id': launch_id,
                     'user_id': userId, #session['user_id'],
                     'full_name': fullName,
                     'user_color': userColor,
                     'user_initials': userInitials,
+                    'host': host,
                     #'user_image': session['user_image'],
                     'role': role
                 }
