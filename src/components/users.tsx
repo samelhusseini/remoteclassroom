@@ -152,7 +152,7 @@ export class Users extends React.Component<UsersProps, UsersState> {
                 </Table.Header>
                 : undefined}
             <Table.Body>
-                {users.map((user) =>
+                {users.map(user =>
                     <Table.Row>
                         <Table.Cell collapsing>
                             <Header as='h4' image>

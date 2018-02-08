@@ -100,6 +100,10 @@ class Student(ndb.Model):
     def get_students_by_course(cls, courseId):
         return json.dumps([l.to_dict() for l in cls.query(ndb.AND(cls.courseId == courseId, cls.role == 'STUDENT')).order(cls.fullName).fetch()], cls=DateTimeEncoder)
 
+    @classmethod
+    def get_teacher_by_course(cls, courseId):
+        return cls.query(ndb.AND(cls.courseId == courseId, cls.role == 'TEACHER')).fetch()[0]
+
 class SourceCode(ndb.Model):
     studentKey = ndb.StringProperty(indexed=True, required=True)
     projectName = ndb.StringProperty(indexed=True, required=True)

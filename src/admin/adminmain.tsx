@@ -197,7 +197,6 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
     unmute() {
     }
 
-
     render() {
         const { selectedUser, selectedUserOnline, messagesLoaded } = this.state;
 
@@ -207,8 +206,8 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
         } else {
             content = <UserDetail
                 messages={this.state.messages.filter(m => selectedUser ? m.student == selectedUser.studentId : false)}
-                user={selectedUser} channel={this.privateChannel}
-                isOnline={selectedUserOnline} messagesLoaded={messagesLoaded}
+                user={selectedUser}
+                messagesLoaded={messagesLoaded}
                 sendMessage={this.sendTeacherMessage.bind(this)}
                 connect={this.connectRoom.bind(this)}
                 disconnect={this.disconnectRoom.bind(this)}

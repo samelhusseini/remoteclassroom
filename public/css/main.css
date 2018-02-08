@@ -286,6 +286,10 @@ h3.actioned button:hover {
     right: 0;
 }
 
+.student-view, .student-view > :first-child {
+    height: 100%;
+}
+
 .main-sidebar {
     position: absolute;
     top: 0;

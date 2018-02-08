@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Segment, Loader, Dimmer } from 'semantic-ui-react';
+import { OTSession, OTPublisher, OTStreams, OTSubscriber } from 'opentok-react';
 
 import Util from '../utils/util';
 
@@ -11,94 +12,33 @@ declare var config: RemoteConfig;
 declare var session: RemoteSession;
 
 export interface ScreenProps {
-    channel: any;
-    studentId: string;
-    isOnline: boolean;
-    connect: (studentId: string, callback: any) => void;
-    disconnect: () => void;
+    opentok_session_id: string;
+    opentok_token: string;
 }
 
-export interface ScreenState {
-    connecting: boolean;
-    isReady: boolean;
-}
-
-export class Screen extends React.Component<ScreenProps, ScreenState> {
-
-    private screenContainer: HTMLElement;
-
+export class Screen extends React.Component<ScreenProps> {
     constructor(props: ScreenProps) {
         super(props);
-        this.state = {
-            connecting: true,
-            isReady: false
-        }
-    }
 
-    componentWillMount() {
-        const { studentId, isOnline } = this.props;
-        if (studentId && isOnline) this.connect(studentId);
-    }
-
-    componentWillUnmount() {
-        this.disconnect();
-    }
-
-    componentWillReceiveProps(nextProps: ScreenProps) {
-        if (this.props.studentId != nextProps.studentId) {
-            const { studentId, isOnline } = nextProps;
-            // Disconnect from previous channel, and connect to a new one
-            if (this.props.studentId) {
-                this.disconnect();
-            }
-
-            if (isOnline) {
-                this.connect(studentId);
-            }
-        }
-    }
-
-    connect(studentId: string) {
-        const { isReady } = this.state;
-        const { connect } = this.props;
-
-        this.setState({connecting: true});
-
-        const connectedCallback = () => {
-            this.setState({connecting: false});
-        };
-
-        connect.call(this, studentId, connectedCallback);
-    }
-
-    disconnect() {
-        const { disconnect } = this.props;
-        disconnect.call(this);
+        this.state = {};
     }
     
     render() {
-        const { isOnline } = this.props;
-        const { connecting } = this.state;
+        const { opentok_session_id, opentok_token } = this.props;
+        const { opentok_api_key } = session;
+
+        console.log('student:', this.props, session);
 
         return <Segment className="screen">
-            {!isOnline ? 
-            <div className="status">
-                <div className="content">
-                    <div className="center">
-                        <Icon name="hide" />
-                        <div>Student is Offline</div>
-                    </div>
-            </div> </div> : undefined}
-            {connecting && isOnline ? <Dimmer active>
-                <Loader>Loading</Loader>
-            </Dimmer> : undefined}
-
-            <div id="localVideo"></div>
-            <div id="localVolume"></div>
-            <div id="remotes"></div>
-            <div id="localScreenContainer"
-                ref={e => this.screenContainer = e}>
-            </div>
+            <OTSession
+                apiKey={opentok_api_key}
+                sessionId={opentok_session_id}
+                token={opentok_token}
+            >
+                <OTStreams>
+                    <OTSubscriber />
+                </OTStreams>
+            </OTSession>
         </Segment>;
     }
 }

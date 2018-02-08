@@ -199,13 +199,16 @@ def join():
         user.opentokToken = opentok_token
         user.put()
 
+    teacher = Student.get_teacher_by_course(courseId)
+
     # Set user cookies (student role)
     auth = json.loads(request.cookies.get('remote_auth')) if 'remote_auth' in request.cookies else {}
     auth[hashid] = {
         'role': 'Student',
         'opentok_api_key': OPENTOK_API_KEY,
         'opentok_session_id': user.opentokSessionId,
-        'opentok_token': user.opentokToken,
+        'teacher_session_id': teacher.opentokSessionId,
+        'opentok_token': user.opentokToken
     }
     resp.set_cookie('remote_userfullname', fullName)
     resp.set_cookie('remote_auth', json.dumps(auth))
@@ -244,8 +247,8 @@ def launch_by_id(launch_id):
     userInitials = request.cookies.get('remote_userinitials')
     role = auth[launch_id]['role'] if launch_id in auth else ''
     host = os.environ['HTTP_HOST']
-    opentok_session_id = auth[launch_id]['opentok_session_id']
-    opentok_token = auth[launch_id]['opentok_token']
+    opentok_session_id = auth[launch_id]['opentok_session_id'] if launch_id in auth else ''
+    opentok_token = auth[launch_id]['opentok_token'] if launch_id in auth else ''
 
     if not role:
         return redirect('/main?launch='+launch_id+'#join')
@@ -286,6 +289,7 @@ def launch_by_id(launch_id):
         return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
     else:
         session['roles'] = 'Student'
+        jsonsession['teacher_session_id'] = auth[launch_id]['teacher_session_id']
         return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
 
 @app.route("/test-starter")

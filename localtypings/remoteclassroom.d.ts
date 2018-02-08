@@ -18,6 +18,7 @@ interface RemoteSession {
     opentok_api_key: string;
     opentok_session_id: string;
     opentok_token: string;
+    opentok_teacher_session_id?: string;
 }
 
 interface RemoteUser {
@@ -29,4 +30,6 @@ interface RemoteUser {
     role: string;
     primaryRemoteLink: string;
     secondaryRemoteLink: string;
+    opentokSessionId: string;
+    opentokToken: string;
 }
