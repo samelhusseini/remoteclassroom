@@ -36,7 +36,7 @@ export class Screen extends React.Component<ScreenProps> {
                 token={opentok_token}
             >
                 <OTStreams>
-                    <OTSubscriber />
+                    <OTSubscriber properties={{ width: 800, height: 600}} />
                 </OTStreams>
             </OTSession>
         </Segment>;

@@ -41,7 +41,7 @@ export class Frame extends React.Component<FrameProps, FrameState> {
         
         return <div className="student-view">
             <OTSession apiKey={session.opentok_api_key} sessionId={session.opentok_session_id} token={session.opentok_token}>
-                <OTPublisher properties={{ publishVideo: true, width: 100, height: 100, videoSource: 'screen' }} />
+                <OTPublisher properties={{ publishVideo: true, publishAudio: true, width: 100, height: 100, videoSource: 'screen' }} />
                 
                 <iframe id="content-iframe" src={url} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
             </OTSession>

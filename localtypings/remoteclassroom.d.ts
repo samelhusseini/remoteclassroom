@@ -19,6 +19,7 @@ interface RemoteSession {
     opentok_session_id: string;
     opentok_token: string;
     opentok_teacher_session_id?: string;
+    protocol: string;
 }
 
 interface RemoteUser {

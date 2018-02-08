@@ -247,6 +247,7 @@ def launch_by_id(launch_id):
     userInitials = request.cookies.get('remote_userinitials')
     role = auth[launch_id]['role'] if launch_id in auth else ''
     host = os.environ['HTTP_HOST']
+    protocol = 'https' # if request.url.startswith('http://') else 'https'
     opentok_session_id = auth[launch_id]['opentok_session_id'] if launch_id in auth else ''
     opentok_token = auth[launch_id]['opentok_token'] if launch_id in auth else ''
 
@@ -281,7 +282,8 @@ def launch_by_id(launch_id):
         'opentok_api_key': OPENTOK_API_KEY,
         'opentok_session_id': opentok_session_id,
         'opentok_token': opentok_token,
-        'launch_id': launch_id
+        'launch_id': launch_id,
+        'protocol': protocol
     }
 
     if 'Instructor' in role:
