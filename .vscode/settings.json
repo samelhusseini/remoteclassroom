@@ -1,3 +1,6 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "python.linting.enabled": false,
+    "python.formatting.provider": "yapf",
+    "python.pythonPath": "${workspaceFolder}/env/bin/python"
 }

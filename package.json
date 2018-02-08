@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/samelhusseini/remoteclass#readme",
   "dependencies": {
+    "@opentok/client": "^2.13.0",
     "awesome-typescript-loader": "^3.4.1",
     "js-cookie": "^2.2.0",
     "moment": "^2.20.1",

@@ -3,13 +3,20 @@ import * as React from "react";
 import { Container, Table, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea} from "semantic-ui-react";
 
 export interface AddStudentProps {
-    trigger: any, // TODO: not sure what type a react component is
     courseLink?: string
 }
 
-export class AddStudent extends React.Component<AddStudentProps> {
+export interface AddStudentState {
+    isModalOpen: boolean
+}
+
+export class AddStudent extends React.Component<AddStudentProps, AddStudentState> {
     constructor(props: AddStudentProps) {
         super(props);
+
+        this.state = { 
+            isModalOpen: false
+        };
     }
 
     copyCourseLink() {
@@ -26,8 +33,23 @@ export class AddStudent extends React.Component<AddStudentProps> {
         document.body.removeChild(linkText);
     }
 
+    openModal() {
+        this.setState({ isModalOpen: true });
+    }
+
+    closeModal() {
+        this.setState({ isModalOpen: false });
+    }
+
     render() {
-        return <Modal trigger={this.props.trigger}>
+        return <Modal trigger={
+                <Button circular floated="right" onClick={() => this.openModal()}>
+                    <Icon inverted name="add user" />
+                </Button>
+            }
+            onClose={() => this.closeModal()}
+            open={this.state.isModalOpen}
+        >
             <Header icon="add user" content="Invite Students"/>
             <Modal.Description>
                 <Container text>
@@ -67,7 +89,7 @@ export class AddStudent extends React.Component<AddStudentProps> {
                 </Container>
             </Modal.Description>
             <Modal.Actions>
-                <Button>
+                <Button onClick={() => this.closeModal()}>
                     Back
                 </Button>
             </Modal.Actions>

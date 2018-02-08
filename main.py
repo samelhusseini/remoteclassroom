@@ -17,6 +17,8 @@ from common import feedUpdated, configChanged, generate_color, generate_user_id
 import admin
 import lti
 
+from opentok import OpenTok, MediaModes
+
 from pylti.common import LTI_SESSION_KEY
 
 import settings
@@ -24,6 +26,8 @@ import settings
 from canvas_read import CanvasReader
 
 DEFAULT_COURSE_PREFIX = 'remoteclassschool'
+OPENTOK_API_KEY = '46055162'
+OPENTOK_API_SECRET = '29da2d1de1fdb09d35bf8a8b30167604e97f67f5'
 
 '''
 @app.route("/class")
@@ -196,49 +200,59 @@ def launch_by_id(launch_id):
     courseId = DEFAULT_COURSE_PREFIX + launch_id
     course = ndb.Key('Course', courseId).get()
 
-    if course:
-        if 'remote_auth' in request.cookies:
-            auth = json.loads(request.cookies.get('remote_auth'))
-            userId = request.cookies.get('remote_userid')
-            userColor = request.cookies.get('remote_usercolor')
-            fullName = request.cookies.get('remote_userfullname')
-            userInitials = request.cookies.get('remote_userinitials')
-            role = auth[launch_id]['role'] if launch_id in auth else ''
-            host = os.environ['HTTP_HOST']
+    if not course:
+        return "Error: No such course code"
 
-            # Setup fake LTI session
-            session['full_name'] = fullName
-            session['guid'] = str(uuid.uuid4()) # Generate new UUID
-            session['course_id'] = courseId
-            session['user_id'] = userId
-            session['user_color'] = userColor
-            session['user_initials'] = userInitials
-            session['host'] = host
-            #session['user_image'] = request.form.get('user_image')
+    if 'remote_auth' not in request.cookies:
+        return redirect('/main?launch=' + launch_id + '#join')
+        
+    auth = json.loads(request.cookies.get('remote_auth'))
+    userId = request.cookies.get('remote_userid')
+    userColor = request.cookies.get('remote_usercolor')
+    fullName = request.cookies.get('remote_userfullname')
+    userInitials = request.cookies.get('remote_userinitials')
+    role = auth[launch_id]['role'] if launch_id in auth else ''
+    host = os.environ['HTTP_HOST']
+    
+    opentok_sdk = OpenTok(OPENTOK_API_KEY, OPENTOK_API_SECRET)
+    # use tokbox server to route media streams;
+    # if you want to use p2p - change media_mode to MediaModes.relayed
+    opentok_session = opentok_sdk.create_session(media_mode = MediaModes.routed)
+    session['opentok_session_id'] = opentok_session.session_id
 
-            session[LTI_SESSION_KEY] = True
-            session['oauth_consumer_key'] = settings.CONSUMER_KEY
+    # Setup fake LTI session
+    session['full_name'] = fullName
+    session['guid'] = str(uuid.uuid4()) # Generate new UUID
+    session['course_id'] = courseId
+    session['user_id'] = userId
+    session['user_color'] = userColor
+    session['user_initials'] = userInitials
+    session['host'] = host
+    #session['user_image'] = request.form.get('user_image')
 
-            if role:
-                jsonsession = {
-                    #'guid': session['guid'],
-                    'course_id': launch_id,
-                    'user_id': userId, #session['user_id'],
-                    'full_name': fullName,
-                    'user_color': userColor,
-                    'user_initials': userInitials,
-                    'host': host,
-                    #'user_image': session['user_image'],
-                    'role': role
-                }
-                if 'Instructor' in role:
-                    session['roles'] = 'Instructor'
-                    return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
-                else:
-                    session['roles'] = 'Student'
-                    return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
-        return redirect('/main?launch='+launch_id+'#join')
-    return "Error: No such course code"
+    session[LTI_SESSION_KEY] = True
+    session['oauth_consumer_key'] = settings.CONSUMER_KEY
+
+    if role:
+        jsonsession = {
+            #'guid': session['guid'],
+            'course_id': launch_id,
+            'user_id': userId, #session['user_id'],
+            'full_name': fullName,
+            'user_color': userColor,
+            'user_initials': userInitials,
+            'host': host,
+            #'user_image': session['user_image'],
+            'role': role,
+            'opentok_session_id': opentok_session.session_id
+        }
+
+        if 'Instructor' in role:
+            session['roles'] = 'Instructor'
+            return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
+        else:
+            session['roles'] = 'Student'
+            return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
 
 @app.route("/test-starter")
 def show_starter():
