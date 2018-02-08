@@ -16,7 +16,8 @@ export interface FrameProps {
 }
 
 export interface FrameState {
-    teacherVideoEnabled: boolean;
+    audioDeviceId?: string;
+    teacherSharing: boolean;
 }
 
 export class Frame extends React.Component<FrameProps, FrameState> {
@@ -24,24 +25,53 @@ export class Frame extends React.Component<FrameProps, FrameState> {
         super(props);
 
         this.state = {
-            teacherVideoEnabled: false
+            audioDeviceId: null,
+            teacherSharing: false
         };
-    }
 
-    teacherVideoEnabled() {
-        this.setState({ teacherVideoEnabled: true });
-    }
-    
-    teacherVideoDisabled() {
-        this.setState({ teacherVideoEnabled: false });
+        OT.getDevices((err, devices) => {
+            const audioDevices = devices.filter(device => device.kind === 'audioInput');
+
+            OT.getUserMedia({ audioSource: audioDevices[0].deviceId, videoSource: null });
+
+            this.setState({ audioDeviceId: audioDevices[0].deviceId });
+        });
     }
 
     render() {
         const { url } = this.props;
-        
+        const { audioDeviceId, teacherSharing } = this.state;
+
         return <div className="student-view">
+            {
+                teacherSharing ?
+                    <div>TEACHER IS SHARING</div> :
+                    null
+            }
+
+            <OTSession apiKey={session.opentok_api_key} sessionId={session.opentok_teacher_session_id} token={session.opentok_teacher_token}>
+                <OTStreams>
+                    <OTSubscriber properties={
+                        { 
+                            width: 800,
+                            height: 600,
+                            subscribeToAudio: true,
+                            subscribeToVideo: true,
+                            audioVolume: 100
+                        }
+                    }
+                    eventHandlers={
+                        {
+                            videoEnabled: () => this.setState({ teacherSharing: true }),
+                            videoDisabled: () => this.setState({ teacherSharing: false })
+                        }
+                    }
+                    />
+                </OTStreams>
+            </OTSession>
+
             <OTSession apiKey={session.opentok_api_key} sessionId={session.opentok_session_id} token={session.opentok_token}>
-                <OTPublisher properties={{ publishVideo: true, publishAudio: true, width: 100, height: 100, videoSource: 'screen' }} />
+                <OTPublisher properties={{ publishVideo: true, publishAudio: true, width: 100, height: 100, videoSource: 'screen', audioSource: audioDeviceId }} />
                 
                 <iframe id="content-iframe" src={url} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
             </OTSession>

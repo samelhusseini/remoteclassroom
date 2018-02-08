@@ -122,15 +122,14 @@ export class TeacherPresent extends React.Component<TeacherPresentProps, Teacher
             <Card>
                 <Card.Content textAlign='center'>
                     <Card.Header>
-
-                        <OTSession
-                            apiKey={apiKey}
-                            sessionId={sessionId}
-                            token={token}
-                            onError={this.onSessionError}
-                            eventHandlers={this.sessionEventHandlers}
-                        >
-                            {publishing ?
+                        {publishing ?
+                            <OTSession
+                                apiKey={apiKey}
+                                sessionId={sessionId}
+                                token={token}
+                                onError={this.onSessionError}
+                                eventHandlers={this.sessionEventHandlers}
+                            >
                                 <OTPublisher
                                     properties={{
                                         publishVideo: true,
@@ -142,11 +141,10 @@ export class TeacherPresent extends React.Component<TeacherPresentProps, Teacher
                                     onPublish={this.onPublish}
                                     onError={this.onPublishError}
                                     eventHandlers={this.publisherEventHandlers}
-                                /> :
-                                <Icon size='massive' color='blue' name='browser'/>
-                            }
-
-                        </OTSession>
+                                />
+                            </OTSession> :
+                            <Icon size='massive' color='blue' name='browser'/>
+                        }
                     </Card.Header>
                     <Card.Description>
                         <h3>Present</h3>

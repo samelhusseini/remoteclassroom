@@ -44,18 +44,31 @@ npm install -g webpack
 4. Follow the Google Cloud SDK install steps to install gcloud on your platform:
 https://cloud.google.com/sdk/downloads
 
+5. Install [ngrok](https://ngrok.com/)
+
 
 ## Running locally
 
 In a terminal window, run webpack: 
+
 ```
 webpack --watch
 ```
 
 In another terminal window, run the local server: 
+
 ```
 dev_appserver.py app.yaml
 ```
+
+Expose the dev server over ngrok proxy to be able to use https:
+
+```
+hgrok http 8080
+```
+
+Then navigate to the `https://` URL, provided by ngrok to open up the teacher's view.
+Use the "add student" button to get the student view URL.
 
 ## License
 

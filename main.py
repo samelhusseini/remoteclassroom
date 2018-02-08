@@ -209,8 +209,9 @@ def join():
         'role': 'Student',
         'opentok_api_key': OPENTOK_API_KEY,
         'opentok_session_id': user.opentokSessionId,
+        'opentok_token': user.opentokToken,
         'teacher_session_id': teacher.opentokSessionId,
-        'opentok_token': user.opentokToken
+        'teacher_token': teacher.opentokToken
     }
     resp.set_cookie('remote_userfullname', fullName)
     resp.set_cookie('remote_auth', json.dumps(auth))
@@ -293,7 +294,8 @@ def launch_by_id(launch_id):
         return render_template('admin.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
     else:
         session['roles'] = 'Student'
-        jsonsession['teacher_session_id'] = auth[launch_id]['teacher_session_id']
+        jsonsession['opentok_teacher_session_id'] = auth[launch_id]['teacher_session_id']
+        jsonsession['opentok_teacher_token'] = auth[launch_id]['teacher_token']
         return render_template('student.html', jsconfig=json.dumps(jsonconfig), jssession=json.dumps(jsonsession))
 
 @app.route("/test-starter")

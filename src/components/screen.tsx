@@ -14,6 +14,7 @@ declare var session: RemoteSession;
 export interface ScreenProps {
     opentok_session_id: string;
     opentok_token: string;
+    audioVolume: number;
 }
 
 export class Screen extends React.Component<ScreenProps> {
@@ -36,7 +37,7 @@ export class Screen extends React.Component<ScreenProps> {
                 token={opentok_token}
             >
                 <OTStreams>
-                    <OTSubscriber properties={{ width: 800, height: 600}} />
+                    <OTSubscriber properties={{ width: 800, height: 600, subscribeToAudio: true, subscribeToVideo: true, audioVolume: 100}} />
                 </OTStreams>
             </OTSession>
         </Segment>;
