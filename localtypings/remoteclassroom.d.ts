@@ -11,8 +11,13 @@ interface RemoteSession {
     user_image: string;
     user_color: string;
     user_initials: string;
+    host: string;
     remote_link?: string;
     role?: string;
+    launch_id: string;
+    opentok_api_key: string;
+    opentok_session_id: string;
+    opentok_token: string;
 }
 
 interface RemoteUser {

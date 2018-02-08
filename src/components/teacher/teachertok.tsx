@@ -4,6 +4,7 @@ import * as React from "react";
 import "@opentok/client";
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react';
 
+declare var session: RemoteSession;
 
 export interface TokBoxCredentials {
     apiKey: string,
@@ -26,9 +27,10 @@ export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState
     private subscriberEventHandlers: any;
 
     private credentials: TokBoxCredentials = {
-        apiKey: "46055162",
-        sessionId: "2_MX40NjA1NTE2Mn5-MTUxODA1MDQwNzM5M35QdTl1OVVCTmN0b3l1ekR3T3BZY3hFSGV-fg",
-        token: "T1==cGFydG5lcl9pZD00NjA1NTE2MiZzaWc9M2E2ODY3ZDlhMmRmMGEzZjhiZDJlMmMxZDdlNWU2N2I5Y2VjMGNmMDpzZXNzaW9uX2lkPTJfTVg0ME5qQTFOVEUyTW41LU1UVXhPREExTURRd056TTVNMzVRZFRsMU9WVkNUbU4wYjNsMWVrUjNUM0JaWTNoRlNHVi1mZyZjcmVhdGVfdGltZT0xNTE4MDUwNTc0Jm5vbmNlPTAuOTg3MTg2MjczNzYyNjA3NCZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTE4NjU1MzczJmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
+        apiKey: session.opentok_api_key, // "46055162",
+        sessionId: session.opentok_session_id, // "2_MX40NjA1NTE2Mn5-MTUxODA1MDQwNzM5M35QdTl1OVVCTmN0b3l1ekR3T3BZY3hFSGV-fg",
+        token: session.opentok_token // "T1==cGFydG5lcl9pZD00NjA1NTE2MiZzaWc9M2E2ODY3ZDlhMmRmMGEzZjhiZDJlMmMxZDdlNWU2N2I5Y2VjMGNmMDpzZXNzaW9uX2lkPTJfTVg0ME5qQTFOVEUyTW41LU1UVXhPREExTURRd056TTVNMzVRZFRsMU9WVkNUbU4wYjNsMWVrUjNUM0JaWTNoRlNHVi1mZyZjcmVhdGVfdGltZT0xNTE4MDUwNTc0Jm5vbmNlPTAuOTg3MTg2MjczNzYyNjA3NCZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTE4NjU1MzczJmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
+
     };
 
     constructor(props: TeacherTokProps) {

@@ -5,6 +5,7 @@ import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input } from
 
 import Util from '../../utils/util';
 
+import { OTSession, OTPublisher, OTStreams, OTSubscriber } from 'opentok-react';
 
 declare var Pusher: any;
 declare var config: RemoteConfig;
@@ -27,6 +28,10 @@ export class Frame extends React.Component<FrameProps, FrameState> {
 
     render() {
         const { url } = this.props;
-        return <iframe id="content-iframe" src={url} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
+        return  <OTSession apiKey="your-api-key" sessionId="your-session-id" token="your-session-token">
+            <OTPublisher properties={{videoSource: 'screen'}} />
+            
+            <iframe id="content-iframe" src={url} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
+        </OTSession>;
     }
 }
