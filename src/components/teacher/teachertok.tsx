@@ -29,7 +29,6 @@ export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState
         apiKey: "46055162",
         sessionId: "2_MX40NjA1NTE2Mn5-MTUxODA1MDQwNzM5M35QdTl1OVVCTmN0b3l1ekR3T3BZY3hFSGV-fg",
         token: "T1==cGFydG5lcl9pZD00NjA1NTE2MiZzaWc9M2E2ODY3ZDlhMmRmMGEzZjhiZDJlMmMxZDdlNWU2N2I5Y2VjMGNmMDpzZXNzaW9uX2lkPTJfTVg0ME5qQTFOVEUyTW41LU1UVXhPREExTURRd056TTVNMzVRZFRsMU9WVkNUbU4wYjNsMWVrUjNUM0JaWTNoRlNHVi1mZyZjcmVhdGVfdGltZT0xNTE4MDUwNTc0Jm5vbmNlPTAuOTg3MTg2MjczNzYyNjA3NCZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNTE4NjU1MzczJmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
-
     };
 
     constructor(props: TeacherTokProps) {
@@ -123,9 +122,9 @@ export class TeacherTok extends React.Component<TeacherTokProps, TeacherTokState
                     <button onClick={this.toggleVideo}>
                         {publishVideo ? 'Disable' : 'Enable'} Video
                     </button>
-                    <h2>Puiblisher</h2>
+                    <h2>Publisher</h2>
                     <OTPublisher
-                        properties={{publishVideo, width: 100, height: 100,}}
+                        properties={{publishVideo, width: 100, height: 100, videoSource: 'screen'}}
                         onPublish={this.onPublish}
                         onError={this.onPublishError}
                         eventHandlers={this.publisherEventHandlers}
