@@ -280,6 +280,7 @@ def launch_by_id(launch_id):
         #'guid': session['guid'],
         'course_id': DEFAULT_COURSE_PREFIX + launch_id,
         'course_name': course.courseName,
+        'course_apps': course.courseApps,
         'user_id': userId, #session['user_id'],
         'full_name': fullName,
         'user_color': userColor,

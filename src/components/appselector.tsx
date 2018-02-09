@@ -19,17 +19,17 @@ import {
 import Apps from '../utils/apps';
 
 
-export interface ApplicationSelectorProps {
+export interface AppSelectorProps {
     open: boolean;//todo not sure what type a react component is
     onSetApplication: (app: string) => void;
 }
 
-export interface ApplicationSelectorState {
+export interface AppSelectorState {
     open?: boolean;
 }
 
-export class ApplicationSelector extends React.Component<ApplicationSelectorProps, ApplicationSelectorState> {
-    constructor(props: ApplicationSelectorProps) {
+export class AppSelector extends React.Component<AppSelectorProps, AppSelectorState> {
+    constructor(props: AppSelectorProps) {
         super(props);
         this.state = {
             open: this.props.open
@@ -40,8 +40,8 @@ export class ApplicationSelector extends React.Component<ApplicationSelectorProp
         this.setState({ open: false });
     }
 
-    componentWillReceiveProps(nextProps: ApplicationSelectorProps) {
-        const newState: ApplicationSelectorState = {};
+    componentWillReceiveProps(nextProps: AppSelectorProps) {
+        const newState: AppSelectorState = {};
         if (nextProps.open != undefined) {
             newState.open = nextProps.open;
         }

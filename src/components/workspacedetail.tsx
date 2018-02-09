@@ -17,11 +17,12 @@ import {
     TextArea,
     Divider
 } from 'semantic-ui-react';
-import { ApplicationSelector } from "./applicationselector";
+import { AppSelector } from "./appselector";
 
 import Apps from '../utils/apps';
 import { TeacherPresent } from "./teacher/teacherpresent";
 
+import Util from '../utils/util';
 
 export interface WorkspaceDetailProps {
 }
@@ -42,7 +43,11 @@ export class WorkspaceDetail extends React.Component<WorkspaceDetailProps, Works
     onSetApplication(app: string) {
         this.setState({ app: app, appSelectorVisible: false});
 
-        
+        // Saving application
+        Util.POST('/update_course', {
+            courseId: Util.getCourseId(),
+            courseApps: app
+        });
     }
 
     getApplication() {
@@ -66,7 +71,7 @@ export class WorkspaceDetail extends React.Component<WorkspaceDetailProps, Works
                         </Card.Description>}
             </Card.Content>
             <Card.Content extra textAlign='center'>
-                <ApplicationSelector
+                <AppSelector
                     open={this.state.appSelectorVisible}
                     onSetApplication={this.onSetApplication.bind(this)} />
                 <Button primary onClick={() => this.setState({ appSelectorVisible: true })}>{hasApp ? 'Change App' : 'Select an App'}</Button>
