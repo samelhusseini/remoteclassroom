@@ -7,6 +7,7 @@ interface RemoteConfig {
 interface RemoteSession {
     full_name: string;
     course_id: string;
+    course_name?: string;
     user_id: string;
     user_image: string;
     user_color: string;

@@ -19,6 +19,8 @@ import lti
 import pusherauth
 import snap
 
+import urllib
+
 from opentok import OpenTok, MediaModes
 
 from pylti.common import LTI_SESSION_KEY
@@ -236,12 +238,13 @@ def launch_by_id(launch_id):
     # Lookup course id
     courseId = DEFAULT_COURSE_PREFIX + launch_id
     course = ndb.Key('Course', courseId).get()
+    courseName = course.courseName
 
     if not course:
         return "Error: No such course code"
 
     if 'remote_auth' not in request.cookies:
-        return redirect('/main?launch=' + launch_id + '#join')
+        return redirect('/main?launch=' + launch_id + '&name=' + urllib.quote(courseName) + ' #join')
         
     auth = json.loads(request.cookies.get('remote_auth'))
     userId = request.cookies.get('remote_userid')
@@ -275,6 +278,7 @@ def launch_by_id(launch_id):
     jsonsession = {
         #'guid': session['guid'],
         'course_id': DEFAULT_COURSE_PREFIX + launch_id,
+        'course_name': course.courseName,
         'user_id': userId, #session['user_id'],
         'full_name': fullName,
         'user_color': userColor,

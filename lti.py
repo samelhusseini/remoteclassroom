@@ -495,6 +495,21 @@ def delete_user(lti=lti):
     configChanged(courseId, 'config', 'users')
     return "Deleted"
 
+@app.route("/update_course", methods=['POST'])
+@auth(request='session', error=error, role='staff', app=app)
+def update_course(lti=lti):
+#def update_settings():
+    content = request.get_json(silent=True)
+    courseId = cgi.escape(content['courseId'])
+    courseName = cgi.escape(content['courseName'])
+
+    course = ndb.Key('Course', courseId).get()
+    if courseName:
+        course.courseName = courseName
+        configChanged(courseId, 'courseName', courseName)
+    course.put()
+    return "Updated course"
+
 @app.route("/update_settings", methods=['POST'])
 @auth(request='session', error=error, role='staff', app=app)
 def update_settings(lti=lti):

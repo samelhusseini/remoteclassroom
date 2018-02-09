@@ -12,6 +12,7 @@ import { WorkspaceDetail } from "../components/workspacedetail";
 import { MainMenu } from "../components/MainMenu";
 
 import { NewPostModal } from "../components/teacher/newpostmodal";
+import { CourseNameEditor } from "../components/teacher/coursenameeditor";
 
 import Util from '../utils/util';
 
@@ -217,7 +218,7 @@ export class AdminMainView extends React.Component<AdminMainViewProps, AdminMain
         return <div className="pusher">
             <div className="admin-sidebar">
                 <div className="admin-scrollabale">
-                    <Header inverted as='h2' className="inlineEdit default">Untitled Class</Header>
+                    <CourseNameEditor name={session.course_name} />
                     <WorkspaceSelector isSelected={this.state.currentView == ViewType.Workspace} onSelect={this.selectWorkspaceView.bind(this)} />
                     <UserSelector messages={this.state.messages} users={this.state.users} presenceChannel={this.presenceChannel} selectedUser={selectedUser} onSelectedUser={this.setSelectedUser.bind(this)} />
                     <div className="settings">

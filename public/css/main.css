@@ -363,6 +363,21 @@ h2.inlineEdit:hover {
     cursor: text;
 }
 
+.ui.input.inlineEdit input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.71428571rem;
+    font-weight: bold;
+    padding: 3px !important;
+    margin: -0.15rem 0em 1rem;
+}
+
+.ui.input.inlineEdit input::selection {
+    background: white;
+    color: white;
+}
+
 .starter-background {
     background-image: url("/public/images/intro.jpeg") !important;
     padding: '1em 0em';
