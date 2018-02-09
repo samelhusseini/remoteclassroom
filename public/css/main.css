@@ -432,3 +432,17 @@ h2.inlineEdit:hover {
 .chat .teachermessages > .ui.feed {
     flex-grow: 1;
 }
+
+.student-publisher {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.student-subscriber .OTSubscriberContainer {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+}
