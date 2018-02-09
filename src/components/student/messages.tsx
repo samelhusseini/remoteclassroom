@@ -3,10 +3,11 @@ import * as ReactDOM from "react-dom";
 
 import Moment from 'react-moment';
 
-import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea, Card } from 'semantic-ui-react';
+import { Table, Checkbox, Button, Icon, Modal, Form, Header, Image, Input, Grid, Feed, TextArea, Card } from 'semantic-ui-react';
 
 import Util from '../../utils/util';
 
+import { UserAvatar } from "../common/useravatar";
 
 declare var Pusher: any;
 declare var config: RemoteConfig;
@@ -61,53 +62,60 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
 
         return <div className='messages-sidebar'>
 
-            <Header>Messages</Header>
+            <Header>Chat</Header>
             <div id="scrolling-messages" className="scrolling-messages">
                 <Grid padded>
                     <Grid.Row>
                         <Grid.Column width={16}>
-                            <Comment.Group>
+                            <Feed>
                                 {messages.map((message) =>
                                     message.type == "link" && (
-                                        <Comment>
-                                            <Comment.Content>
-                                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                                <Comment.Metadata>
-                                                    <div><Moment fromNow utc>{message.date}</Moment></div>
-                                                </Comment.Metadata>
-                                                <Comment.Text>
-                                                    <Card color='orange' fluid>
-                                                        <Card.Content><a href='http://www.google.com'> www.google.com</a></Card.Content>
-                                                    </Card>
-                                                </Comment.Text>
-                                            </Comment.Content>
-                                        </Comment>) ||
+                                        <Feed.Event>
+                                            <Feed.Label>
+                                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                                            </Feed.Label>
+                                            <Feed.Content>
+                                                <Feed.Summary>
+                                                    <Feed.User>{message.info.fullName}</Feed.User>
+                                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                                </Feed.Summary>
+                                                <Feed.Extra text>
+                                                    Go to this link: {message.content}
+                                                </Feed.Extra>
+                                            </Feed.Content>
+                                        </Feed.Event>) ||
                                     message.type == "text" && (
-                                        <Comment>
-                                            <Comment.Content>
-                                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                                <Comment.Metadata>
-                                                    <div><Moment fromNow utc>{message.date}</Moment></div>
-                                                </Comment.Metadata>
-                                                <Comment.Text>{message.content}</Comment.Text>
-                                            </Comment.Content>
-                                        </Comment>) ||
+                                        <Feed.Event>
+                                            <Feed.Label>
+                                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                                            </Feed.Label>
+                                            <Feed.Content>
+                                                <Feed.Summary>
+                                                    <Feed.User>{message.info.fullName}</Feed.User>
+                                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                                </Feed.Summary>
+                                                <Feed.Extra text>
+                                                    {message.content}
+                                                </Feed.Extra>
+                                            </Feed.Content>
+                                        </Feed.Event>) ||
                                     message.type == "ping" && (
-                                        <Comment>
-                                            <Comment.Content>
-                                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                                <Comment.Metadata>
-                                                    <div><Moment fromNow utc>{message.date}</Moment></div>
-                                                </Comment.Metadata>
-                                                <Comment.Text>
-                                                    <Card color='blue' fluid>
-                                                        <Card.Content>The class will start in 5 minutes</Card.Content>
-                                                    </Card>
-                                                </Comment.Text>
-                                            </Comment.Content>
-                                        </Comment>)
+                                        <Feed.Event>
+                                            <Feed.Label>
+                                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                                            </Feed.Label>
+                                            <Feed.Content>
+                                                <Feed.Summary>
+                                                    <Feed.User>{message.info.fullName}</Feed.User>
+                                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                                </Feed.Summary>
+                                                <Feed.Extra text>
+                                                    The class will start in 5 minutes
+                                                </Feed.Extra>
+                                            </Feed.Content>
+                                        </Feed.Event>)
                                 )}
-                            </Comment.Group>
+                            </Feed>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

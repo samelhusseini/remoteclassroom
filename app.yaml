@@ -8,18 +8,22 @@ handlers:
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
+  secure: always
 
 - url: /dist
   static_dir: dist
+  secure: always
 
 - url: /public/(.*)
   static_files: public/\1
   upload: public/(.*)
+  secure: always
   http_headers:
     Access-Control-Allow-Origin: '*'
 
 - url: /.*
   script: main.app
+  secure: always
 
 skip_files:
 - ^(node_modules)

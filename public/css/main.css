@@ -263,14 +263,14 @@ h3.actioned button:hover {
 }
 
 .starter-menu {
-    height: 40px;
+    height: 60px;
     background-color: #0072bc !important;
     border-radius: 0 !important;
 }
 
 .frame-body {
     position: absolute;
-    top: 40px;
+    top: 60px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -286,6 +286,20 @@ h3.actioned button:hover {
     right: 0;
 }
 
+.student-view {
+    height: 100%;
+}
+
+.admin-workspace-detail-panel .presenting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-workspace-detail-panel .presenting #teacher_publisher_audio {
+    display: none;
+}
+
 .main-sidebar {
     position: absolute;
     top: 0;
@@ -299,6 +313,7 @@ h3.actioned button:hover {
 .main-sidebar.sidebar-visible {
     right: 0;
 }
+
 
 /* Student messages */
 
@@ -348,8 +363,23 @@ h2.inlineEdit:hover {
     cursor: text;
 }
 
+.ui.input.inlineEdit input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.71428571rem;
+    font-weight: bold;
+    padding: 3px !important;
+    margin: -0.15rem 0em 1rem;
+}
+
+.ui.input.inlineEdit input::selection {
+    background: white;
+    color: white;
+}
+
 .starter-background {
-    background-image: url("https://images.unsplash.com/photo-1509223029680-bf5c4fe21130?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=833586f5bd235c24e0d0f88105163473&auto=format&fit=crop&w=6000&q=80") !important;
+    background-image: url("/public/images/intro.jpeg") !important;
     padding: '1em 0em';
     width: 100% !important;
     background-position: center;
@@ -366,13 +396,42 @@ h2.inlineEdit:hover {
     height: 10px;
 }
 
+
 /* Student admin screen */
 
 .ui.segment.screen {
     width: 100%;
-    padding-bottom: 40%;
+    min-height: 600px;
+    text-align: center;
+    padding: 1em;
     background: #dfe6e9;
     border: solid 2px #b2bec3;
+}
+
+.screen .OT_subscriber.OT_audio-only {
+    visibility: hidden;
+    display: none;
+}
+
+#content-iframe {
+    position: absolute;
+}
+
+#student_subscriber.visible {
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#student_subscriber.hidden {
+    display: none;
 }
 
 .ui.segment.screen .status {
@@ -392,6 +451,7 @@ h2.inlineEdit:hover {
     -ms-user-select: text;
     user-select: text;
 }
+
 .ui.segment.screen .center {
     display: table-cell;
     vertical-align: middle;
@@ -400,6 +460,7 @@ h2.inlineEdit:hover {
 .ui.segment.screen .center i {
     font-size: 70px;
 }
+
 
 /* Teacher messages */
 
@@ -417,7 +478,49 @@ h2.inlineEdit:hover {
     height: 100%;
 }
 
-
-.chat .teachermessages > .ui.comments {
+.chat .teachermessages > .ui.feed {
     flex-grow: 1;
+}
+
+.student-publisher {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#student_publisher_audio {
+    visibility: hidden;
+}
+
+#student_publisher_video {
+    margin: 6px;
+}
+
+.student-subscriber .OTSubscriberContainer {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
+#studentAudioLevel {
+    display: none; /* TODO: hide until we fix the bar background on Firefox */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100px;
+    -webkit-appearance: none; /* Reset appearance */
+}
+
+#studentAudioLevel::-webkit-meter-bar {
+    background: none;
+    /* Required to get rid of the default background property */
+    background-color: transparent;
+}
+
+#studentAudioLevel::-webkit-meter-optimum-value {
+    box-shadow: none;
+    background-color: #55efc4;
 }

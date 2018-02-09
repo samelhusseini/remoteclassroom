@@ -7,12 +7,20 @@ interface RemoteConfig {
 interface RemoteSession {
     full_name: string;
     course_id: string;
+    course_name?: string;
     user_id: string;
     user_image: string;
     user_color: string;
     user_initials: string;
-    remote_link?: string;
+    host: string;
     role?: string;
+    launch_id: string;
+    opentok_api_key: string;
+    opentok_session_id: string;
+    opentok_token: string;
+    opentok_teacher_token?: string;
+    opentok_teacher_session_id?: string;
+    protocol: string;
 }
 
 interface RemoteUser {
@@ -22,6 +30,6 @@ interface RemoteUser {
     color: string;
     avatarUrl: string;
     role: string;
-    primaryRemoteLink: string;
-    secondaryRemoteLink: string;
+    opentokSessionId: string;
+    opentokToken: string;
 }

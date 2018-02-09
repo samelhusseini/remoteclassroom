@@ -1,10 +1,8 @@
 /// <reference path="../../localtypings/remoteclassroom.d.ts" />
-/// <reference path="../../localtypings/simplewebrtc.d.ts" />
+/// <reference path="../../localtypings/opentok-react.d.ts" />
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-
-import * as SimpleWebRTC from 'simplewebrtc';
 
 import { Menu, Button, Icon, Image, Label, Header } from "semantic-ui-react";
 
@@ -12,7 +10,10 @@ import Util from '../utils/util';
 
 import { NotificationModal } from "../components/student/notificationmodal";
 import { Frame } from "../components/student/frame";
+import { TeacherFrame } from "../components/student/teacherframe";
 import { Messages } from "../components/student/messages";
+
+import { UserAvatar } from "../components/common/useravatar";
 
 declare var Pusher: any;
 declare var config: RemoteConfig;
@@ -25,6 +26,7 @@ export interface MainAppState {
     iframeUrl?: string;
     sidebarOpen?: boolean;
     messages?: any[];
+    muteAudio?: boolean;
 }
 
 export class StudentApp extends React.Component<MainAppProps, MainAppState> {
@@ -36,6 +38,9 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
 
     private messagesComponent: Messages;
 
+    private audioPublisher: any;
+    private screenPublisher: any;
+
     constructor(props: MainAppProps) {
         super(props);
         this.state = {
@@ -44,7 +49,6 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
         }
 
         this.handleNeedHelp = this.handleNeedHelp.bind(this);
-        this.handleStartCall = this.handleStartCall.bind(this);
     }
 
     componentWillMount() {
@@ -83,7 +87,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             if (data.studentId == Util.getStudentId()) {
                 Util.showNotification('Ping! Headphones On!', `Teacher is trying to contact you!`, '/public/images/notification/headphones.png');
             }
-        })
+        });
         //this.messageChannel.bind('new_message', this.addMessage, this);
         this.userChatChannel.bind('new_message', this.addMessage, this);
 
@@ -100,29 +104,65 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             }
         }, false);
 
-        let webrtc = new SimpleWebRTC({
-            localVideoEl: "",
-            remoteVideosEl: "",
-            autoRequestMedia: true,
-            media: { audio: true, video: false, screen: true }
-            //url: 'https://your-production-signalserver.com/'
-        });
+        this.beginPublishing();
+    }
 
-        // we have to wait until it's ready
-        webrtc.on('readyToCall', function () {
-            // you can name it anything
-            webrtc.joinRoom(Util.getCourseId() + Util.getStudentId());
+    beginPublishing() {
 
-            console.log("Joined call: " + Util.getCourseId() + Util.getStudentId());
+        OT.getDevices((err, devices) => {
+            const audioDevices = devices.filter(device => device.kind === 'audioInput');
 
-            webrtc.shareScreen(function (err: any) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Sharing screen");
+            const pubSession = OT.initSession(session.opentok_api_key, session.opentok_session_id);
+
+            pubSession.connect(session.opentok_token, (error: any) => {
+                if (error) {
+                    console.error('>>', error);
+                    return;
                 }
+
+                OT.getUserMedia({ audioSource: audioDevices[0].deviceId, videoSource: null })
+                    .then(stream => {
+                        this.audioPublisher = OT.initPublisher(document.querySelector('#student_publisher_audio') as HTMLElement, {
+                            width: 80, height: 48, publishVideo: false, publishAudio: true, videoSource: null,
+                            audioSource: audioDevices[0].deviceId,
+                            style: {
+                                buttonDisplayMode: 'off', /* Don't show the mute button, custom mute */
+                                nameDisplayMode: 'off',
+                                audioLevelDisplayMode: 'off'
+                            }
+                        });
+                        let movingAvg: number = null;
+                        this.audioPublisher.on('audioLevelUpdated', function (event: any) {
+                            if (movingAvg === null || movingAvg <= event.audioLevel) {
+                                movingAvg = event.audioLevel;
+                            } else {
+                                movingAvg = 0.7 * movingAvg + 0.3 * event.audioLevel;
+                            }
+
+                            // 1.5 scaling to map the -30 - 0 dBm range to [0,1]
+                            var logLevel = (Math.log(movingAvg) / Math.LN10) / 1.5 + 1;
+                            logLevel = Math.min(Math.max(logLevel, 0), 1);
+                            (document.getElementById('studentAudioLevel') as HTMLMeterElement).value = logLevel;
+                        });
+                        pubSession.publish(this.audioPublisher, (err: any) => {
+                            if (err) console.error('Publishing audio error:', err)
+                        });
+                    });
+
+                this.screenPublisher = OT.initPublisher(document.querySelector('#student_publisher_video') as HTMLElement, {
+                    width: 80, height: 48, publishVideo: true, publishAudio: this.state.muteAudio, videoSource: 'screen', audioSource: null
+                });
+                pubSession.publish(this.screenPublisher, (err: any) => {
+                    if (err) console.error('Publishing video error:', err)
+                });
             });
         });
+    }
+
+    handleMuteClick() {
+        const { muteAudio } = this.state;
+        if (this.audioPublisher) this.audioPublisher.publishAudio(muteAudio);
+        this.setState({ muteAudio: !muteAudio });
     }
 
     retrieveMessageHistory() {
@@ -183,13 +223,6 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
         //$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
     }
 
-    handleStartCall(e: any) {
-        Util.POSTUser('/register');
-        if (session.remote_link) {
-            window.open(session.remote_link + "?sl=");
-        }
-    }
-
     handleNeedHelp(e: any) {
         Util.POST('/help', {
             studentId: Util.getStudentId(),
@@ -212,8 +245,8 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
     }
 
     render() {
-        const { iframeUrl, sidebarOpen, messages } = this.state;
-        const { full_name, user_image, remote_link, user_color, user_initials } = session;
+        const { iframeUrl, sidebarOpen, messages, muteAudio } = this.state;
+        const { full_name, user_image, user_color, user_initials } = session;
 
         if (window.location.hash && Util.isInstructor()) {
             // Redirect to SNAP present
@@ -235,26 +268,29 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             <div className={`main-body ${sidebarOpen ? 'sidebar-visible' : ''}`}>
                 <Menu inverted borderless className="starter-menu">
                     <Menu.Menu position='left'>
+                        <meter min="0" max="1" id="studentAudioLevel" />
+                        <div className="student-publisher" id="student_publisher_video"></div>
                         <Menu.Item>
-                            {user_image ? <Image spaced="right" avatar src={user_image} /> :
-                                <div className='ui avatar right spaced image no-user-avatar' style={{ backgroundColor: user_color || '#512DA8' }}>{user_initials}</div>} {full_name}
+                            <UserAvatar avatarUrl={user_image} color={user_color} initials={user_initials} fullName={full_name} /> {full_name}
+                        </Menu.Item>
+                        <Menu.Item name={muteAudio ? 'microphone slash' : 'microphone'} onClick={this.handleMuteClick.bind(this)}>
+                            <Icon name={muteAudio ? 'microphone slash' : 'microphone'} />
+                        </Menu.Item>
+                        <Menu.Item>
+                            <div className="student-publisher" id="student_publisher_audio" ></div>
                         </Menu.Item>
                     </Menu.Menu>
-                    {remote_link ?
-                        <Menu.Item>
-                            <Button className="raise-hand" size='mini' color="green" icon labelPosition='left' onClick={this.handleStartCall}><Icon name='call' /> Start Call</Button>
-                        </Menu.Item>
-                        : undefined}
                     <Menu.Item>
                         <Button className="raise-hand" size='mini' color="yellow" icon labelPosition='left' onClick={this.handleNeedHelp}><Icon name='hand pointer' />Raise Hand</Button>
                     </Menu.Item>
                     <Menu.Item onClick={this.handleOpenSidebar.bind(this)}>
-                        <Icon name='sidebar' />Messages
+                        <Icon name='comments' />Chat
                         {unreadMessageCount > 0 ? <Label size="small" className='white'>{unreadMessageCount}</Label> : undefined}
                     </Menu.Item>
                 </Menu>
                 <div className="frame-body">
                     <Frame url={snapUrl} />
+                    <TeacherFrame />
                 </div>
             </div>
             <div className={`main-sidebar ${sidebarOpen ? 'sidebar-visible' : ''}`}>

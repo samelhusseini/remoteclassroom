@@ -78,7 +78,9 @@ class Setting(ndb.Model):
 class Course(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     courseId = ndb.StringProperty(indexed=True, required=True)
-
+    teacherName = ndb.StringProperty(indexed=False)
+    courseName = ndb.StringProperty(indexed=False, default='Untitled Class')
+    appUrls = ndb.StringProperty(indexed=False, repeated=True)
 
 class Student(ndb.Model): 
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -91,12 +93,25 @@ class Student(ndb.Model):
     color = ndb.StringProperty(indexed=False)
     
     avatarUrl = ndb.StringProperty(indexed=False)
-    primaryRemoteLink = ndb.StringProperty(indexed=False)
-    secondaryRemoteLink = ndb.StringProperty(indexed=False)
+
+    opentokSessionId = ndb.StringProperty(indexed=False)
+    opentokToken = ndb.StringProperty(indexed=False)
+
+    def info(self):
+        return {
+            'avatarUrl': self.avatarUrl,
+            'fullName': self.fullName,
+            'initials': self.initials,
+            'color': self.color
+        }
 
     @classmethod
     def get_students_by_course(cls, courseId):
         return json.dumps([l.to_dict() for l in cls.query(ndb.AND(cls.courseId == courseId, cls.role == 'STUDENT')).order(cls.fullName).fetch()], cls=DateTimeEncoder)
+
+    @classmethod
+    def get_teacher_by_course(cls, courseId):
+        return cls.query(ndb.AND(cls.courseId == courseId, cls.role == 'TEACHER')).fetch()[0]
 
 class SourceCode(ndb.Model):
     studentKey = ndb.StringProperty(indexed=True, required=True)

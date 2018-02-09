@@ -48,7 +48,33 @@ export namespace Util {
         })
     }
 
+    function getHiddenProp() {
+        var prefixes = ['webkit', 'moz', 'ms', 'o'];
+
+        // if 'hidden' is natively supported just return it
+        if ('hidden' in document) return 'hidden';
+
+        // otherwise loop over all the known prefixes until we find one
+        for (var i = 0; i < prefixes.length; i++) {
+            if ((prefixes[i] + 'Hidden') in document)
+                return prefixes[i] + 'Hidden';
+        }
+
+        // otherwise it's not supported
+        return null;
+    }
+
+    export function isHidden() {
+        var prop = getHiddenProp();
+        if (!prop) return false;
+
+        return (document as any)[prop];
+    }
+
     export function showNotification(title: string, message: string, icon: string) {
+        const hidden = isHidden();
+        if (!hidden) return;
+
         if ((Notification as any).permission !== "granted")
             Notification.requestPermission();
         else {
@@ -71,9 +97,9 @@ export namespace Util {
     // leading edge, instead of the trailing.
     export function debounce(func: Function, wait: number, immediate?: boolean) {
         let timeout: any;
-        return function() {
+        return function () {
             let context = this, args = arguments;
-            let later = function() {
+            let later = function () {
                 timeout = null;
                 if (!immediate) func.apply(context, args);
             };

@@ -29,8 +29,6 @@ declare var session: RemoteSession;
 
 export interface UserDetailProps {
     user: RemoteUser;
-    isOnline: boolean;
-    channel: any;
     messages: any[];
     sendMessage: (to: RemoteUser, message: string) => void;
     messagesLoaded?: boolean;
@@ -49,18 +47,12 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
     constructor(props: UserDetailProps) {
         super(props);
         this.state = {
-            isMuted: true
-        }
+            isMuted: false
+        };
     }
 
-    mute() {
-        this.setState({ isMuted: true });
-        this.props.mute.call(this);
-    }
-
-    unmute() {
-        this.setState({ isMuted: false });
-        this.props.unmute.call(this);
+    toggleMute() {
+        this.setState({ isMuted: !this.state.isMuted });
     }
 
     render() {
@@ -71,8 +63,8 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
             <Grid padded>
                 <Grid.Row>
                     <Grid.Column width={11}>
-                        <Screen channel={this.props.channel} studentId={this.props.user.studentId} isOnline={this.props.isOnline} connect={connect} disconnect={disconnect} />
-                        {isMuted ? <Button circular large icon='unmute' onClick={this.unmute.bind(this)} /> : <Button circular large icon='mute' onClick={this.mute.bind(this)} />}
+                        <Screen opentok_session_id={this.props.user.opentokSessionId} opentok_token={this.props.user.opentokToken} audioVolume={this.state.isMuted ? 0 : 100} />
+                        <Button circular large icon={isMuted ? 'unmute' : 'mute'} onClick={() => this.toggleMute()} />
                     </Grid.Column>
                     <Grid.Column width={5} className="chat-column">
                         <Segment className="chat" basic={true}>

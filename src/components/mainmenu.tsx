@@ -30,7 +30,7 @@ export class MainMenu extends React.Component<MainMenuProps, {}> {
 
     render() {
         const { activeItem } = this.props;
-        const { full_name, user_image, remote_link } = session;
+        const { full_name, user_image } = session;
 
         return <Menu fixed='top' inverted icon='labeled' className="main-menu">
             <Menu.Menu position='left'>

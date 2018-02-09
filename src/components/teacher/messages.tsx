@@ -5,7 +5,7 @@ import Moment from 'react-moment';
 
 import {
     Grid,
-    Comment,
+    Feed,
     TextArea,
     Checkbox,
     Button,
@@ -20,6 +20,8 @@ import {
 
 import Util from '../../utils/util';
 
+
+import { UserAvatar } from "../common/useravatar";
 
 declare var Pusher: any;
 declare var config: RemoteConfig;
@@ -61,52 +63,65 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
     render() {
         const { messages } = this.props;
 
+        // Mark all messages as read.
+        messages.forEach(m => m.read = true);
+
         return <div className="teachermessages">
-            <Comment.Group>
+            <Feed>
                 {messages.map((message) =>
                     message.type == "ping" && (
-                        <Comment>
-                            <Comment.Avatar src={message.avatarUrl} />
-                            <Comment.Content>
-                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                <Comment.Metadata>
-                                    <div><Moment fromNow utc>{message.date}</Moment></div>
-                                </Comment.Metadata>
-                                <Comment.Text>
-                                    <Card color='blue' fluid>
-                                        <Card.Content></Card.Content>
-                                    </Card>
-                                </Comment.Text>
-                            </Comment.Content>
-                        </Comment>) ||
+                        <Feed.Event>
+                            <Feed.Label>
+                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                            </Feed.Label>
+                            <Feed.Content>
+                                <Feed.Summary>
+                                    <Feed.User>{message.info.fullName}</Feed.User> raised their hand
+                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                </Feed.Summary>
+                            </Feed.Content>
+                        </Feed.Event>) ||
+                    message.type == "help" && (
+                        <Feed.Event>
+                            <Feed.Label>
+                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                            </Feed.Label>
+                            <Feed.Content>
+                                <Feed.Summary>
+                                    <Feed.User>{message.info.fullName}</Feed.User> raised his/her hand
+                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                </Feed.Summary>
+                            </Feed.Content>
+                        </Feed.Event>) ||
                     message.type == "text" && (
-                        <Comment>
-                            <Comment.Avatar src={message.avatarUrl} />
-                            <Comment.Content>
-                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                <Comment.Metadata>
-                                    <div><Moment fromNow utc>{message.date}</Moment></div>
-                                </Comment.Metadata>
-                                <Comment.Text>{message.content}</Comment.Text>
-                            </Comment.Content>
-                        </Comment>) ||
+                        <Feed.Event>
+                            <Feed.Label>
+                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                            </Feed.Label>
+                            <Feed.Content>
+                                <Feed.Summary>
+                                    <Feed.User>{message.info.fullName}</Feed.User>
+                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                </Feed.Summary>
+                                <Feed.Extra text>
+                                    {message.content}
+                                </Feed.Extra>
+                            </Feed.Content>
+                        </Feed.Event>) ||
                     message.type == "link" && (
-                        <Comment>
-                            <Comment.Avatar src={message.avatarUrl} />
-                            <Comment.Content>
-                                <Comment.Author as='a'>{message.fullName}</Comment.Author>
-                                <Comment.Metadata>
-                                    <div><Moment fromNow utc>{message.date}</Moment></div>
-                                </Comment.Metadata>
-                                <Comment.Text>
-                                    <Card color='orange' fluid>
-                                        <Card.Content><a href='http://www.google.com'> www.google.com</a></Card.Content>
-                                    </Card>
-                                </Comment.Text>
-                            </Comment.Content>
-                        </Comment>)
+                        <Feed.Event>
+                            <Feed.Label>
+                                <UserAvatar avatarUrl={message.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.fullName} />
+                            </Feed.Label>
+                            <Feed.Content>
+                                <Feed.Summary>
+                                    <Feed.User>{message.info.fullName}</Feed.User> raised their hand
+                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                </Feed.Summary>
+                            </Feed.Content>
+                        </Feed.Event>)
                 )}
-            </Comment.Group>
+            </Feed>
 
             <Form>
                 <Form.Group>

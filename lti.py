@@ -10,10 +10,9 @@ import settings
 import json
 
 import logging
-import urllib
 
 from common import app, p, pusher_key_config
-from model import Log, Setting, Student, SourceCode, entity_to_dict, DateTimeJSONEncoder
+from model import Log, Setting, Student, entity_to_dict, DateTimeJSONEncoder
 
 from common import feedUpdated, newMessage, newStudentMessage, registerUpdated, configChanged, loadedUpdated, generate_color
 
@@ -159,8 +158,6 @@ def student(lti=lti):
     }
     if session['roles'] == "Student":
         student = ndb.Key('Student', session['course_id'] + session['user_id']).get()
-        if (student and student.primaryRemoteLink):
-            jsonsession['remote_link'] = json.dumps(student.primaryRemoteLink).replace('"', '')
         jsonsession['user_initials'] = student.initials
         host = app.config.get('host')
         trigger_loaded(session['course_id'], session['user_id'])
@@ -212,8 +209,6 @@ def launch_class(lti=lti):
 
     if 'Learner' in roles.split(','):
         student = ndb.Key('Student', session['course_id'] + session['user_id']).get()
-        if (student and student.primaryRemoteLink):
-            return redirect(json.dumps(student.primaryRemoteLink).replace('"', ''))
 
     if 'Instructor' in roles.split(','):
         session['roles'] = 'Instructor'
@@ -342,8 +337,7 @@ def get_messages(lti=lti):
         messagefeed["date"] = DateTimeJSONEncoder().encode(message.date).replace('"', '')
         student = ndb.Key('Student', courseId + (message.teacher if message.teacher else message.student)).get()
         if (student):
-            messagefeed["fullName"] = student.fullName
-            messagefeed["avatarUrl"] = student.avatarUrl
+            messagefeed['info'] = student.info()
         messagefeeds.append(messagefeed)
     return json.dumps(messagefeeds)
 
@@ -363,8 +357,7 @@ def get_student_messages(lti=lti):
         student = ndb.Key('Student', courseId + (message.teacher if message.teacher else message.student)).get()
         
         if (student):
-            messagefeed["fullName"] = student.fullName
-            messagefeed["avatarUrl"] = student.avatarUrl
+            messagefeed['info'] = student.info()
         messagefeeds.append(messagefeed)
     return json.dumps(messagefeeds)
 
@@ -392,9 +385,8 @@ def new_student_message(lti=lti):
         'courseId': courseId,
         'id': message.key.id(),
         'type': 'text',
-        'avatarUrl': avatarUrl,
         'content': text,
-        'fullName': fullName,
+        'info': student.info(),
         'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
     })
     newMessage(courseId, {
@@ -402,9 +394,8 @@ def new_student_message(lti=lti):
         'courseId': courseId,
         'id': message.key.id(),
         'type': 'text',
-        'avatarUrl': avatarUrl,
+        'info': student.info(),
         'content': text,
-        'fullName': fullName,
         'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
     })
     return "Message received"
@@ -431,17 +422,14 @@ def new_teacher_message(lti=lti):
     message.teacher = teacherId
     message.put()
 
-    teacherFullName = teacher.fullName if teacher else 'Unknown teacher'
-    avatarUrl = student.avatarUrl if student else ''
-
     newStudentMessage(courseId, studentId, {
         'student': teacherId,
         'courseId': courseId,
         'id': message.key.id(),
         'type': 'text',
-        'avatarUrl': avatarUrl,
         'content': text,
-        'fullName': teacherFullName,
+        'info': teacher.info(),
+        'teacherinfo': student.info(),
         'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
     })
     newMessage(courseId, {
@@ -449,9 +437,9 @@ def new_teacher_message(lti=lti):
         'courseId': courseId,
         'id': message.key.id(),
         'type': 'text',
-        'avatarUrl': avatarUrl,
         'content': text,
-        'fullName': teacherFullName,
+        'info': teacher.info(),
+        'teacherinfo': student.info(),
         'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
     })
     return "Message received"
@@ -480,9 +468,8 @@ def new_message(lti=lti):
         'courseId': courseId,
         'id': message.key.id(),
         'type': 'text',
-        'avatarUrl': avatarUrl,
         'content': text,
-        'fullName': fullName,
+        'info': student.info(),
         'date': ''
     })
     return "Message received"
@@ -508,32 +495,20 @@ def delete_user(lti=lti):
     configChanged(courseId, 'config', 'users')
     return "Deleted"
 
-@app.route("/update_primary", methods=['POST'])
+@app.route("/update_course", methods=['POST'])
 @auth(request='session', error=error, role='staff', app=app)
-def update_primary(lti=lti):
-#def update_primary():
+def update_course(lti=lti):
+#def update_settings():
     content = request.get_json(silent=True)
-    studentId = cgi.escape(content['studentId'])
     courseId = cgi.escape(content['courseId'])
-    primaryLink = cgi.escape(content['primaryLink'])
-    student = ndb.Key('Student', courseId + studentId).get()
-    student.primaryRemoteLink = primaryLink
-    student.put()
-    configChanged(courseId, 'config', 'users')
-    return "Updated primary"
+    courseName = cgi.escape(content['courseName'])
 
-@app.route("/update_secondary", methods=['POST'])
-@auth(request='session', error=error, role='staff', app=app)
-def update_secondary(lti=lti):
-    content = request.get_json(silent=True)
-    studentId = cgi.escape(content['studentId'])
-    courseId = cgi.escape(content['courseId'])
-    secondaryLink = cgi.escape(content['secondaryLink'])
-    student = ndb.Key('Student', courseId + studentId).get()
-    student.secondaryRemoteLink = secondaryLink
-    student.put()
-    configChanged(courseId, 'config', 'users')
-    return "Updated primary"
+    course = ndb.Key('Course', courseId).get()
+    if courseName:
+        course.courseName = courseName
+        configChanged(courseId, 'courseName', courseName)
+    course.put()
+    return "Updated course"
 
 @app.route("/update_settings", methods=['POST'])
 @auth(request='session', error=error, role='staff', app=app)
@@ -571,6 +546,16 @@ def trigger_help(lti=lti):
         'fullName': fullName,
         'avatarUrl': avatarUrl
     })
+
+    newMessage(courseId, {
+        'student': studentId,
+        'courseId': courseId,
+        'id': help.key.id(),
+        'type': 'help',
+        'content': '',
+        'info': student.info(),
+        'date': DateTimeJSONEncoder().encode(help.date).replace('"', '')
+    })
     return "Help received"
 
 @app.route("/register", methods=['POST'])
@@ -596,103 +581,3 @@ def trigger_loaded(courseId, studentId):
     loadedUpdated(courseId, {
         'student': studentId
     })
-
-# SNAP CLOUD
-@app.route("/SnapCloud", methods=['POST'])
-def SNAP_login():
-    content = request.get_json(silent=True)
-    username = cgi.escape(content["__u"])
-    password = cgi.escape(content["__h"])
-    if (password == "CHANGEME"):
-        return Response(render_template(
-            'SNAP_API.txt'),
-            headers={'MioCracker': username}
-        )
-    return ""
-
-@app.route("/SnapCloudRawPublic", methods=['GET'])
-def SNAP_Public():
-    Username = cgi.escape(request.args.get('Username'))
-    ProjectName = cgi.escape(request.args.get('ProjectName'))
-    code = ndb.Key('SourceCode', Username + ProjectName).get()
-    sourceCode = str(code.sourceCode) if code.sourceCode is not None else ""
-    media = str(code.media) if code.media is not None else "<media name=\"" + ProjectName + "\" app=\"Snap! 4.0, http://snap.berkeley.edu\" version=\"1\"></media>"
-    return Response("<snapdata>" + sourceCode + media + "</snapdata>", headers={'Content-Type': 'text/html; charset=UTF-8'})
-
-@app.route("/SnapCloud/<URL>", methods=['GET', 'POST'])
-def SNAP_Service(URL):
-    # Save project
-    studentKey = request.headers['MioCracker'] #'8791939'
-
-    if (URL[0:4] == ".1.0"):
-        ProjectName = cgi.escape(request.form["ProjectName"])
-        Source = request.form["SourceCode"]
-        Media = request.form["Media"]
-        SourceSize = cgi.escape(request.form["SourceSize"])
-        MediaSize = cgi.escape(request.form["MediaSize"])
-        key = studentKey + ProjectName
-        code = SourceCode.get_or_insert(key, studentKey=studentKey, projectName=ProjectName, sourceCode=Source)
-        code.sourceCode = Source
-        code.media = Media
-        code.sourceSize = SourceSize
-        code.mediaSize = MediaSize
-        code.put()
-        return key
-    # Get project list
-    if (URL[0:4] == ".2.0"):
-        # Retrieve all code
-        all_code = SourceCode.get_all(studentKey)
-        retVal = []
-        for code in all_code:
-            projectName = code.projectName.encode('utf-8')
-            updated = ""
-            notes = ""
-            logging.info(projectName)
-            retVal.append("ProjectName=" + urllib.quote(projectName) + "&Updated=" + updated + "&Notes=" + notes + "&Public=true")
-            logging.info(retVal)
-        return " ".join(retVal)
-    # Get project
-    if (URL[0:4] == ".3.0"):
-        return "Not Supported"
-    # Get raw project
-    if (URL[0:4] == ".4.0"):
-        ProjectName = cgi.escape(request.form["ProjectName"])
-        code = ndb.Key('SourceCode', studentKey + ProjectName).get()
-        sourceCode = str(code.sourceCode) if code.sourceCode is not None else ""
-        media = str(code.media) if code.media is not None else "<media name=\"" + ProjectName + "\" app=\"Snap! 4.0, http://snap.berkeley.edu\" version=\"1\"></media>"
-        return Response("<snapdata>" + sourceCode + media + "</snapdata>", headers={'Content-Type': 'text/plain'})
-    # Delete project
-    if (URL[0:4] == ".5.0"):
-        ProjectName = cgi.escape(request.form["ProjectName"])
-        code = ndb.Key('SourceCode', studentKey + ProjectName)
-        code.delete()
-        return ""
-    # Publish project
-    if (URL[0:4] == ".6.0"):
-        return "Not supported"
-    # Unpublish project
-    if (URL[0:4] == ".7.0"):
-        return "Not supported"
-    # Logout
-    if (URL[0:4] == ".8.0"):
-        return "Not supported"
-    # Change password
-    if (URL[0:4] == ".9.0"):
-        return "Not supported"
-    return "Unknown API call"
-
-
-@app.route("/pusher/auth", methods=['POST'])
-@auth(request='session', error=error, role='any', app=app)
-def pusher_authentication(lti=lti):
-  auth = p.authenticate(
-    channel=request.form['channel_name'],
-    socket_id=request.form['socket_id'],
-    custom_data={
-      u'user_id': session['user_id'],
-      u'user_info': {
-        u'twitter': u'@pusher'
-      }
-    }
-  )
-  return json.dumps(auth)

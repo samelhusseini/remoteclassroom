@@ -13,10 +13,13 @@
   },
   "homepage": "https://github.com/samelhusseini/remoteclass#readme",
   "dependencies": {
+    "@opentok/client": "^2.13.0",
     "awesome-typescript-loader": "^3.4.1",
     "js-cookie": "^2.2.0",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.13",
+    "opentok": "^2.6.1",
+    "opentok-react": "^0.7.0",
     "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -25,12 +28,12 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.6.0",
     "semantic-ui-react": "^0.77.2",
-    "simplewebrtc": "^3.0.1",
     "source-map-loader": "^0.2.1",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
+    "@types/opentok": "^2.3.4",
     "@types/js-cookie": "^2.1.0",
     "@types/query-string": "^5.0.1",
     "@types/react": "^16.0.35",

@@ -20,6 +20,8 @@ export interface JoinViewState {
 export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
 
     private courseid: string;
+    private courseName: string;
+    private teacherName: string;
 
     constructor(props: JoinViewProps) {
         super(props);
@@ -31,6 +33,8 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
     componentWillMount() {
         const parsed = queryString.parse(location.search);
         this.courseid = parsed['launch'];
+        this.courseName = parsed['name'];
+        this.teacherName = parsed['teacher'];
     }
 
     componentDidMount() {
@@ -55,34 +59,34 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
 
     userNameChanged(e: Event) {
         const val = (e.target as HTMLInputElement).value;
-        this.setState({userName: val});
+        this.setState({ userName: val });
     }
 
     render() {
         return <Segment textAlign='center' className="starter-background" vertical>
-        <Container text>
-              <Header
-                as='h1'
-                content='Welcome to COMP3621'
-                inverted
-                style={{ fontSize: '3em', fontWeight: 'normal', marginBottom: 0, marginTop: '3em' }}
-              />
-              <Header
-                as='h2'
-                content='Instructed by Lisa Smith'
-                inverted
-                style={{ fontSize: '1.9em', fontWeight: 'normal', marginTop: '0.5em' }}
-              />
-               <Divider inverted size='large'/>
-              <Header
-                as='h2'
-                content='Enter your name to get started'
-                inverted
-                style={{ fontSize: '1.4em', fontWeight: 'normal' }}
-              />
-              <p><Input size='large'  focus placeholder='Your Name' required ref="username" value={this.state.userName} onChange={this.userNameChanged.bind(this)}/></p>
-              <Button primary size='huge' onClick={() => this.joinClass()}> Get Started <Icon name='arrow right' /></Button>
+            <Container text>
+                <Header
+                    as='h1'
+                    content={`Welcome to ${this.courseName}`}
+                    inverted
+                    style={{ fontSize: '3em', fontWeight: 'normal', marginBottom: 0, marginTop: '3em' }}
+                />
+                <Header
+                    as='h2'
+                    content={`Instructed by ${this.teacherName}`}
+                    inverted
+                    style={{ fontSize: '1.9em', fontWeight: 'normal', marginTop: '0.5em' }}
+                />
+                <Divider inverted size='large' />
+                <Header
+                    as='h2'
+                    content='Enter your name to get started'
+                    inverted
+                    style={{ fontSize: '1.4em', fontWeight: 'normal' }}
+                />
+                <p><Input size='large' focus placeholder='Your Name' required ref="username" value={this.state.userName} onChange={this.userNameChanged.bind(this)} /></p>
+                <Button primary size='huge' onClick={() => this.joinClass()}> Get Started <Icon name='arrow right' /></Button>
             </Container>
-          </Segment>;
+        </Segment>;
     }
 }
