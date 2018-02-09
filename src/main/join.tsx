@@ -21,6 +21,7 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
 
     private courseid: string;
     private courseName: string;
+    private teacherName: string;
 
     constructor(props: JoinViewProps) {
         super(props);
@@ -33,6 +34,7 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
         const parsed = queryString.parse(location.search);
         this.courseid = parsed['launch'];
         this.courseName = parsed['name'];
+        this.teacherName = parsed['teacher'];
     }
 
     componentDidMount() {
@@ -71,7 +73,7 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
                 />
                 <Header
                     as='h2'
-                    content='Instructed by Lisa'
+                    content={`Instructed by ${this.teacherName}`}
                     inverted
                     style={{ fontSize: '1.9em', fontWeight: 'normal', marginTop: '0.5em' }}
                 />

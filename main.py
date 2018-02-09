@@ -130,7 +130,7 @@ def create():
 
         # Add course to database
         key = courseId
-        course = Course.get_or_insert(key, courseId=courseId)
+        course = Course.get_or_insert(key, courseId=courseId, teacherName=fullName)
         course.put()
 
         # Add teacher to course
@@ -239,12 +239,13 @@ def launch_by_id(launch_id):
     courseId = DEFAULT_COURSE_PREFIX + launch_id
     course = ndb.Key('Course', courseId).get()
     courseName = course.courseName
+    teacherName = course.teacherName
 
     if not course:
         return "Error: No such course code"
 
     if 'remote_auth' not in request.cookies:
-        return redirect('/main?launch=' + launch_id + '&name=' + urllib.quote(courseName) + ' #join')
+        return redirect('/main?launch=' + launch_id + '&name=' + urllib.quote(courseName) + '&teacher=' + urllib.quote(teacherName) + ' #join')
         
     auth = json.loads(request.cookies.get('remote_auth'))
     userId = request.cookies.get('remote_userid')
@@ -258,7 +259,7 @@ def launch_by_id(launch_id):
     opentok_token = auth[launch_id]['opentok_token'] if launch_id in auth else ''
 
     if not role:
-        return redirect('/main?launch='+launch_id+'#join')
+        return redirect('/main?launch=' + launch_id + '&name=' + urllib.quote(courseName) + '&teacher=' + urllib.quote(teacherName) + ' #join')
     
     session['opentok_session_id'] = opentok_session_id
 

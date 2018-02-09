@@ -78,7 +78,9 @@ class Setting(ndb.Model):
 class Course(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     courseId = ndb.StringProperty(indexed=True, required=True)
+    teacherName = ndb.StringProperty(indexed=False)
     courseName = ndb.StringProperty(indexed=False, default='Untitled Class')
+    appUrls = ndb.StringProperty(indexed=False, repeated=True)
 
 class Student(ndb.Model): 
     date = ndb.DateTimeProperty(auto_now_add=True)
