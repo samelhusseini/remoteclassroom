@@ -316,8 +316,6 @@ def show_starter():
         'role': 'Instructor'
     }
     student = ndb.Key('Student', jsonsession['course_id'] + jsonsession['user_id']).get()
-    if (student and student.primaryRemoteLink):
-        jsonsession['remote_link'] = json.dumps(student.primaryRemoteLink).replace('"', '')
     return render_template('student.html', jsconfig=jsonconfig, jssession=jsonsession, host=host)
 
 

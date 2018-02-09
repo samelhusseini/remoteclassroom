@@ -5,7 +5,6 @@ import * as ReactDOM from "react-dom";
 
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
-import { MainView } from './main';
 import { AdminMainView } from './adminmain';
 import { SettingsView } from './settings';
 

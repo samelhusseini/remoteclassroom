@@ -12,7 +12,6 @@ interface RemoteSession {
     user_color: string;
     user_initials: string;
     host: string;
-    remote_link?: string;
     role?: string;
     launch_id: string;
     opentok_api_key: string;
@@ -30,8 +29,6 @@ interface RemoteUser {
     color: string;
     avatarUrl: string;
     role: string;
-    primaryRemoteLink: string;
-    secondaryRemoteLink: string;
     opentokSessionId: string;
     opentokToken: string;
 }

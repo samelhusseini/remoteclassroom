@@ -62,7 +62,7 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
 
         return <div className='messages-sidebar'>
 
-            <Header>Messages</Header>
+            <Header>Chat</Header>
             <div id="scrolling-messages" className="scrolling-messages">
                 <Grid padded>
                     <Grid.Row>

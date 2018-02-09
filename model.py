@@ -90,8 +90,6 @@ class Student(ndb.Model):
     color = ndb.StringProperty(indexed=False)
     
     avatarUrl = ndb.StringProperty(indexed=False)
-    primaryRemoteLink = ndb.StringProperty(indexed=False)
-    secondaryRemoteLink = ndb.StringProperty(indexed=False)
 
     opentokSessionId = ndb.StringProperty(indexed=False)
     opentokToken = ndb.StringProperty(indexed=False)

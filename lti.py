@@ -158,8 +158,6 @@ def student(lti=lti):
     }
     if session['roles'] == "Student":
         student = ndb.Key('Student', session['course_id'] + session['user_id']).get()
-        if (student and student.primaryRemoteLink):
-            jsonsession['remote_link'] = json.dumps(student.primaryRemoteLink).replace('"', '')
         jsonsession['user_initials'] = student.initials
         host = app.config.get('host')
         trigger_loaded(session['course_id'], session['user_id'])
@@ -211,8 +209,6 @@ def launch_class(lti=lti):
 
     if 'Learner' in roles.split(','):
         student = ndb.Key('Student', session['course_id'] + session['user_id']).get()
-        if (student and student.primaryRemoteLink):
-            return redirect(json.dumps(student.primaryRemoteLink).replace('"', ''))
 
     if 'Instructor' in roles.split(','):
         session['roles'] = 'Instructor'
@@ -498,33 +494,6 @@ def delete_user(lti=lti):
     student_key.delete()
     configChanged(courseId, 'config', 'users')
     return "Deleted"
-
-@app.route("/update_primary", methods=['POST'])
-@auth(request='session', error=error, role='staff', app=app)
-def update_primary(lti=lti):
-#def update_primary():
-    content = request.get_json(silent=True)
-    studentId = cgi.escape(content['studentId'])
-    courseId = cgi.escape(content['courseId'])
-    primaryLink = cgi.escape(content['primaryLink'])
-    student = ndb.Key('Student', courseId + studentId).get()
-    student.primaryRemoteLink = primaryLink
-    student.put()
-    configChanged(courseId, 'config', 'users')
-    return "Updated primary"
-
-@app.route("/update_secondary", methods=['POST'])
-@auth(request='session', error=error, role='staff', app=app)
-def update_secondary(lti=lti):
-    content = request.get_json(silent=True)
-    studentId = cgi.escape(content['studentId'])
-    courseId = cgi.escape(content['courseId'])
-    secondaryLink = cgi.escape(content['secondaryLink'])
-    student = ndb.Key('Student', courseId + studentId).get()
-    student.secondaryRemoteLink = secondaryLink
-    student.put()
-    configChanged(courseId, 'config', 'users')
-    return "Updated primary"
 
 @app.route("/update_settings", methods=['POST'])
 @auth(request='session', error=error, role='staff', app=app)
