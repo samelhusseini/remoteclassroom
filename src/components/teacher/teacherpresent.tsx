@@ -44,12 +44,12 @@ export class TeacherPresent extends React.Component<TeacherPresentProps, Teacher
     private sessionEventHandlers: any;
     private publisherEventHandlers: any;
     private subscriberEventHandlers: any;
+    private pubSession: any;
 
     private credentials: TokBoxCredentials = {
         apiKey: session.opentok_api_key,
         sessionId: session.opentok_session_id,
         token: session.opentok_token
-
     };
 
     constructor(props: TeacherPresentProps) {
@@ -75,44 +75,75 @@ export class TeacherPresent extends React.Component<TeacherPresentProps, Teacher
                 this.setState({connection: 'Reconnecting'});
             },
         };
-
-        this.publisherEventHandlers = {
-            accessDenied: () => {
-                console.log('User denied access to media source');
-            },
-            streamCreated: () => {
-                console.log('Publisher stream created');
-            },
-            streamDestroyed: ({reason}: { reason: string }) => {
-                console.log(`Publisher stream destroyed because: ${reason}`);
-            },
-        };
-
-        this.subscriberEventHandlers = {
-            videoEnabled: () => {
-                console.log('Subscriber video enabled');
-            },
-            videoDisabled: () => {
-                console.log('Subscriber video disabled');
-            },
-        };
     }
 
-    onSessionError = (error: OT.OTError) => {
-        this.setState({error});
-    };
+    componentDidMount() {
+        // this.connectSession();
+    }
 
-    onPublish = () => {
-        console.log('Publish Success');
-    };
+    toggleVideo() {
+        let {publishing} = this.state;
+        
+        publishing = !publishing;
+        
+        if (!publishing) {
+            this.disconnectSession();
+        } else {
+            this.connectSession();
+        }
 
-    onPublishError = (error: OT.OTError) => {
-        this.setState({error});
-    };
+        this.setState({ publishing });
+    }
 
-    toggleVideo = () => {
-        this.setState({publishing: !this.state.publishing});
-    };
+    connectSession() {
+        OT.getDevices((err, devices) => {
+            const audioDevices = devices.filter(device => device.kind === 'audioInput');
+            this.pubSession = OT.initSession(session.opentok_api_key, session.opentok_session_id);
+
+            this.pubSession.connect(session.opentok_token, (error: any) => {
+                if (error) {
+                    console.error('>>', error);
+                    return;
+                }
+
+                OT.getUserMedia({ audioSource: audioDevices[0].deviceId, videoSource: null })
+                    .then(stream => {
+                        const publisher1 = OT.initPublisher(document.querySelector('#teacher_publisher_audio') as HTMLElement, { 
+                            width: 100,
+                            height: 100,
+                            publishVideo: false,
+                            publishAudio: true,
+                            videoSource: null,
+                            audioSource: audioDevices[0].deviceId 
+                        });
+
+                        this.pubSession.publish(publisher1, (err: any) => console.error('Audio publishing error:', err));
+                    });
+
+                const publisher2 = OT.initPublisher(document.querySelector('#teacher_publisher_video') as HTMLElement, { 
+                    width: 100,
+                    height: 100,
+                    publishVideo: true,
+                    publishAudio: false,
+                    videoSource: 'screen',
+                    audioSource: null 
+                });
+
+                this.pubSession.publish(publisher2, (err: any) => console.error('Video publishing error:', err));
+            });
+        });
+    }
+
+    disconnectSession() {
+        if (this.pubSession) {
+            this.pubSession.off('streamCreated');
+            this.pubSession.disconnect();
+        }
+    }
+
+    componentWillUnmount() {
+        this.disconnectSession();
+    }
 
     render() {
         const {apiKey, sessionId, token} = this.credentials;
@@ -123,26 +154,10 @@ export class TeacherPresent extends React.Component<TeacherPresentProps, Teacher
                 <Card.Content textAlign='center'>
                     <Card.Header>
                         {publishing ?
-                            <OTSession
-                                apiKey={apiKey}
-                                sessionId={sessionId}
-                                token={token}
-                                onError={this.onSessionError}
-                                eventHandlers={this.sessionEventHandlers}
-                            >
-                                <OTPublisher
-                                    properties={{
-                                        publishVideo: true,
-                                        publishAudio: true,
-                                        width: 262,
-                                        height: 164,
-                                        videoSource: 'screen'
-                                    }}
-                                    onPublish={this.onPublish}
-                                    onError={this.onPublishError}
-                                    eventHandlers={this.publisherEventHandlers}
-                                />
-                            </OTSession> :
+                            <div className="presenting">
+                                <div id="teacher_publisher_audio"></div>
+                                <div id="teacher_publisher_video"></div>
+                            </div> :
                             <Icon size='massive' color='blue' name='browser'/>
                         }
                     </Card.Header>
@@ -158,7 +173,7 @@ export class TeacherPresent extends React.Component<TeacherPresentProps, Teacher
                     </Card.Description>
                 </Card.Content>
                 <Card.Content extra textAlign="center">
-                    <Button onClick={this.toggleVideo}
+                    <Button onClick={() => this.toggleVideo()}
                             color={publishing ? 'red' : 'green'}>{publishing ? 'End' : 'Start'} Presentation</Button>
                 </Card.Content>
             </Card>

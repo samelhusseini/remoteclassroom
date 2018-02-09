@@ -50,10 +50,9 @@ export class Frame extends React.Component<FrameProps, FrameState> {
                 if (event.stream.hasVideo) {
                     props.width = 800;
                     props.height = 600;
-                    props.insertMode = 'before';
                 }
 
-                const subscriber = subSession.subscribe(event.stream, 'subscriber', props, (err: any) => console.error('<<<', err));
+                const subscriber = subSession.subscribe(event.stream, document.querySelector('#student_subscriber') as HTMLElement, props, (err: any) => console.error('<<<', err));
 
                 subscriber.on('videoEnabled', (evt: any) => this.setState({ teacherSharing: true }));
                 subscriber.on('videoDisabled', (evt: any) => this.setState({ teacherSharing: false }));
@@ -76,12 +75,12 @@ export class Frame extends React.Component<FrameProps, FrameState> {
 
                 OT.getUserMedia({ audioSource: audioDevices[0].deviceId, videoSource: null })
                     .then(stream => {
-                        const publisher1 = OT.initPublisher('student-publisher-audio', { width: 100, height: 100, publishVideo: false, publishAudio: true, videoSource: null, audioSource: audioDevices[0].deviceId });
-                        pubSession.publish(publisher1, (err: any) => console.error('>>>1', err));
+                        const publisher1 = OT.initPublisher(document.querySelector('#student_publisher_audio') as HTMLElement, { width: 100, height: 100, publishVideo: false, publishAudio: true, videoSource: null, audioSource: audioDevices[0].deviceId });
+                        pubSession.publish(publisher1, (err: any) => console.error('Publishing audio error:', err));
                     });
                 
-                const publisher2 = OT.initPublisher('student-publisher-video', { width: 100, height: 100, publishVideo: true, publishAudio: false, videoSource: 'screen', audioSource: null });
-                pubSession.publish(publisher2, (err: any) => console.error('>>>2', err));
+                const publisher2 = OT.initPublisher(document.querySelector('#student_publisher_video') as HTMLElement, { width: 100, height: 100, publishVideo: true, publishAudio: false, videoSource: 'screen', audioSource: null });
+                pubSession.publish(publisher2, (err: any) => console.error('Publishing video error:', err));
             });
         });
     }
@@ -91,13 +90,13 @@ export class Frame extends React.Component<FrameProps, FrameState> {
         const {teacherSharing} = this.state;
 
         return <div className="student-view">
-            <div className="student-publisher" id="student-publisher-audio"></div>
-            <div className="student-publisher" id="student-publisher-video"></div>
-            <div className="student-subscriber" id="student-subscriber"></div>
-            {teacherSharing ? null :
+                <div className="student-sharing">
+                    <div className="student-publisher" id="student_publisher_audio"></div>
+                    <div className="student-publisher" id="student_publisher_video"></div>
+                    <div className={"student-subscriber " + (teacherSharing ? "hidden" : "")} id="student_subscriber"></div>
+                </div>
                 <iframe id="content-iframe" src={url}
                         sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
-            }
         </div>;
     }
 }

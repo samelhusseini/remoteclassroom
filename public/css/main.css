@@ -286,7 +286,7 @@ h3.actioned button:hover {
     right: 0;
 }
 
-.student-view, .student-view > :first-child {
+.student-view {
     height: 100%;
 }
 
@@ -381,8 +381,36 @@ h2.inlineEdit:hover {
     border: solid 2px #b2bec3;
 }
 
+#student-publisher-audio,
+#student-publisher-video,
+#teacher-publisher-audio,
+#teacher-publisher-video {
+    display: none;
+}
+
 .screen .OT_subscriber.OT_audio-only {
     visibility: hidden;
+    display: none;
+}
+
+#content-iframe {
+    position: absolute;
+}
+
+#student_subscriber {
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#student_subscriber.hidden {
     display: none;
 }
 
