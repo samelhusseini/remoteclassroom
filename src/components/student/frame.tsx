@@ -16,7 +16,8 @@ export interface FrameProps {
 }
 
 export interface FrameState {
-    audioDeviceId?: string;
+    audioSource?: any;
+    videoSource?: any;
     teacherSharing: boolean;
 }
 
@@ -25,56 +26,50 @@ export class Frame extends React.Component<FrameProps, FrameState> {
         super(props);
 
         this.state = {
-            audioDeviceId: null,
+            audioSource: null,
             teacherSharing: false
         };
 
+        // Promise
+        //     .all([
+        //         OT.getUserMedia({ videoSource: 'screen' }),
+        //         OT.getUserMedia({ videoSource: null })
+        //     ])
+        //     .then(([screenStream, audioStream]) => this.setState({ videoSource: screenStream.getVideoTracks()[0], audioSource: audioStream.getAudioTracks()[0] }));
+    }
+
+    componentDidMount() {
         OT.getDevices((err, devices) => {
             const audioDevices = devices.filter(device => device.kind === 'audioInput');
 
-            OT.getUserMedia({ audioSource: audioDevices[0].deviceId, videoSource: null });
+            const otSession = OT.initSession(session.opentok_api_key, session.opentok_session_id);
 
-            this.setState({ audioDeviceId: audioDevices[0].deviceId });
+            otSession.connect(session.opentok_token, (error: any) => {
+                if (error) {
+                    console.error('>>', error);
+                    return;
+                }
+
+                OT.getUserMedia({ audioSource: audioDevices[0].deviceId, videoSource: null })
+                    .then(stream => {
+                        const publisher1 = OT.initPublisher('publisherElement1', { width: 100, height: 100, publishVideo: false, publishAudio: true, videoSource: null, audioSource: audioDevices[0].deviceId });
+                        otSession.publish(publisher1, (err: any) => console.error('>>>1', err));
+                    });
+                
+                const publisher2 = OT.initPublisher('publisherElement2', { width: 100, height: 100, publishVideo: true, publishAudio: false, videoSource: 'screen', audioSource: null });
+                otSession.publish(publisher2, (err: any) => console.error('>>>2', err));
+            });
         });
     }
 
     render() {
         const { url } = this.props;
-        const { audioDeviceId, teacherSharing } = this.state;
+        const { videoSource, audioSource, teacherSharing } = this.state;
 
         return <div className="student-view">
-            {
-                teacherSharing ?
-                    <div>TEACHER IS SHARING</div> :
-                    null
-            }
-
-            <OTSession apiKey={session.opentok_api_key} sessionId={session.opentok_teacher_session_id} token={session.opentok_teacher_token}>
-                <OTStreams>
-                    <OTSubscriber properties={
-                        { 
-                            width: 800,
-                            height: 600,
-                            subscribeToAudio: true,
-                            subscribeToVideo: true,
-                            audioVolume: 100
-                        }
-                    }
-                    eventHandlers={
-                        {
-                            videoEnabled: () => this.setState({ teacherSharing: true }),
-                            videoDisabled: () => this.setState({ teacherSharing: false })
-                        }
-                    }
-                    />
-                </OTStreams>
-            </OTSession>
-
-            <OTSession apiKey={session.opentok_api_key} sessionId={session.opentok_session_id} token={session.opentok_token}>
-                <OTPublisher properties={{ publishVideo: true, publishAudio: true, width: 100, height: 100, videoSource: 'screen', audioSource: audioDeviceId }} />
-                
+                <div id="publisherElement1"></div>        
+                <div id="publisherElement2"></div>        
                 <iframe id="content-iframe" src={url} sandbox="allow-top-navigation allow-scripts allow-same-origin"></iframe>
-            </OTSession>
         </div>;
     }
 }

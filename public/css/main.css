@@ -374,9 +374,16 @@ h2.inlineEdit:hover {
 
 .ui.segment.screen {
     width: 100%;
-    padding-bottom: 40%;
+    min-height: 600px;
+    text-align: center;
+    padding: 1em;
     background: #dfe6e9;
     border: solid 2px #b2bec3;
+}
+
+.screen .OT_subscriber.OT_audio-only {
+    visibility: hidden;
+    display: none;
 }
 
 .ui.segment.screen .status {

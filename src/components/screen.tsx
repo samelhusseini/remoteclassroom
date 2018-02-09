@@ -18,28 +18,55 @@ export interface ScreenProps {
 }
 
 export class Screen extends React.Component<ScreenProps> {
+    otSession: any;
+
     constructor(props: ScreenProps) {
         super(props);
 
         this.state = {};
+    }
+
+    componentDidMount() {
+        const { opentok_session_id, opentok_token } = this.props;
+        const { opentok_api_key } = session;
+
+        this.otSession = OT.initSession(opentok_api_key, opentok_session_id);
+
+        this.otSession.on('streamCreated', (event: any) => {
+            let props: any = {
+                insertMode: 'append',
+                width: 100,
+                height: 100
+            };
+
+            if (event.stream.hasVideo) {
+                props.width = 800;
+                props.height = 600;
+                props.insertMode = 'before';
+            }
+
+            this.otSession.subscribe(event.stream, 'subscriber', props, (err: any) => console.error('<<<', err));
+        });
+
+        this.otSession.connect(opentok_token, (error: any) => {
+            if (error) {
+                console.error('>>', error);
+                return;
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.otSession.off('streamCreated');
+        this.otSession.disconnect();
     }
     
     render() {
         const { opentok_session_id, opentok_token } = this.props;
         const { opentok_api_key } = session;
 
-        console.log('student:', this.props, session);
-
         return <Segment className="screen">
-            <OTSession
-                apiKey={opentok_api_key}
-                sessionId={opentok_session_id}
-                token={opentok_token}
-            >
-                <OTStreams>
-                    <OTSubscriber properties={{ width: 800, height: 600, subscribeToAudio: true, subscribeToVideo: true, audioVolume: 100}} />
-                </OTStreams>
-            </OTSession>
+            <div id="subscriber"></div>
         </Segment>;
     }
 }
