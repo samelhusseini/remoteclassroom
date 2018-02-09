@@ -63,13 +63,13 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
         <Container text>
               <Header
                 as='h1'
-                content='Welcome to COMP3621'
+                content='Welcome to COMPSCIKIDS'
                 inverted
                 style={{ fontSize: '3em', fontWeight: 'normal', marginBottom: 0, marginTop: '3em' }}
               />
               <Header
                 as='h2'
-                content='Instructed by Lisa Smith'
+                content='Instructed by Lisa'
                 inverted
                 style={{ fontSize: '1.9em', fontWeight: 'normal', marginTop: '0.5em' }}
               />
