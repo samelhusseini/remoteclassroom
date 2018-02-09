@@ -290,6 +290,16 @@ h3.actioned button:hover {
     height: 100%;
 }
 
+.admin-workspace-detail-panel .presenting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-workspace-detail-panel .presenting #teacher_publisher_audio {
+    display: none;
+}
+
 .main-sidebar {
     position: absolute;
     top: 0;
