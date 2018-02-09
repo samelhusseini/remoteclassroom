@@ -432,8 +432,8 @@ def new_teacher_message(lti=lti):
         'id': message.key.id(),
         'type': 'text',
         'content': text,
-        'info': student.info(),
-        'teacherinfo': teacher.info(),
+        'info': teacher.info(),
+        'teacherinfo': student.info(),
         'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
     })
     newMessage(courseId, {
@@ -442,8 +442,8 @@ def new_teacher_message(lti=lti):
         'id': message.key.id(),
         'type': 'text',
         'content': text,
-        'info': student.info(),
-        'teacherinfo': teacher.info(),
+        'info': teacher.info(),
+        'teacherinfo': student.info(),
         'date': DateTimeJSONEncoder().encode(message.date).replace('"', '')
     })
     return "Message received"
