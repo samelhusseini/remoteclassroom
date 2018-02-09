@@ -501,12 +501,16 @@ def update_course(lti=lti):
 #def update_settings():
     content = request.get_json(silent=True)
     courseId = cgi.escape(content['courseId'])
-    courseName = cgi.escape(content['courseName'])
+    courseName = cgi.escape(content['courseName']) if 'courseName' in content else None
+    courseApps = cgi.escape(content['courseApps']) if 'courseApps' in content else None
 
     course = ndb.Key('Course', courseId).get()
     if courseName:
         course.courseName = courseName
-        configChanged(courseId, 'courseName', courseName)
+        configChanged(courseId, 'courseName', course.courseName)
+    if courseApps:
+        course.courseApps = [x.strip() for x in courseApps.split(',')]
+        configChanged(courseId, 'courseApps', course.courseApps)
     course.put()
     return "Updated course"
 

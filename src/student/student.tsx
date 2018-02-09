@@ -44,7 +44,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
     constructor(props: MainAppProps) {
         super(props);
         this.state = {
-            iframeUrl: config.iframeUrl,
+            iframeUrl: this.getAppUrl(session.course_apps),
             messages: []
         }
 
@@ -78,8 +78,11 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
     componentDidMount() {
         this.configChannel.bind('changed', (config: any) => {
             const newState: MainAppState = {};
-            if (this.state.iframeUrl !== config.iframeUrl) {
-                newState.iframeUrl = config.iframeUrl;
+            if (config.courseApps) {
+                const appUrl = this.getAppUrl(config.courseApps);
+                if (this.state.iframeUrl !== appUrl) {
+                    newState.iframeUrl = appUrl;
+                }
             }
             if (Object.keys(newState).length > 0) this.setState(newState);
         }, this);
@@ -244,6 +247,16 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
         }
     }
 
+    getAppUrl(apps: string) {
+        if (!apps.length) return "/";
+        switch (apps[0]) {
+            case "Snap":
+                return `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
+            case "Scratch":
+                return "https://preview.scratch.mit.edu";
+        }
+    }
+
     render() {
         const { iframeUrl, sidebarOpen, messages, muteAudio } = this.state;
         const { full_name, user_image, user_color, user_initials } = session;
@@ -261,7 +274,6 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             }
         }
 
-        const snapUrl = `/public/SNAP/snap.html#login:${Util.getCourseId() + Util.getStudentId()}`;
         let unreadMessageCount = 0;
         messages.forEach(m => !m.read ? unreadMessageCount++ : undefined);
         return <div className="pusher">
@@ -289,7 +301,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
                     </Menu.Item>
                 </Menu>
                 <div className="frame-body">
-                    <Frame url={snapUrl} />
+                    <Frame url={iframeUrl} />
                     <TeacherFrame />
                 </div>
             </div>
