@@ -350,6 +350,10 @@ h2.inlineEdit:hover {
     background: white;
     color: white;
 }
+.ui.input.inlineEdit input::-moz-selection {
+    background: rgba(255, 255, 255, 0.5);
+    color: white;
+}
 
 .starter-background {
     background-image: url("/public/images/intro.jpeg") !important;
