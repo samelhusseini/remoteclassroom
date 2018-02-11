@@ -12,6 +12,7 @@ declare var config: RemoteConfig;
 declare var session: RemoteSession;
 
 export interface TeacherFrameProps {
+    setAudioConnected: (connected: boolean) => void;
 }
 
 export interface TeacherFrameState {
@@ -33,6 +34,10 @@ export class TeacherFrame extends React.Component<TeacherFrameProps, TeacherFram
         };
     }
 
+    setAudioConnected(connected: boolean) {
+        this.props.setAudioConnected(connected);
+    }
+
     componentDidMount() {
         OT.getDevices((err, devices) => {
             const audioDevices = devices.filter(device => device.kind === 'audioInput');
@@ -40,10 +45,19 @@ export class TeacherFrame extends React.Component<TeacherFrameProps, TeacherFram
             const subSession = OT.initSession(session.opentok_api_key, session.opentok_teacher_session_id);
 
             subSession.on('streamCreated', (event: any) => {
+                const audioStream = event.stream.hasAudio;
+                const screenShareStream = event.stream.videoType == 'screen';
+
+                // Bail out early if stream is not a screen share..
+                if (!audioStream && !screenShareStream) return;
+
                 let props: any = {
                     insertMode: 'append',
                     width: 100,
-                    height: 100
+                    height: 100,
+                    subscribeToAudio: audioStream,
+                    subscribeToVideo: screenShareStream,
+                    insertDefaultUI: !audioStream
                 };
 
                 if (event.stream.hasVideo) {
@@ -51,10 +65,7 @@ export class TeacherFrame extends React.Component<TeacherFrameProps, TeacherFram
                     props.height = 600;
                 }
 
-                // Bail out early if stream is not a screen share..
-                if (event.stream.videoType != 'screen') return;
-
-                const subscriber = subSession.subscribe(event.stream, document.querySelector('#student_subscriber') as HTMLElement, props, (err: any) => {
+                const subscriber = subSession.subscribe(event.stream, audioStream ? undefined : document.querySelector('#student_subscriber') as HTMLElement, props, (err: any) => {
                     if (err) console.error('<<<', err);
                     // if (err) {
                     //     showMessage('Streaming connection failed. This could be due to a restrictive firewall.');
@@ -63,11 +74,13 @@ export class TeacherFrame extends React.Component<TeacherFrameProps, TeacherFram
 
                 // Restrict frame rate to help with performance.
                 //(subscriber as any).subscribeToVideo(true);
-                subscriber.restrictFrameRate(true);
+                if (screenShareStream) subscriber.restrictFrameRate(true);
 
                 subscriber.on('connected', (evt: any) => {
-                    console.log('Connected to teacher stream');
-                    this.setState({ teacherSharing: true })
+                    console.log('Connected to teacher stream.');
+
+                    if (evt.target.stream.videoType == 'screen') this.setState({ teacherSharing: true })
+                    else if (evt.target.stream.hasAudio) this.setAudioConnected(true);
                 });
 
                 // subscriber.on('videoEnabled', (evt: any) => {
@@ -81,12 +94,14 @@ export class TeacherFrame extends React.Component<TeacherFrameProps, TeacherFram
                 //     this.setState({ teacherSharing: false })
                 // });
             });
-            subSession.on('streamDestroyed', (event: any) => {
-                // Bail out early if stream is not a screen share..
-                if (event.stream.videoType != 'screen') return;
+
+            subSession.on('streamDestroyed', (evt: any) => {
+                if (!evt.stream) return;
 
                 console.log('Disconnected from a teacher stream');
-                this.setState({ teacherSharing: false })
+
+                if (evt.stream.videoType == 'screen') this.setState({ teacherSharing: false })
+                else if (evt.stream.hasAudio) this.setAudioConnected(false);
 
             })
 

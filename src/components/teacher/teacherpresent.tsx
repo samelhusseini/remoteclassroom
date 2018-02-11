@@ -108,28 +108,46 @@ export class TeacherPresent extends React.Component<TeacherPresentProps, Teacher
 
                 OT.getUserMedia({ audioSource: audioDevices[0].deviceId, videoSource: null })
                     .then(stream => {
-                        const publisher1 = OT.initPublisher(document.querySelector('#teacher_publisher_audio') as HTMLElement, { 
+                        console.log('setting up audio');
+                        const audioPublisher = OT.initPublisher(undefined, { 
                             width: 100,
                             height: 100,
-                            publishVideo: false,
                             publishAudio: true,
+                            publishVideo: false,
                             videoSource: null,
-                            audioSource: audioDevices[0].deviceId 
+                            audioSource: audioDevices[0].deviceId,
+                            insertDefaultUI: false
                         });
 
-                        this.pubSession.publish(publisher1, (err: any) => console.error('Audio publishing error:', err));
+                        audioPublisher.publishAudio(true);
+
+                        audioPublisher.on('videoElementCreated', (event: any) => {
+                            console.log(event.element);
+                            (document.querySelector('#teacher_publisher_audio') as HTMLElement).appendChild(event.element);
+                        })
+
+                        this.pubSession.publish(audioPublisher, (err: any) => {
+                            if (err) console.error('Audio publishing error:', err)
+                        });
                     });
 
-                const publisher2 = OT.initPublisher(document.querySelector('#teacher_publisher_video') as HTMLElement, { 
+                const screenPublisher = OT.initPublisher(document.querySelector('#teacher_publisher_video') as HTMLElement, { 
                     width: 100,
                     height: 100,
                     publishVideo: true,
                     publishAudio: false,
                     videoSource: 'screen',
-                    audioSource: null 
+                    audioSource: null
+                    //insertDefaultUI: false
                 });
 
-                this.pubSession.publish(publisher2, (err: any) => console.error('Video publishing error:', err));
+                // screenPublisher.on('videoElementCreated', (event: any) => {
+                //     (document.querySelector('#teacher_publisher_video') as HTMLElement).appendChild(event.element);
+                // })
+
+                this.pubSession.publish(screenPublisher, (err: any) => {
+                    if (err) console.error('Video publishing error:', err)
+                });
             });
         });
     }
