@@ -50,32 +50,6 @@
     border: 5px solid #75ab00 !important;
 }
 
-.owl-theme .owl-nav [class*=owl-]:hover {
-    background-color: #2b5464;
-}
-
-.owl-theme .owl-nav [class*=owl-] {
-    background-color: #00aff0;
-}
-
-.ui.button.get-started {
-    background-color: #75ab00;
-    color: white;
-}
-
-.ui.button.to-starter {
-    background-color: #75ab00;
-    color: white;
-}
-
-.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
-    background-color: #75ab00;
-}
-
-.owl-stage {
-    margin: 10px;
-}
-
 .ui.card.green {
     box-shadow: 0 1px 0 0 #D4D4D5, 0 4px 0 0 #21BA45, 0 1px 3px 0 #D4D4D5
 }
@@ -119,7 +93,7 @@ body {
     bottom: 0;
     left: 0;
     width: 300px;
-    background-color: #0072bc;
+    background-color: #0984e3;
     overflow-y: auto;
 }
 
@@ -246,7 +220,6 @@ h3.actioned button:hover {
 
 
 /* Index */
-
 .main-body {
     position: absolute;
     top: 0;
@@ -264,7 +237,7 @@ h3.actioned button:hover {
 
 .starter-menu {
     height: 60px;
-    background-color: #0072bc !important;
+    background-color: #0984e3 !important;
     border-radius: 0 !important;
 }
 
@@ -502,6 +475,17 @@ h2.inlineEdit:hover {
     top: 0;
     right: 0;
     left: 0;
+}
+
+#audioConnectedIndicator {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    height: 3px;
+    background-color: #55efc4;
+    width: 100%;
+    left: 0;
+    right: 0;
 }
 
 #studentAudioLevel {

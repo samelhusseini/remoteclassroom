@@ -63,7 +63,7 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
             <Grid padded>
                 <Grid.Row>
                     <Grid.Column width={11}>
-                        <Screen opentok_session_id={this.props.user.opentokSessionId} opentok_token={this.props.user.opentokToken} audioVolume={this.state.isMuted ? 0 : 100} />
+                        <Screen opentok_session_id={this.props.user.opentokSessionId} opentok_token={this.props.user.opentokToken} audioVolume={this.state.isMuted ? 0 : 100} publishAudio={this.state.isMuted}/>
                         <Button circular large icon={isMuted ? 'unmute' : 'mute'} onClick={() => this.toggleMute()} />
                     </Grid.Column>
                     <Grid.Column width={5} className="chat-column">

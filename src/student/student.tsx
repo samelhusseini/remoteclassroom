@@ -27,6 +27,7 @@ export interface MainAppState {
     sidebarOpen?: boolean;
     messages?: any[];
     muteAudio?: boolean;
+    audioConnected?: boolean;
 }
 
 export class StudentApp extends React.Component<MainAppProps, MainAppState> {
@@ -116,6 +117,46 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
             const audioDevices = devices.filter(device => device.kind === 'audioInput');
 
             const pubSession = OT.initSession(session.opentok_api_key, session.opentok_session_id);
+
+            pubSession.on('streamCreated', (event: any) => {
+                // Receiving audio from teacher
+                console.log('receiving audio from teacher...');
+                const audioStream = event.stream.hasAudio;
+                const screenShareStream = event.stream.videoType == 'screen';
+
+                let props: any = {
+                    insertMode: 'append',
+                    subscribeToAudio: true,
+                    subscribeToVideo: false,
+                    insertDefaultUI: false
+                };
+
+                if (event.stream.hasVideo) {
+                    props.width = 800;
+                    props.height = 600;
+                }
+
+                const subscriber = pubSession.subscribe(event.stream, undefined, props, (err: any) => {
+                    if (err) console.error('<<<', err);
+                    // if (err) {
+                    //     showMessage('Streaming connection failed. This could be due to a restrictive firewall.');
+                    // }
+                });
+
+                subscriber.on('connected', (evt: any) => {
+                    console.log('Connected to teacher 1:1 stream.');
+
+                    this.setAudioConnected(true);
+                });
+            });
+
+            pubSession.on('streamDestroyed', (evt: any) => {
+                if (!evt.stream) return;
+
+                console.log('Disconnected from teacher 1:1 stream.');
+
+                this.setAudioConnected(false);
+            })
 
             pubSession.connect(session.opentok_token, (error: any) => {
                 if (error) {
@@ -257,8 +298,13 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
         }
     }
 
+    setAudioConnected(connected: boolean) {
+        console.log('Audio connected: ', connected);
+        this.setState({ audioConnected: connected });
+    }
+
     render() {
-        const { iframeUrl, sidebarOpen, messages, muteAudio } = this.state;
+        const { iframeUrl, sidebarOpen, messages, muteAudio, audioConnected } = this.state;
         const { full_name, user_image, user_color, user_initials } = session;
 
         if (window.location.hash && Util.isInstructor()) {
@@ -281,6 +327,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
                 <Menu inverted borderless className="starter-menu">
                     <Menu.Menu position='left'>
                         <meter min="0" max="1" id="studentAudioLevel" />
+                        {audioConnected ? <div id="audioConnectedIndicator" /> : undefined}
                         <div className="student-publisher" id="student_publisher_video"></div>
                         <Menu.Item>
                             <UserAvatar avatarUrl={user_image} color={user_color} initials={user_initials} fullName={full_name} /> {full_name}
@@ -302,7 +349,7 @@ export class StudentApp extends React.Component<MainAppProps, MainAppState> {
                 </Menu>
                 <div className="frame-body">
                     <Frame url={iframeUrl} />
-                    <TeacherFrame />
+                    <TeacherFrame setAudioConnected={this.setAudioConnected.bind(this)} />
                 </div>
             </div>
             <div className={`main-sidebar ${sidebarOpen ? 'sidebar-visible' : ''}`}>
