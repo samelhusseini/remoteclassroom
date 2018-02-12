@@ -57,17 +57,18 @@ export class AddStudent extends React.Component<AddStudentProps, AddStudentState
                     <Header as="h3">Class sharelink</Header>
                     <p>Send students the following share link and they will be added to the class</p>
                     <p>
-                        <Input size="medium" fluid
-                                action={
-                                    {
-                                        color: "blue",
-                                        labelPosition: "right",
-                                        icon: "copy",
-                                        content: "Copy",
-                                        onClick: (e: any) => { this.copyCourseLink(); }
-                                    }
+                        <Input size="medium" fluid focus
+                            input={<input readOnly />}
+                            action={
+                                {
+                                    color: "blue",
+                                    labelPosition: "right",
+                                    icon: "copy",
+                                    content: "Copy",
+                                    onClick: (e: any) => { this.copyCourseLink(); }
                                 }
-                                defaultValue={this.props.courseLink} />
+                            }
+                            defaultValue={this.props.courseLink} />
                     </p>
                     <Header as="h3">Email invite</Header>
                     <p>Send students an email requesting them to join the class</p>
