@@ -58,8 +58,8 @@ export class Screen extends React.Component<ScreenProps> {
                 };
 
                 if (event.stream.hasVideo) {
-                    props.width = 800;
-                    props.height = 600;
+                    props.width = "100%";
+                    props.height = "100%";
                     props.insertMode = 'before';
                 }
 
@@ -112,17 +112,35 @@ export class Screen extends React.Component<ScreenProps> {
         const { opentok_session_id, opentok_token } = this.props;
         this.disconnectSession();
         this.connectSession(opentok_session_id, opentok_token);
+
+        window.addEventListener("resize", this.updateDimensions);
+        this.updateDimensions();
     }
 
     componentWillUnmount() {
         this.disconnectSession();
+
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        var w = window,
+        d = document,
+        documentElement = d.documentElement,
+        body = d.getElementsByTagName('body')[0],
+        width = w.innerWidth || documentElement.clientWidth || body.clientWidth,
+        height = w.innerHeight|| documentElement.clientHeight|| body.clientHeight;
+
+        let publisherContainer = document.getElementById("screen");
+        publisherContainer.style.width = `${width-600}px`;
+        publisherContainer.style.height = `${height}px`;
     }
 
     render() {
         const { opentok_session_id, opentok_token } = this.props;
         const { opentok_api_key } = session;
 
-        return <Segment className="screen">
+        return <Segment id="screen" className="screen">
             <div id="subscriber"></div>
         </Segment>;
     }

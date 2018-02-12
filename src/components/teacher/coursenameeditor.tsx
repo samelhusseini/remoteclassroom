@@ -45,6 +45,12 @@ export class CourseNameEditor extends React.Component<CourseNameEditorProps, Cou
         this.setState({ name: (event.target as any).value });
     }
 
+    handleKeyPress(event: KeyboardEvent) {
+        if (event.key == 'Enter') {
+            this.setState({ editing: false });
+        }
+    }
+
     saveName() {
         let name = this.state.name;
         if (!name) name = CourseNameEditor.DEFAULT_PROJECT_NAME;
@@ -61,7 +67,11 @@ export class CourseNameEditor extends React.Component<CourseNameEditorProps, Cou
     render() {
         const { name, editing } = this.state;
         if (editing) {
-            return <Input autoFocus className="inlineEdit" ref={e => this.input = e} value={name} onFocus={this.handleFocus.bind(this)} onChange={this.handleChange.bind(this)} onBlur={this.handleLostFocus.bind(this)} />
+            return <Input autoFocus className="inlineEdit" ref={e => this.input = e}
+                value={name} onFocus={this.handleFocus.bind(this)} 
+                onChange={this.handleChange.bind(this)} 
+                onBlur={this.handleLostFocus.bind(this)} 
+                onKeyPress={this.handleKeyPress.bind(this)} />
         } else {
             return <Header inverted as='h2' className="inlineEdit default" onClick={this.handleClick.bind(this)}>{name}</Header>
         }

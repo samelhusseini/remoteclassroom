@@ -56,6 +56,12 @@ export class CreateView extends React.Component<CreateViewProps, CreateViewState
         this.className = val;
     }
 
+    handleKeyPress(event: KeyboardEvent) {
+        if (event.key == 'Enter') {
+            this.createClass();
+        }
+    }
+
     render() {
         return <Segment textAlign='center' className="starter-background" vertical>
             <Container text>
@@ -71,7 +77,7 @@ export class CreateView extends React.Component<CreateViewProps, CreateViewState
                     inverted
                     style={{ fontSize: '1.6em', fontWeight: 'normal' }}
                 />
-                <p><Input size='large' focus placeholder='Your Name' ref="username" required onChange={this.userNameChanged.bind(this)} /></p>
+                <p><Input size='large' focus placeholder='Your Name' ref="username" required onChange={this.userNameChanged.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} /></p>
                 <Button primary size='huge' onClick={() => this.createClass()}> Get Started <Icon name='arrow right' /></Button>
             </Container>
         </Segment>;

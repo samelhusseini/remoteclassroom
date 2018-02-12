@@ -62,6 +62,12 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
         this.setState({ userName: val });
     }
 
+    handleKeyPress(event: KeyboardEvent) {
+        if (event.key == 'Enter') {
+            this.joinClass();
+        }
+    }
+
     render() {
         return <Segment textAlign='center' className="starter-background" vertical>
             <Container text>
@@ -84,7 +90,7 @@ export class JoinView extends React.Component<JoinViewProps, JoinViewState> {
                     inverted
                     style={{ fontSize: '1.4em', fontWeight: 'normal' }}
                 />
-                <p><Input size='large' focus placeholder='Your Name' required ref="username" value={this.state.userName} onChange={this.userNameChanged.bind(this)} /></p>
+                <p><Input size='large' focus placeholder='Your Name' required ref="username" value={this.state.userName} onChange={this.userNameChanged.bind(this)} onKeyPress={this.handleKeyPress.bind(this)} /></p>
                 <Button primary size='huge' onClick={() => this.joinClass()}> Get Started <Icon name='arrow right' /></Button>
             </Container>
         </Segment>;
