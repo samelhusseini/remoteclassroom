@@ -1,13 +1,14 @@
 import * as React from "react";
 
-import { Container, Table, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea} from "semantic-ui-react";
+import { Container, Table, Button, Icon, Modal, Form, Header, Image, Input, Grid, Comment, TextArea, Popup } from "semantic-ui-react";
 
 export interface AddStudentProps {
     courseLink?: string
 }
 
 export interface AddStudentState {
-    isModalOpen: boolean
+    isModalOpen: boolean,
+    showLinkCopiedMessage: boolean
 }
 
 export class AddStudent extends React.Component<AddStudentProps, AddStudentState> {
@@ -15,11 +16,19 @@ export class AddStudent extends React.Component<AddStudentProps, AddStudentState
         super(props);
 
         this.state = { 
-            isModalOpen: false
+            isModalOpen: false,
+            showLinkCopiedMessage: false
         };
     }
 
     copyCourseLink() {
+        const timeoutLength = 5 * 1000;
+        this.setState({ showLinkCopiedMessage: true });
+
+        setTimeout(() => {
+            this.setState({ showLinkCopiedMessage: false })
+        }, timeoutLength)
+
         const linkText = document.createElement('p');
         linkText.innerText = this.props.courseLink;
         document.body.appendChild(linkText);
@@ -60,15 +69,23 @@ export class AddStudent extends React.Component<AddStudentProps, AddStudentState
                         <Input size="medium" fluid focus
                             input={<input readOnly />}
                             action={
-                                {
-                                    color: "blue",
-                                    labelPosition: "right",
-                                    icon: "copy",
-                                    content: "Copy",
-                                    onClick: (e: any) => { this.copyCourseLink(); }
-                                }
+                                <Popup
+                                    trigger={
+                                        <Button
+                                            color="blue"
+                                            labelPosition="right"
+                                            icon="copy"
+                                            content="Copy"
+                                            onClick={(e: any) => { this.copyCourseLink(); }}
+                                        />
+                                    }
+                                    content="Copied"
+                                    open={this.state.showLinkCopiedMessage}
+                                    position='bottom center'
+                                />
                             }
-                            defaultValue={this.props.courseLink} />
+                            defaultValue={this.props.courseLink} 
+                        />
                     </p>
                     <Header as="h3">Email invite</Header>
                     <p>Send students an email requesting them to join the class</p>
