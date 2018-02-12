@@ -60,23 +60,24 @@ export class UserDetail extends React.Component<UserDetailProps, UserDetailState
         const { isMuted } = this.state;
 
         return <div className="admin-user-detail-panel">
-            <Grid padded>
-                <Grid.Row>
-                    <Grid.Column width={11}>
-                        <Screen opentok_session_id={this.props.user.opentokSessionId} opentok_token={this.props.user.opentokToken} audioVolume={this.state.isMuted ? 0 : 100} publishAudio={this.state.isMuted}/>
+            <div className="admin-student-view-wrapper">
+                <div className="admin-student-view">
+                    <Screen opentok_session_id={this.props.user.opentokSessionId} opentok_token={this.props.user.opentokToken} audioVolume={this.state.isMuted ? 0 : 100} publishAudio={this.state.isMuted} />
+                    <div className="admin-student-toolbox">
                         <Button circular large icon={isMuted ? 'unmute' : 'mute'} onClick={() => this.toggleMute()} />
-                    </Grid.Column>
-                    <Grid.Column width={5} className="chat-column">
-                        <Segment className="chat" basic={true}>
-                            {!messagesLoaded ? <Dimmer active>
-                                <Loader>Loading</Loader>
-                            </Dimmer> : undefined}
-                            <h3>Messages</h3>
-                            <Messages messages={messages} user={user} sendMessage={sendMessage} />
-                        </Segment>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+                    </div>
+                </div>
+            </div>
+            <div className="chat-column-wrapper">
+                <div className="chat-column">
+                    <Segment className="chat" basic={true}>
+                        {!messagesLoaded ? <Dimmer active>
+                            <Loader>Loading</Loader>
+                        </Dimmer> : undefined}
+                        <Messages messages={messages} user={user} sendMessage={sendMessage} />
+                    </Segment>
+                </div>
+            </div>
         </div>;
     }
 }

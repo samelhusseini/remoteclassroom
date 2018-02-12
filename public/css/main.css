@@ -97,6 +97,10 @@ body {
     overflow-y: auto;
 }
 
+.admin-fixed {
+    display: block;
+}
+
 .admin-scrollabale {
     padding: 1rem;
     position: relative;
@@ -177,11 +181,14 @@ h3.actioned button:hover {
     flex-direction: column;
     min-height: 100vh;
     color: #333333;
-    padding: 1.5rem;
 }
 
 .admin-user-detail-panel > .grid {
     flex-grow: 1;
+}
+
+.admin-user-detail-panel > .ui.grid > .row {
+    padding: 0;
 }
 
 .admin-workspace-detail-panel {
@@ -220,6 +227,7 @@ h3.actioned button:hover {
 
 
 /* Index */
+
 .main-body {
     position: absolute;
     top: 0;
@@ -350,6 +358,7 @@ h2.inlineEdit:hover {
     background: white;
     color: white;
 }
+
 .ui.input.inlineEdit input::-moz-selection {
     background: rgba(255, 255, 255, 0.5);
     color: white;
@@ -378,11 +387,13 @@ h2.inlineEdit:hover {
 
 .ui.segment.screen {
     width: 100%;
-    min-height: 600px;
+    height: 100%;
     text-align: center;
-    padding: 1em;
-    background: #dfe6e9;
-    border: solid 2px #b2bec3;
+    padding: 0;
+    background: #2d3436;
+    border: none;
+    border-radius: 0;
+    margin: 0;
 }
 
 .screen .OT_subscriber.OT_audio-only {
@@ -438,25 +449,94 @@ h2.inlineEdit:hover {
     font-size: 70px;
 }
 
+.admin-student-view-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 300px;
+    bottom: 0;
+    height: 100%;
+}
+
+.admin-student-view {
+    position: relative;
+}
+
+.admin-student-toolbox {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+}
+
 
 /* Teacher messages */
 
+.chat-column-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 300px;
+    border-left: 1px solid rgba(0, 0, 0, .20);
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white;
+}
+
 .chat-column {
-    border-left: 1px solid rgba(34, 36, 38, 0.15);
+    position: relative;
+    height: 100%;
 }
 
 .ui.segment.chat {
+    padding: 0;
     height: 100%;
 }
 
 .ui.segment.chat .teachermessages {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
 
-.chat .teachermessages > .ui.feed {
+.teachermessages .heading {
+    position: fixed;
+    top: 0;
+    padding-left: 3px;
+}
+
+.teachermessages .inner {
     flex-grow: 1;
+}
+
+.teachermessages .inner .messages {
+    padding-top: 30px;
+    padding-bottom: 55px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.teachermessages .inner .ui.feed {
+    height: 100%;
+    padding: 0.5rem;
+    overflow-y: auto;
+}
+
+.teachermessages .messagebox {
+    border-top: 1px solid rgba(0, 0, 0, .20);
+}
+
+.teachermessages .messagebox .fields {
+    margin: 0;
+    padding: 0.5rem;
+}
+
+.teachermessages .messagebox #teacherMessageText {
+    border: none;
 }
 
 .student-publisher {
@@ -493,13 +573,15 @@ h2.inlineEdit:hover {
 }
 
 #studentAudioLevel {
-    display: none; /* TODO: hide until we fix the bar background on Firefox */
+    display: none;
+    /* TODO: hide until we fix the bar background on Firefox */
     position: absolute;
     top: 0;
     left: 0;
     height: 4px;
     width: 100px;
-    -webkit-appearance: none; /* Reset appearance */
+    -webkit-appearance: none;
+    /* Reset appearance */
 }
 
 #studentAudioLevel::-webkit-meter-bar {

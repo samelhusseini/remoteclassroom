@@ -67,63 +67,69 @@ export class Messages extends React.Component<MessagesProps, MessagesState> {
         messages.forEach(m => m.read = true);
 
         return <div className="teachermessages">
-            <Feed>
-                {messages.map((message) =>
-                    message.type == "ping" && (
-                        <Feed.Event>
-                            <Feed.Label>
-                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Summary>
-                                    <Feed.User>{message.info.fullName}</Feed.User> raised their hand
+            <div className="heading">
+                <h3>Messages</h3>
+            </div>
+            <div className="inner">
+                <div className="messages">
+                    <Feed>
+                        {messages.map((message) =>
+                            message.type == "ping" && (
+                                <Feed.Event>
+                                    <Feed.Label>
+                                        <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                                    </Feed.Label>
+                                    <Feed.Content>
+                                        <Feed.Summary>
+                                            <Feed.User>{message.info.fullName}</Feed.User> raised their hand
                                     <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>) ||
-                    message.type == "help" && (
-                        <Feed.Event>
-                            <Feed.Label>
-                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Summary>
-                                    <Feed.User>{message.info.fullName}</Feed.User> raised his/her hand
+                                        </Feed.Summary>
+                                    </Feed.Content>
+                                </Feed.Event>) ||
+                            message.type == "help" && (
+                                <Feed.Event>
+                                    <Feed.Label>
+                                        <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                                    </Feed.Label>
+                                    <Feed.Content>
+                                        <Feed.Summary>
+                                            <Feed.User>{message.info.fullName}</Feed.User> raised his/her hand
                                     <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>) ||
-                    message.type == "text" && (
-                        <Feed.Event>
-                            <Feed.Label>
-                                <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Summary>
-                                    <Feed.User>{message.info.fullName}</Feed.User>
+                                        </Feed.Summary>
+                                    </Feed.Content>
+                                </Feed.Event>) ||
+                            message.type == "text" && (
+                                <Feed.Event>
+                                    <Feed.Label>
+                                        <UserAvatar avatarUrl={message.info.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.info.fullName} />
+                                    </Feed.Label>
+                                    <Feed.Content>
+                                        <Feed.Summary>
+                                            <Feed.User>{message.info.fullName}</Feed.User>
+                                            <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
+                                        </Feed.Summary>
+                                        <Feed.Extra text>
+                                            {message.content}
+                                        </Feed.Extra>
+                                    </Feed.Content>
+                                </Feed.Event>) ||
+                            message.type == "link" && (
+                                <Feed.Event>
+                                    <Feed.Label>
+                                        <UserAvatar avatarUrl={message.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.fullName} />
+                                    </Feed.Label>
+                                    <Feed.Content>
+                                        <Feed.Summary>
+                                            <Feed.User>{message.info.fullName}</Feed.User> raised their hand
                                     <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
-                                </Feed.Summary>
-                                <Feed.Extra text>
-                                    {message.content}
-                                </Feed.Extra>
-                            </Feed.Content>
-                        </Feed.Event>) ||
-                    message.type == "link" && (
-                        <Feed.Event>
-                            <Feed.Label>
-                                <UserAvatar avatarUrl={message.avatarUrl} color={message.info.color} initials={message.info.initials} fullName={message.fullName} />
-                            </Feed.Label>
-                            <Feed.Content>
-                                <Feed.Summary>
-                                    <Feed.User>{message.info.fullName}</Feed.User> raised their hand
-                                    <Feed.Date><Moment fromNow utc>{message.date}</Moment></Feed.Date>
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>)
-                )}
-            </Feed>
-
-            <Form>
+                                        </Feed.Summary>
+                                    </Feed.Content>
+                                </Feed.Event>)
+                        )}
+                    </Feed>
+                </div>
+            </div>
+            <Form className='messagebox'>
                 <Form.Group>
                     <TextArea id='teacherMessageText' autoHeight placeholder='Type a message...' rows={1}
                         onKeyPress={this.handleMessageKeyPress.bind(this)} />

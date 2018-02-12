@@ -61,8 +61,8 @@ export class TeacherFrame extends React.Component<TeacherFrameProps, TeacherFram
                 };
 
                 if (event.stream.hasVideo) {
-                    props.width = 800;
-                    props.height = 600;
+                    props.width = '100%';
+                    props.height = '100%';
                 }
 
                 const subscriber = subSession.subscribe(event.stream, audioStream ? undefined : document.querySelector('#student_subscriber') as HTMLElement, props, (err: any) => {
