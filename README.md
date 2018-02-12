@@ -72,4 +72,4 @@ Use the "add student" button to get the student view URL.
 
 ## License
 
-MIT
+Apache License 2.0
