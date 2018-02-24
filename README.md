@@ -1,8 +1,6 @@
 # remoteclassroom
 Virtual Classroom for remote teaching
 
-![](https://travis-ci.org/sammysamau/remoteclassroom.svg?branch=master)
-
 Try it now at http://remoteclass.school/create
 
 ## Development
